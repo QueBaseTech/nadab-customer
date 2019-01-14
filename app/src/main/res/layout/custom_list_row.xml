@@ -34,44 +34,35 @@
         android:id="@+id/tvUnitMeasure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:text="UnitMeasure"
-        android:layout_marginTop="16dp"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/tvName"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
-        android:layout_marginLeft="17dp" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvPrice"
+        app:layout_constraintStart_toEndOf="@+id/tvPrice" />
+
+    <TextView
+        android:id="@+id/tvPriceTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="KSHs."
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:text="Price"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
-    <TextView
-        android:id="@+id/tvHotel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Price"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
-    <TextView
-        android:id="@+id/tvImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Price"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvPriceTag"
+        app:layout_constraintStart_toEndOf="@+id/tvPriceTag" />
 </android.support.constraint.ConstraintLayout>

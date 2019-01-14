@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> {
 
-    private ArrayList<Hotel> dataList;
+    private ArrayList<Hotel> mDataList;
 
-    public HotelAdapter(ArrayList<Hotel> dataList) {
-        this.dataList = dataList;
+    public HotelAdapter(ArrayList<Hotel> mDataList) {
+        this.mDataList = mDataList;
     }
 
    private  OnItemlickListener mListener;
@@ -30,7 +30,6 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     @Override
     public HotelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         //correct
         LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_hotels, parent, false);
@@ -42,14 +41,14 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     @Override
     public void onBindViewHolder(HotelViewHolder holder, int position) {
-        holder.txtHotelName.setText(dataList.get(position).getBusinessName ());
-        holder.txtAddress.setText(dataList.get(position).getAddress ());
-        holder.txtPayBillNo.setText(dataList.get(position).getPayBillNo ());
+        holder.txtHotelName.setText(mDataList.get(position).getBusinessName ());
+        holder.txtAddress.setText(mDataList.get(position).getAddress ());
+        holder.txtPayBillNo.setText(mDataList.get(position).getPayBillNo ());
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return mDataList.size();
     }
 
     class HotelViewHolder extends RecyclerView.ViewHolder {

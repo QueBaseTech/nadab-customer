@@ -32,6 +32,7 @@ import com.example.karokojnr.nadab.api.HotelService;
 import com.example.karokojnr.nadab.api.RetrofitInstance;
 import com.example.karokojnr.nadab.model.Hotel;
 import com.example.karokojnr.nadab.model.HotelsList;
+import com.example.karokojnr.nadab.utils.Constants;
 import com.example.karokojnr.nadab.utils.utils;
 
 import java.util.ArrayList;
@@ -85,53 +86,37 @@ public class MainActivity extends AppCompatActivity
             setupViewPager(viewPager);
             tabLayout.setupWithViewPager(viewPager);
         }
-//RECYCLER VIEW
-
-
-        /*Create handle for the RetrofitInstance interface*/
+        //RECYCLER VIEW
         HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-        /*Call the method with parameter in the interface to get the employee data*/
-
         Call<HotelsList> call = service.getHotels ();
-
-
-        //Call<HotelsList> call = service.getHotels (utils.getToken(getApplicationContext()));
-        /*Log the URL called*/
         Log.wtf ( "URL Called", call.request ().url () + "" );
-
         call.enqueue ( new Callback<HotelsList> () {
             @Override
             public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
                 assert response.body () != null;
+                if (response == null) {
+                    Toast.makeText ( getApplicationContext (), "Something Went Wrong...!!", Toast.LENGTH_SHORT ).show ();
+                } else {
+                    assert response.body () != null;
+                    for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
+                        hotelList.add ( response.body ().getHotelsArrayList ().get ( i ) );
+                    }
+                    Log.i ( "RESPONSE: ", "" + response.toString () );
+                }
                 generateHotelsList ( response.body ().getHotelsArrayList () );
-                Log.d ( TAG, "onResponse: fteched okay" );
             }
-
             @Override
             public void onFailure(Call<HotelsList> call, Throwable t) {
                 Toast.makeText ( MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
             }
         } );
         //RECYCLERVIEW END
-
-      /*  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
     }
 
     /*Method to generate List of hotel using RecyclerView with custom adapter*/
     private void generateHotelsList(ArrayList<Hotel> empDataList) {
         recyclerView = (RecyclerView) findViewById ( R.id.recycler_view );
-
         adapter = new HotelAdapter ( empDataList );
-
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager ( MainActivity.this );
-
         recyclerView.setHasFixedSize(true);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -147,6 +132,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view, int position) {
                 Hotel hotel = hotelList.get ( position );
                 Toast.makeText ( getApplicationContext (), hotel.getBusinessName () + " is selected!", Toast.LENGTH_SHORT ).show ();
+                Intent intent = new Intent(MainActivity.this, HotelMeals.class);
+                intent.putExtra(Constants.M_HOTEL_ID, hotel.getId());
+                startActivity(intent);
             }
 
             @Override
@@ -154,11 +142,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         } ) );
-        getProductList ();
-
-        //adapter.setOnItemClickListener ( MainActivity.this );
         return;
-
     }
 
     @Override

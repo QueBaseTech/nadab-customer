@@ -6,6 +6,7 @@ import com.example.karokojnr.nadab.model.Hotel;
 import com.example.karokojnr.nadab.model.HotelRegister;
 import com.example.karokojnr.nadab.model.HotelsList;
 import com.example.karokojnr.nadab.model.Login;
+import com.example.karokojnr.nadab.model.ProductList;
 import com.example.karokojnr.nadab.model.Products;
 
 import retrofit2.Call;
@@ -15,15 +16,13 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 
 public interface HotelService {
 
-    /*
-    * Pull all the hotels
-//    * */
-//    @GET("hotels/")
-//    Call<HotelsList> getHotels(int token);
+    @GET("hotels/{id}/products")
+    Call<Products> getHotelProducts(@Path("id") String hotelId);
 
     @GET("hotels/")
     Call<HotelsList> getHotels();

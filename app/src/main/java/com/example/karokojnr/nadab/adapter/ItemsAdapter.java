@@ -38,11 +38,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Product product = productList.get ( position );
         holder.name.setText(product.getName());
-//        holder.unitMeasure.setText(product.getUnitMeasure());
+        holder.unitMeasure.setText(product.getUnitMeasure());
         holder.price.setText(product.getPrice());
-        //holder.hotel.setText(product.getHotel());
         Glide.with(context)
-//                .load("https://ccc7835e.ngrok.io/images/uploads/thumbs/e4a27e9b74b1907706fa31f3dd519b36.jpg")
                 .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+product.getImage())
                 .into(holder.imageView);
     }
@@ -59,11 +57,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
          MyViewHolder(View itemView) {
             super ( itemView );
             name = (TextView) itemView.findViewById ( R.id.tvName );
-            //unitMeasure = (TextView) itemView.findViewById ( R.id.tvUnitMeasure );
-            price = (TextView) itemView.findViewById ( R.id.tvPrice );
-            //hotel = (TextView) itemView.findViewById ( R.id.tvHotel );
+            unitMeasure = (TextView) itemView.findViewById ( R.id.tvUnitMeasure );
+            price = (TextView) itemView.findViewById ( R.id.tvPrice);
             imageView = (ImageView) itemView.findViewById ( R.id.imageView );
-          //  sellingStatus = (TextView) view.findViewById ( R.id.sellingStatus );
         }
     }
 
