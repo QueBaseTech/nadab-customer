@@ -6,7 +6,7 @@ import com.example.karokojnr.nadab.model.Hotel;
 import com.example.karokojnr.nadab.model.HotelRegister;
 import com.example.karokojnr.nadab.model.HotelsList;
 import com.example.karokojnr.nadab.model.Login;
-import com.example.karokojnr.nadab.model.ProductList;
+
 import com.example.karokojnr.nadab.model.Products;
 
 import retrofit2.Call;

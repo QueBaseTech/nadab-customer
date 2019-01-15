@@ -197,19 +197,19 @@ public class MainActivity extends AppCompatActivity
 
             startActivity(new Intent (MainActivity.this, HotelsActivity.class));
             return true;
-        }/*else if (id == R.id.action_cart) {
+        }else if (id == R.id.action_cart) {
 
-            NotificationCountSetClass.setAddToCart(MainActivity.this, item, notificationCount);
-            invalidateOptionsMenu();
-            startActivity(new Intent(MainActivity.this, CartListActivity.class));
+            /*NotificationCountSetClass.setAddToCart(MainActivity.this, item, notificationCount);
+            invalidateOptionsMenu();*/
+            startActivity(new Intent(MainActivity.this, CartActivity.class));
 
-            notificationCount=0;//clear notification count
+           // notificationCount=0;//clear notification count
             invalidateOptionsMenu();
             return true;
         }else {
-            startActivity(new Intent(MainActivity.this, EmptyActivity.class));
+           // startActivity(new Intent(MainActivity.this, EmptyActivity.class));
 
-        }*/
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity
         }else if (id == R.id.my_wishlist) {
             //startActivity(new Intent(MainActivity.this, WishlistActivity.class));
         }else if (id == R.id.my_cart) {
-          //  startActivity(new Intent(MainActivity.this, CartListActivity.class));
+            startActivity(new Intent(MainActivity.this, CartActivity.class));
         }else {
            // startActivity(new Intent(MainActivity.this, EmptyActivity.class));
         }

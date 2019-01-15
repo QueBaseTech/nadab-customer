@@ -1,6 +1,7 @@
 package com.example.karokojnr.nadab.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,12 +35,13 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
         return new MyViewHolder (view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Product product = productList.get ( position );
         holder.name.setText(product.getName());
         holder.unitMeasure.setText(product.getUnitMeasure());
-        holder.price.setText(product.getPrice());
+        holder.price.setText("Ksh " + product.getPrice());
         Glide.with(context)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+product.getImage())
                 .into(holder.imageView);

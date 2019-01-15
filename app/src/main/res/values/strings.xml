@@ -59,4 +59,17 @@
     <string name="discounts_and_offers">Discounts &amp; Offers</string>
     <string name="hotels">Hotels</string>
 
+
+    <string name="quantity">Quantity</string>
+    <string name="brew_tea">ADD TO CART</string>
+    <string name="initial_cost">$0.00</string>
+    <string name="initial_quantity">1</string>
+    <string name="total">Total</string>
+    <string name="price">PRICE: </string>
+
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
+
 </resources>

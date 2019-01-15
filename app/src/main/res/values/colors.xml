@@ -8,6 +8,7 @@
     <color name="gen_white">#FFFFFF</color>
     <color name="green_light">#43A047</color>
     <color name="grey_light">#E0E0E0</color>
+    <color name="colorLine">#D3D3D3</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>
