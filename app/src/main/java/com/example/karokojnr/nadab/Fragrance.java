@@ -7,18 +7,18 @@ public class Fragrance {
 
     public int id;
 
-    public String name;
-    public String description;
-    public String imageUrl;
-    public Double price;
+    public String tvName;
+    public String tvUnitMeasure;
+    public String imageView;
+    public Double tvPrice;
     public int userRating;
 
 
     public Fragrance(Cursor cursor) {
-        this.name = cursor.getString(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_NAME));
-        this.description = cursor.getString(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_DESCRIPTION));
-        this.imageUrl = cursor.getString(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_IMAGE));
-        this.price = cursor.getDouble(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_PRICE));
+        this.tvName = cursor.getString(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_ITEM_NAME));
+        this.tvUnitMeasure = cursor.getString(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_UNIT_MEASURE));
+        this.imageView = cursor.getString(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_ITEM_IMAGE));
+        this.tvPrice = cursor.getDouble(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_ITEM_PRICE));
         this.userRating = cursor.getInt(cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_USERRATING));
     }
 

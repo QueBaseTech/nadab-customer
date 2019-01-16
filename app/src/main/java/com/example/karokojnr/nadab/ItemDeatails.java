@@ -75,7 +75,7 @@ public class ItemDeatails extends AppCompatActivity {
         String image = getIntent().getStringExtra(Constants.M_IMAGE);
 
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContentResolver = this.getContentResolver();
         FragranceDbHelper dbHelper = new FragranceDbHelper(this);
         mDb = dbHelper.getWritableDatabase();

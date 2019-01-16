@@ -15,7 +15,7 @@ public class FragranceContract {
      * content authority is the package name for the app, which is guaranteed to be unique on the
      * device.
      */
-    public static final String CONTENT_AUTHORITY = "com.delaroystudios.fragrancecart";
+    public static final String CONTENT_AUTHORITY = "com.example.karokojnr.nadab";
 
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
@@ -83,6 +83,15 @@ public class FragranceContract {
         public final static String COLUMN_CART_IMAGE = "cartimageurl";
         public final static String COLUMN_CART_QUANTITY = "cartquantity";
         public final static String COLUMN_CART_TOTAL_PRICE = "carttotalprice";
+
+        public final static String COLUMN_ITEM_NAME = "name";
+        public final static String COLUMN_UNIT_MEASURE = "unitmeasure";
+        public final static String COLUMN_ITEM_PRICE = "price";
+        public final static String COLUMN_ITEM_IMAGE = "image";
+
+
+
+
 
     }
 

@@ -114,10 +114,10 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
                 FragranceContract.FragranceEntry._CARTID,
-                FragranceContract.FragranceEntry.COLUMN_CART_NAME,
-                FragranceContract.FragranceEntry.COLUMN_CART_IMAGE,
-                FragranceContract.FragranceEntry.COLUMN_CART_QUANTITY,
-                FragranceContract.FragranceEntry.COLUMN_CART_TOTAL_PRICE,
+                FragranceContract.FragranceEntry.COLUMN_ITEM_NAME,
+                FragranceContract.FragranceEntry.COLUMN_UNIT_MEASURE,
+                FragranceContract.FragranceEntry.COLUMN_ITEM_PRICE,
+                FragranceContract.FragranceEntry.COLUMN_ITEM_IMAGE,
         };
 
         // This loader will execute the ContentProvider's query method on a background thread

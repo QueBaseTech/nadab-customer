@@ -78,11 +78,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         //Set values
        // holder.itemView.setTag(id);
-        holder.fragName.setText(product.getName ());
+        holder.tvName.setText(product.getName ());
         //holder.fragQuantity.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
-        holder.fragQuantity.setText("Quantity ordering: " + product.getUnitMeasure ());
+        holder.tvUnitMeasure.setText("Quantity ordering: " + product.getUnitMeasure ());
        // holder.fragPrice.setText("$" + precision.format(fragrancePrice));
-        holder.fragPrice.setText("$" + product.getPrice ());
+        holder.tvPrice.setText("$" + product.getPrice ());
 
 
         //String poster = "http://boombox.ng/images/fragrance/" + fragranceImage;
@@ -91,7 +91,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+product.getImage())
               /* .apply ( new RequestOptions ()
                 .placeholder(R.drawable.load))*/
-                .into(holder.image);
+                .into(holder.imageView);
 
     }
 
@@ -120,15 +120,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
-        TextView fragName, fragQuantity, fragPrice;
-        ImageView image;
+        TextView tvName, tvUnitMeasure, tvPrice;
+        ImageView imageView;
         public CartViewHolder(View itemView) {
             super(itemView);
 
-            fragName = (TextView) itemView.findViewById(R.id.tvName);
-            fragQuantity = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
-            fragPrice = (TextView) itemView.findViewById(R.id.tvPrice);
-            image = (ImageView) itemView.findViewById(R.id.imageView);
+            tvName = (TextView) itemView.findViewById(R.id.tvName);
+            tvUnitMeasure = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
+            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
         }
 
     }

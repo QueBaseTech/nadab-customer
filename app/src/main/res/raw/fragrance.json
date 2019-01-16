@@ -1,11 +1,11 @@
 {
   "fragrances": [
     {
-      "fragranceName": "Versace Eros",
-      "description": "Versace Eros is cologne with a great clean aroma scent that's not too intense, yet moderate scent that lasts all day.",
-      "imageUrl": "versace-eros.png",
-      "price": 41.29,
-      "userRating": 5
+      "tvName": "Versace Eros",
+      "tvUnitmeasure": "Versace Eros is cologne with a great clean aroma scent that's not too intense, yet moderate scent that lasts all day.",
+      "imageView": "versace-eros.png",
+      "tvPrice":
+      //"userRating": 5
     },
     {
       "fragranceName": "Burberry",

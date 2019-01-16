@@ -52,10 +52,10 @@ public class FragranceDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_FRAGRANCE_TABLE = "CREATE TABLE " + FragranceContract.FragranceEntry.TABLE_NAME + " (" +
                 FragranceContract.FragranceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                FragranceContract.FragranceEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_IMAGE + " TEXT NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_PRICE + " REAL NOT NULL, " +
+                FragranceContract.FragranceEntry.COLUMN_ITEM_NAME + " TEXT UNIQUE NOT NULL, " +
+                FragranceContract.FragranceEntry.COLUMN_UNIT_MEASURE + " TEXT NOT NULL, " +
+                FragranceContract.FragranceEntry.COLUMN_ITEM_IMAGE + " TEXT NOT NULL, " +
+                FragranceContract.FragranceEntry.COLUMN_ITEM_PRICE + " REAL NOT NULL, " +
                 FragranceContract.FragranceEntry.COLUMN_USERRATING + " INTEGER NOT NULL " + " );";
 
         final String SQL_CREATE_CART_FRAGRANCE_TABLE = "CREATE TABLE " + FragranceContract.FragranceEntry.CART_TABLE + " (" +
@@ -137,10 +137,10 @@ public class FragranceDbHelper extends SQLiteOpenHelper {
 
                 ContentValues fragranceValues = new ContentValues();
 
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_NAME, name);
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_DESCRIPTION, unitmeasure);
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_IMAGE, imageUrl);
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_PRICE, price);
+                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_ITEM_NAME, name);
+                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_UNIT_MEASURE, unitmeasure);
+                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_ITEM_IMAGE, imageUrl);
+                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_ITEM_PRICE, price);
                 fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_USERRATING, userRating);
 
                  db.insert(FragranceContract.FragranceEntry.TABLE_NAME, null, fragranceValues);
