@@ -10,15 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.karokojnr.nadab.FragranceContract;
+import com.example.karokojnr.nadab.OrderContract;
 import com.example.karokojnr.nadab.R;
 import com.example.karokojnr.nadab.api.RetrofitInstance;
-import com.example.karokojnr.nadab.model.Product;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -27,9 +23,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private Cursor mCursor;
     private Context mContext;
 
-    private ArrayList<Product> productList;
-
-
     /**
      * Constructor for the CustomCursorAdapter that initializes the Context.
      *
@@ -37,8 +30,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
      */
     public CartAdapter(Context mContext) {
         this.mContext = mContext;
-        this.productList = productList;
-
     }
 
 
@@ -52,16 +43,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-
-        Product product = productList.get ( position );
-
-       /* // Indices for the _id, description, and priority columns
-        int idIndex = mCursor.getColumnIndex(FragranceContract.FragranceEntry._CARTID);
-        int fragranceName = mCursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_CART_NAME);
-        int image = mCursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_CART_IMAGE);
-        int quantity = mCursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_CART_QUANTITY);
-        int price = mCursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_CART_TOTAL_PRICE);
-
+        // Indices for the _id, description, and priority columns
+        int idIndex = mCursor.getColumnIndex(OrderContract.OrderEntry._CARTID);
+        int fragranceName = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_NAME);
+        int image = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_IMAGE);
+        int quantity = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_QUANTITY);
+        int price = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE);
 
         mCursor.moveToPosition(position); // get to the right location in the cursor
 
@@ -73,24 +60,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         Double fragrancePrice = mCursor.getDouble(price);
 
         DecimalFormat precision = new DecimalFormat("0.00");
-*/
-
 
         //Set values
        // holder.itemView.setTag(id);
-        holder.fragName.setText(product.getName ());
-        //holder.fragQuantity.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
-        holder.fragQuantity.setText("Quantity ordering: " + product.getUnitMeasure ());
-       // holder.fragPrice.setText("$" + precision.format(fragrancePrice));
-        holder.fragPrice.setText("$" + product.getPrice ());
-
-
-        //String poster = "http://boombox.ng/images/fragrance/" + fragranceImage;
-
+        holder.fragName.setText(name);
+        holder.fragQuantity.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
+        holder.fragPrice.setText("Kshs." + precision.format(fragrancePrice));
        Glide.with(mContext)
-                .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+product.getImage())
-              /* .apply ( new RequestOptions ()
-                .placeholder(R.drawable.load))*/
+                .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+fragranceImage)
                 .into(holder.image);
 
     }
@@ -124,10 +101,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         ImageView image;
         public CartViewHolder(View itemView) {
             super(itemView);
-
             fragName = (TextView) itemView.findViewById(R.id.tvName);
             fragQuantity = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
-            fragPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            fragPrice = (TextView) itemView.findViewById(R.id.price);
             image = (ImageView) itemView.findViewById(R.id.imageView);
         }
 

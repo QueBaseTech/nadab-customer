@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -23,23 +22,21 @@ import java.io.InputStreamReader;
 
 
 
-public class FragranceDbHelper extends SQLiteOpenHelper {
-    private static final String TAG = FragranceDbHelper.class.getSimpleName();
+public class OrderDbHelper extends SQLiteOpenHelper {
+    private static final String TAG = OrderDbHelper.class.getSimpleName();
 
-    private static final String DATABASE_NAME = "fragrances.db";
+    public static final String DATABASE_NAME = "nadab.db";
     private static final int DATABASE_VERSION = 1;
     Context context;
     SQLiteDatabase db;
     ContentResolver mContentResolver;
-
-
 
     //Used to read data from res/ and assets/
     private Resources mResources;
 
 
 
-    public FragranceDbHelper(Context context) {
+    public OrderDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         mResources = context.getResources();
@@ -50,24 +47,24 @@ public class FragranceDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String SQL_CREATE_FRAGRANCE_TABLE = "CREATE TABLE " + FragranceContract.FragranceEntry.TABLE_NAME + " (" +
-                FragranceContract.FragranceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                FragranceContract.FragranceEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_IMAGE + " TEXT NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_PRICE + " REAL NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_USERRATING + " INTEGER NOT NULL " + " );";
+        final String SQL_CREATE_ORDERS_TABLE = "CREATE TABLE " + OrderContract.OrderEntry.CART_TABLE + " (" +
+                OrderContract.OrderEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                OrderContract.OrderEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_IMAGE + " TEXT NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_PRICE + " REAL NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_USERRATING + " INTEGER NOT NULL " + " );";
 
-        final String SQL_CREATE_CART_FRAGRANCE_TABLE = "CREATE TABLE " + FragranceContract.FragranceEntry.CART_TABLE + " (" +
-                FragranceContract.FragranceEntry._CARTID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                FragranceContract.FragranceEntry.COLUMN_CART_NAME + " TEXT UNIQUE NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_CART_IMAGE + " TEXT NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_CART_QUANTITY + " INTEGER NOT NULL, " +
-                FragranceContract.FragranceEntry.COLUMN_CART_TOTAL_PRICE + " REAL NOT NULL " + " );";
+        final String SQL_CREATE_CART_TABLE = "CREATE TABLE " + OrderContract.OrderEntry.CART_TABLE + " (" +
+                OrderContract.OrderEntry._CARTID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                OrderContract.OrderEntry.COLUMN_CART_NAME + " TEXT UNIQUE NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_CART_IMAGE + " TEXT NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_CART_QUANTITY + " INTEGER NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE + " REAL NOT NULL " + " );";
 
 
-        db.execSQL(SQL_CREATE_FRAGRANCE_TABLE);
-        db.execSQL(SQL_CREATE_CART_FRAGRANCE_TABLE);
+        db.execSQL(SQL_CREATE_CART_TABLE);
+//        db.execSQL(SQL_CREATE_ORDERS_TABLE);
         Log.d(TAG, "Database Created Successfully" );
 
 
@@ -85,8 +82,8 @@ public class FragranceDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO: Handle database version upgrades
-        db.execSQL("DROP TABLE IF EXISTS " + FragranceContract.FragranceEntry.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + FragranceContract.FragranceEntry.CART_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + OrderContract.OrderEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + OrderContract.OrderEntry.CART_TABLE);
         onCreate(db);
     }
 
@@ -105,13 +102,13 @@ public class FragranceDbHelper extends SQLiteOpenHelper {
         //Parse resource into key/values
         final String rawJson = builder.toString();
 
-        final String BGS_FRAGRANCES = "fragrances";
+        final String BGS_FRAGRANCES = "orders";
 
         final String BGS_NAME = "name";
         final String BGS_UNITMEASURE = "unitmeasure";
         final String BGS_IMAGEURL = "imageUrl";
         final String BGS_PRICE = "price";
-        final String BGS_USERRATING = "userRating";
+        final String BGS_USERRATING = "userrating";
 
         try {
             JSONObject fragranceJson = new JSONObject(rawJson);
@@ -137,13 +134,13 @@ public class FragranceDbHelper extends SQLiteOpenHelper {
 
                 ContentValues fragranceValues = new ContentValues();
 
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_NAME, name);
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_DESCRIPTION, unitmeasure);
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_IMAGE, imageUrl);
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_PRICE, price);
-                fragranceValues.put(FragranceContract.FragranceEntry.COLUMN_USERRATING, userRating);
+                fragranceValues.put(OrderContract.OrderEntry.COLUMN_NAME, name);
+                fragranceValues.put(OrderContract.OrderEntry.COLUMN_DESCRIPTION, unitmeasure);
+                fragranceValues.put(OrderContract.OrderEntry.COLUMN_IMAGE, imageUrl);
+                fragranceValues.put(OrderContract.OrderEntry.COLUMN_PRICE, price);
+                fragranceValues.put(OrderContract.OrderEntry.COLUMN_USERRATING, userRating);
 
-                 db.insert(FragranceContract.FragranceEntry.TABLE_NAME, null, fragranceValues);
+                 db.insert(OrderContract.OrderEntry.TABLE_NAME, null, fragranceValues);
 
                 Log.d(TAG, "Inserted Successfully " + fragranceValues );
             }

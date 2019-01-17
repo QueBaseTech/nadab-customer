@@ -1,8 +1,6 @@
 package com.example.karokojnr.nadab;
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,18 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.karokojnr.nadab.adapter.CartAdapter;
 
-import org.json.JSONException;
-
-import java.math.BigDecimal;
 import java.text.NumberFormat;
-
 
 
 public class CartActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -36,14 +28,6 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     Double totalPrice;
     Button paymentButton;
 
-    /*private static PayPalConfiguration config = new PayPalConfiguration()
-
-            // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
-            // or live (ENVIRONMENT_PRODUCTION)
-            .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
-
-            .clientId("AejPzHTA5RM1P6pWbQFqJIoPswfJto150Xbsj_vmUyS1xEHETOYtokUzhZN-9adwFMu57qjvqKyueM7r");
-*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +63,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 // Build appropriate uri with String row id appended
                 String stringId = Integer.toString(id);
-                Uri uri = FragranceContract.FragranceEntry.CONTENT_URI_CART;
+                Uri uri = OrderContract.OrderEntry.CONTENT_URI;
                 uri = uri.buildUpon().appendPath(stringId).build();
 
                 // COMPLETED (2) Delete a single row of data using a ContentResolver
@@ -113,16 +97,16 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
-                FragranceContract.FragranceEntry._CARTID,
-                FragranceContract.FragranceEntry.COLUMN_CART_NAME,
-                FragranceContract.FragranceEntry.COLUMN_CART_IMAGE,
-                FragranceContract.FragranceEntry.COLUMN_CART_QUANTITY,
-                FragranceContract.FragranceEntry.COLUMN_CART_TOTAL_PRICE,
+                OrderContract.OrderEntry._CARTID,
+                OrderContract.OrderEntry.COLUMN_CART_NAME,
+                OrderContract.OrderEntry.COLUMN_CART_IMAGE,
+                OrderContract.OrderEntry.COLUMN_CART_QUANTITY,
+                OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE,
         };
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                FragranceContract.FragranceEntry.CONTENT_URI_CART,   // Provider content URI to query
+                OrderContract.OrderEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments
@@ -147,7 +131,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         totalPrice = 0.00;
         for (int i = 0; i<cursor.getCount(); i++)
         {
-            int price = cursor.getColumnIndex(FragranceContract.FragranceEntry.COLUMN_CART_TOTAL_PRICE);
+            int price = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE);
 
             cursor.moveToPosition(i);
             Double fragrancePrice = cursor.getDouble(price);

@@ -101,7 +101,7 @@ public class HotelMeals extends AppCompatActivity {
                 Product product = productList.get ( position );
                 Toast.makeText ( getApplicationContext (), product.getName () + " is selected!", Toast.LENGTH_SHORT ).show ();
 
-                Intent intent = new Intent(HotelMeals.this, ItemDeatails.class);
+                Intent intent = new Intent(HotelMeals.this, ItemDetails.class);
                 intent.putExtra(Constants.M_NAME, product.getName ());
                 intent.putExtra(Constants.M_IMAGE, product.getImage ());
                 intent.putExtra(Constants.M_UNITMEASURE, product.getUnitMeasure ());

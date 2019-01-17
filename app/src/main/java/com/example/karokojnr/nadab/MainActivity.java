@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity
             }
             @Override
             public void onFailure(Call<HotelsList> call, Throwable t) {
+                Log.wtf(TAG, "onFailure: "+t.getMessage());
                 Toast.makeText ( MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
             }
         } );

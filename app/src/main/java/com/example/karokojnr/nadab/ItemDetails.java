@@ -6,11 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,21 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.karokojnr.nadab.CartActivity;
-import com.example.karokojnr.nadab.FragranceContract;
-import com.example.karokojnr.nadab.FragranceDbHelper;
-import com.example.karokojnr.nadab.R;
-import com.example.karokojnr.nadab.Utils;
 import com.example.karokojnr.nadab.api.RetrofitInstance;
 import com.example.karokojnr.nadab.utils.Constants;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import static com.example.karokojnr.nadab.FragranceContract.FragranceEntry.CART_TABLE;
+import static com.example.karokojnr.nadab.OrderContract.OrderEntry.CART_TABLE;
 
-public class ItemDeatails extends AppCompatActivity {
+public class ItemDetails extends AppCompatActivity {
 
     public static final String  FRAGRANCE_NAME = "fragranceName";
     public static final String  FRAGRANCE_DESCRIPTION = "fragranceDescription";
@@ -59,7 +52,18 @@ public class ItemDeatails extends AppCompatActivity {
     private int mNotificationsCount = 0;
     Button addToCartButton;
 
+    // Item values
+    private String itemName;
+    private String itemPrice;
+    private String itemUnitMeasure;
+    private String itemImageUrl;
 
+    public static final String TAG = ItemDetails.class.getSimpleName();
+    private ImageView imageView;
+    private TextView tvName;
+    private TextView tvPrice;
+    private TextView tvUnitMeasure;
+    private RatingBar ratingBar;
 
 
     @Override
@@ -68,59 +72,42 @@ public class ItemDeatails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_deatails);
 
-        //String mealId = getIntent().getStringExtra(Constants.M_ITEM_ID);
-        String name = getIntent ().getStringExtra(Constants.M_NAME);
-        String price = getIntent().getStringExtra(Constants.M_PRICE);
-        String unitMeasure = getIntent().getStringExtra(Constants.M_UNITMEASURE);
-        String image = getIntent().getStringExtra(Constants.M_IMAGE);
+        Intent intent = getIntent();
+        itemName = intent.getStringExtra(Constants.M_NAME);
+        itemPrice = intent.getStringExtra(Constants.M_PRICE);
+        itemUnitMeasure = intent.getStringExtra(Constants.M_UNITMEASURE);
+        itemImageUrl = intent.getStringExtra(Constants.M_IMAGE);
 
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContentResolver = this.getContentResolver();
-        FragranceDbHelper dbHelper = new FragranceDbHelper(this);
+        OrderDbHelper dbHelper = new OrderDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
 
 
 
 
-        Intent intentThatStartedThisActivity = getIntent();
+//        Intent intentThatStartedThisActivity = getIntent();
         addToCartButton = (Button) findViewById(R.id.cart_button);
+        costTextView = (TextView) findViewById(R.id.cost_text_view);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        tvName = (TextView) findViewById(R.id.tvName);
+        tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
+        tvPrice = (TextView) findViewById(R.id.tvPrice);
 
-
-        costTextView = (TextView) findViewById(
-                R.id.cost_text_view);
-
-
-            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-
-            TextView itemname = (TextView) findViewById(R.id.tvName);
-            itemname.setText(name);
-
-            TextView unitmeasure = (TextView) findViewById(R.id.tvUnitMeasure);
-            unitmeasure.setText(unitMeasure);
-
-            TextView fragmentPrice = (TextView) findViewById(R.id.tvPrice);
-            DecimalFormat precision = new DecimalFormat("0.00");
-            fragmentPrice.setText("$" + price);
-
-            float f = Float.parseFloat(Double.toString(rating));
-
-            setTitle(fragranceName);
-
-            RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
-            ratingBar.setRating(f);
-
-
-            Glide.with(this)
-                    .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+ image)
-                    .into(imageView);
-
-
-
+        tvName.setText(itemName);
+        tvUnitMeasure.setText(itemUnitMeasure);
+        tvPrice.setText("Kshs." + price);
+        float f = Float.parseFloat(Double.toString(rating));
+        setTitle(fragranceName);
+        ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
+        ratingBar.setRating(f);
+        Glide.with(this)
+                .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+ itemImageUrl)
+                .into(imageView);
 
         if (mQuantity == 1){
-
-            mTotalPrice = Integer.parseInt (  price);
+            mTotalPrice = Integer.parseInt(itemPrice);
             displayCost(mTotalPrice);
         }
 
@@ -162,22 +149,18 @@ public class ItemDeatails extends AppCompatActivity {
     }
 
     public void increment(View view){
-
-        price = getIntent().getExtras().getInt (FRAGRANCE_PRICE);
         mQuantity = mQuantity + 1;
         displayQuantity(mQuantity);
-        mTotalPrice = mQuantity * price;
+        mTotalPrice = mQuantity * Integer.parseInt(itemPrice);
         displayCost(mTotalPrice);
     }
 
     public void decrement(View view){
         if (mQuantity > 1){
-
             mQuantity = mQuantity - 1;
             displayQuantity(mQuantity);
-            mTotalPrice = mQuantity * price;
+            mTotalPrice = mQuantity * Integer.parseInt(itemPrice);
             displayCost(mTotalPrice);
-
         }
     }
 
@@ -187,28 +170,20 @@ public class ItemDeatails extends AppCompatActivity {
     }
 
     private void displayCost(double totalPrice) {
-
         String convertPrice = NumberFormat.getCurrencyInstance().format(totalPrice);
         costTextView.setText(convertPrice);
     }
 
     private void addValuesToCart() {
-
         ContentValues cartValues = new ContentValues();
+        cartValues.put(OrderContract.OrderEntry.COLUMN_CART_NAME, itemName);
+        cartValues.put(OrderContract.OrderEntry.COLUMN_CART_IMAGE, itemImageUrl);
+        cartValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, mQuantity);
+        cartValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, mTotalPrice);
 
-        cartValues.put(FragranceContract.FragranceEntry.COLUMN_CART_NAME, fragranceName);
-        cartValues.put(FragranceContract.FragranceEntry.COLUMN_CART_IMAGE, fragImage);
-        cartValues.put(FragranceContract.FragranceEntry.COLUMN_CART_QUANTITY, mQuantity);
-        cartValues.put(FragranceContract.FragranceEntry.COLUMN_CART_TOTAL_PRICE, mTotalPrice);
+        mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
 
-
-
-        mContentResolver.insert(FragranceContract.FragranceEntry.CONTENT_URI, cartValues);
-
-        Toast.makeText(this, "Successfully added to Cart",
-                Toast.LENGTH_SHORT).show();
-
-
+        Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
     }
 
     public void addToCart(View view) {
@@ -218,7 +193,6 @@ public class ItemDeatails extends AppCompatActivity {
         builder.setMessage(R.string.add_to_cart);
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-
                 addValuesToCart();
             }
         });
@@ -240,7 +214,7 @@ public class ItemDeatails extends AppCompatActivity {
 
     private void updateNotificationsBadge(int count) {
         mNotificationsCount = count;
-
+        Log.wtf(TAG, "updateNotificationsBadge: "+count );
         // force the ActionBar to relayout its MenuItems.
         // onCreateOptionsMenu(Menu) will be called again.
         invalidateOptionsMenu();

@@ -12,9 +12,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 
-public class FragranceProvider extends ContentProvider {
+public class OrderProvider extends ContentProvider {
 
-    public static final String LOG_TAG = FragranceProvider.class.getSimpleName();
+    public static final String LOG_TAG = OrderProvider.class.getSimpleName();
 
     /** URI matcher code for the content URI for the fragrance table */
     private static final int FRAGRANCES = 100;
@@ -44,9 +44,9 @@ public class FragranceProvider extends ContentProvider {
         // The content URI of the form "content://com.example.android.fragrance/fragrance" will map to the
         // integer code {@link #fragrance}. This URI is used to provide access to MULTIPLE rows
         // of the fragrance table.
-        sUriMatcher.addURI(FragranceContract.CONTENT_AUTHORITY, FragranceContract.PATH_FRAGRANCE, FRAGRANCES);
+//        sUriMatcher.addURI(OrderContract.CONTENT_AUTHORITY, OrderContract.PATH_FRAGRANCE, FRAGRANCES);
 
-        sUriMatcher.addURI(FragranceContract.CONTENT_AUTHORITY, FragranceContract.PATH_CART, CART);
+        sUriMatcher.addURI(OrderContract.CONTENT_AUTHORITY, OrderContract.PATH_CART, CART);
 
         // The content URI of the form "content://com.example.android.fragrance/fragrance/#" will map to the
         // integer code {@link #fragrance_ID}. This URI is used to provide access to ONE single row
@@ -55,17 +55,17 @@ public class FragranceProvider extends ContentProvider {
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.example.android.fragrance/fragrance/3" matches, but
         // "content://com.example.android.fragrance/fragrance" (without a number at the end) doesn't match.
-        sUriMatcher.addURI(FragranceContract.CONTENT_AUTHORITY, FragranceContract.PATH_FRAGRANCE + "/#", FRAGRANCE_ID);
-        sUriMatcher.addURI(FragranceContract.CONTENT_AUTHORITY, FragranceContract.PATH_CART + "/#", CART_ID);
+//        sUriMatcher.addURI(OrderContract.CONTENT_AUTHORITY, OrderContract.PATH_FRAGRANCE + "/#", FRAGRANCE_ID);
+        sUriMatcher.addURI(OrderContract.CONTENT_AUTHORITY, OrderContract.PATH_CART + "/#", CART_ID);
 
     }
 
     /** Database helper object */
-    private FragranceDbHelper fragranceDbHelper;
+    private OrderDbHelper orderDbHelper;
 
     @Override
     public boolean onCreate() {
-        fragranceDbHelper = new FragranceDbHelper(getContext());
+        orderDbHelper = new OrderDbHelper(getContext());
         return true;
     }
 
@@ -73,7 +73,7 @@ public class FragranceProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         // Get readable database
-        SQLiteDatabase database = fragranceDbHelper.getReadableDatabase();
+        SQLiteDatabase database = orderDbHelper.getReadableDatabase();
 
         // This cursor will hold the result of the query
         Cursor cursor;
@@ -81,24 +81,20 @@ public class FragranceProvider extends ContentProvider {
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case FRAGRANCES:
+            case CART:
                 // For the fragrance code, query the fragrance table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the fragrance table.
-                cursor = database.query(FragranceContract.FragranceEntry.TABLE_NAME, projection, selection, selectionArgs,
-                        null, null, sortOrder);
-                break;
-            case CART:
-                cursor = database.query(FragranceContract.FragranceEntry.CART_TABLE, projection, selection, selectionArgs,
+                cursor = database.query(OrderContract.OrderEntry.CART_TABLE, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case CART_ID:
-                selection = FragranceContract.FragranceEntry._CARTID + "=?";
+                selection = OrderContract.OrderEntry._CARTID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
                 // This will perform a query on the fragrance table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
-                cursor = database.query(FragranceContract.FragranceEntry.CART_TABLE, projection, selection, selectionArgs,
+                cursor = database.query(OrderContract.OrderEntry.CART_TABLE, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case FRAGRANCE_ID:
@@ -110,12 +106,12 @@ public class FragranceProvider extends ContentProvider {
                 // For every "?" in the selection, we need to have an element in the selection
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
-                selection = FragranceContract.FragranceEntry._ID + "=?";
+                selection = OrderContract.OrderEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
                 // This will perform a query on the fragrance table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
-                cursor = database.query(FragranceContract.FragranceEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(OrderContract.OrderEntry.CART_TABLE, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -141,9 +137,10 @@ public class FragranceProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+        Log.wtf("Inserting:: ", "insert: "+contentValues );
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case FRAGRANCES:
+            case CART:
                 return insertCart(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
@@ -153,10 +150,10 @@ public class FragranceProvider extends ContentProvider {
     private Uri insertCart(Uri uri, ContentValues values) {
 
         // Get writeable database
-        SQLiteDatabase database = fragranceDbHelper.getWritableDatabase();
+        SQLiteDatabase database = orderDbHelper.getWritableDatabase();
 
         // Insert the new cart with the given values
-        long id = database.insert(FragranceContract.FragranceEntry.CART_TABLE, null, values);
+        long id = database.insert(OrderContract.OrderEntry.CART_TABLE, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
@@ -173,7 +170,7 @@ public class FragranceProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         // Get access to the database and write URI matching code to recognize a single item
-        final SQLiteDatabase db = fragranceDbHelper.getWritableDatabase();
+        final SQLiteDatabase db = orderDbHelper.getWritableDatabase();
 
         int match = sUriMatcher.match(uri);
         // Keep track of the number of deleted tasks
@@ -187,7 +184,7 @@ public class FragranceProvider extends ContentProvider {
                 // Get the task ID from the URI path
                 String id = uri.getPathSegments().get(1);
                 // Use selections/selectionArgs to filter for this ID
-                cartDeleted = db.delete(FragranceContract.FragranceEntry.CART_TABLE, "_id=?", new String[]{id});
+                cartDeleted = db.delete(OrderContract.OrderEntry.CART_TABLE, "_id=?", new String[]{id});
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
