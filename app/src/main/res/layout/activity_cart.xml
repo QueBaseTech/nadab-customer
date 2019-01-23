@@ -51,17 +51,16 @@
         </TableLayout>
 
         <Button
-            android:id="@+id/button_payment"
+            android:id="@+id/button_order"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_below="@+id/priceLayout"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:background="@color/colorPrimary"
             android:text="ORDER"
-            android:onClick="paymentClick"
             android:textColor="#FFF"
             android:textSize="16dp"
-            android:layout_centerHorizontal="true"
             tools:ignore="OnClick" />
 
     </RelativeLayout>

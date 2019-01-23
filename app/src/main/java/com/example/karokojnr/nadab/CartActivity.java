@@ -9,38 +9,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.karokojnr.nadab.adapter.CartAdapter;
+import com.example.karokojnr.nadab.api.HotelService;
+import com.example.karokojnr.nadab.api.RetrofitInstance;
+import com.example.karokojnr.nadab.model.Order;
+import com.example.karokojnr.nadab.model.OrderItem;
 
 import java.text.NumberFormat;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CartActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the employee data loader */
     private static final int CART_LOADER = 0;
 
     /** Adapter for the ListView */
     CartAdapter cartAdapter;
     RecyclerView mRecyclerView;
     Double totalPrice;
-    Button paymentButton;
+    Button placeOrderBt;
+
+    private Order order = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        // Set the RecyclerView to its corresponding view
         mRecyclerView = (RecyclerView) findViewById(R.id.cart_recycler);
-
-        // Set the layout for the RecyclerView to be a linear layout, which measures and
-        // positions items within a RecyclerView into a linear list
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Initialize the adapter and attach it to the RecyclerView
         cartAdapter = new CartAdapter(this);
         mRecyclerView.setAdapter(cartAdapter);
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
@@ -76,21 +82,32 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
 
         getLoaderManager().initLoader(CART_LOADER, null, this);
 
-        paymentButton = (Button) findViewById(R.id.button_payment);
-        //Paypal Intent
-        /*Intent intent = new Intent(this, PayPalService.class);
+        placeOrderBt = (Button) findViewById(R.id.button_order);
 
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        placeOrderBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
+                Call<Order> call = service.placeOrder(order);
+                call.enqueue ( new Callback<Order>() {
+                    @Override
+                    public void onResponse(Call<Order> call, Response<Order> response) {
+                        if (response.body().isSuccess()){
+                            Toast.makeText(CartActivity.this, "Order placed successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(CartActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                        Log.wtf("API call", "onResponse: "+response.body().getMessage() );
+                    }
 
-        startService(intent);*/
-
+                    @Override
+                    public void onFailure(Call<Order> call, Throwable t) {
+                        Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
+                    }
+                } );
+            }
+        });
     }
-
-    /*@Override
-    public void onDestroy() {
-        stopService(new Intent(this, PayPalService.class));
-        super.onDestroy();
-    }*/
 
 
     @Override
@@ -129,15 +146,37 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public double calculateTotal(Cursor cursor){
         totalPrice = 0.00;
+        OrderItem[] orderItems = new OrderItem[cursor.getCount()];
+        if( order == null)
+            order = new Order();
+
         for (int i = 0; i<cursor.getCount(); i++)
         {
+            OrderItem item;
             int price = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE);
+            int name = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_NAME);
+            int qty = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_QUANTITY);
 
             cursor.moveToPosition(i);
-            Double fragrancePrice = cursor.getDouble(price);
-            totalPrice += fragrancePrice;
 
+            String itemName = cursor.getString(name);
+            int itemQty = cursor.getInt(qty);
+            Double fragrancePrice = cursor.getDouble(price);
+
+            item = new OrderItem(itemName, itemQty, fragrancePrice);
+            orderItems[i] = item;
+            totalPrice += fragrancePrice;
         }
+
+        order.setOrderItems(orderItems);
+        order.setTotalPrice(totalPrice);
+        order.setTotalItems(cursor.getCount());
+        order.setOrderStatus("NEW");
+        // TODO: 1/23/19 add hotel
+        order.setHotel("5c2920a1fe16626fb1762e5f");
+        // TODO: 1/23/19 Fetch currently logged in user
+        order.setCustomerId("5c2920a1fe16626fb1762e5f");
+        order.setOrderPayments(null);
 
         TextView totalCost = (TextView) findViewById(R.id.totalPrice);
         String convertPrice = NumberFormat.getCurrencyInstance().format(totalPrice);
@@ -150,52 +189,5 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         cartAdapter.swapCursor(null);
 
     }
-
-    /*public void paymentClick(View pressed) {
-
-        // PAYMENT_INTENT_SALE will cause the payment to complete immediately.
-        // Change PAYMENT_INTENT_SALE to
-        //   - PAYMENT_INTENT_AUTHORIZE to only authorize payment and capture funds later.
-        //   - PAYMENT_INTENT_ORDER to create a payment for authorization and capture
-        //     later via calls from your server.
-
-        PayPalPayment payment = new PayPalPayment(new BigDecimal(totalPrice), "USD", "Being payment for items ordered" ,
-                PayPalPayment.PAYMENT_INTENT_SALE);
-
-        Intent intent = new Intent(this, PaymentActivity.class);
-
-        // send the same configuration for restart resiliency
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-
-        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
-
-        startActivityForResult(intent, 0);
-    }
-
-    @Override
-    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-            if (confirm != null) {
-                try {
-                    Log.i("paymentExample", confirm.toJSONObject().toString(4));
-
-                    // TODO: send 'confirm' to your server for verification.
-                    // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
-                    // for more details.
-
-                } catch (JSONException e) {
-                    Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
-                }
-            }
-        }
-        else if (resultCode == Activity.RESULT_CANCELED) {
-            Log.i("paymentExample", "The user canceled.");
-        }
-        else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-            Log.i("paymentExample", "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
-        }
-    }*/
-
 
 }

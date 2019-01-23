@@ -16,12 +16,6 @@ public class OrderProvider extends ContentProvider {
 
     public static final String LOG_TAG = OrderProvider.class.getSimpleName();
 
-    /** URI matcher code for the content URI for the fragrance table */
-    private static final int FRAGRANCES = 100;
-
-    /** URI matcher code for the content URI for a single fragrance in the fragrance table */
-    private static final int FRAGRANCE_ID = 101;
-
     /** URI matcher code for the content URI for the cart table */
     private static final int CART = 102;
 
@@ -82,31 +76,11 @@ public class OrderProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case CART:
-                // For the fragrance code, query the fragrance table directly with the given
-                // projection, selection, selection arguments, and sort order. The cursor
-                // could contain multiple rows of the fragrance table.
                 cursor = database.query(OrderContract.OrderEntry.CART_TABLE, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case CART_ID:
                 selection = OrderContract.OrderEntry._CARTID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-
-                // This will perform a query on the fragrance table where the _id equals 3 to return a
-                // Cursor containing that row of the table.
-                cursor = database.query(OrderContract.OrderEntry.CART_TABLE, projection, selection, selectionArgs,
-                        null, null, sortOrder);
-                break;
-            case FRAGRANCE_ID:
-                // For the fragrance_ID code, extract out the ID from the URI.
-                // For an example URI such as "content://com.example.android.fragrance/fragrance/3",
-                // the selection will be "_id=?" and the selection argument will be a
-                // String array containing the actual ID of 3 in this case.
-                //
-                // For every "?" in the selection, we need to have an element in the selection
-                // arguments that will fill in the "?". Since we have 1 question mark in the
-                // selection, we have 1 String in the selection arguments' String array.
-                selection = OrderContract.OrderEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
                 // This will perform a query on the fragrance table where the _id equals 3 to return a

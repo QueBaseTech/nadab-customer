@@ -3,6 +3,7 @@ package com.example.karokojnr.nadab.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     // Class variables for the Cursor that holds task data and the Context
     private Cursor mCursor;
     private Context mContext;
+
+    public static final String TAG = CartAdapter.class.getSimpleName();
 
     /**
      * Constructor for the CustomCursorAdapter that initializes the Context.
@@ -61,12 +64,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         DecimalFormat precision = new DecimalFormat("0.00");
 
+        Log.wtf(TAG, "onBindViewHolder: Name::" + name );
+        Log.wtf(TAG, "onBindViewHolder: Price::" + fragrancePrice );
+        Log.wtf(TAG, "onBindViewHolder: Qty::" + fragranceQuantity );
+
+
+
         //Set values
        // holder.itemView.setTag(id);
         holder.fragName.setText(name);
         holder.fragQuantity.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
         holder.fragPrice.setText("Kshs." + precision.format(fragrancePrice));
-       Glide.with(mContext)
+        Glide.with(mContext)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+fragranceImage)
                 .into(holder.image);
 

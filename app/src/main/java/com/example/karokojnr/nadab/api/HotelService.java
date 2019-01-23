@@ -7,6 +7,7 @@ import com.example.karokojnr.nadab.model.HotelRegister;
 import com.example.karokojnr.nadab.model.HotelsList;
 import com.example.karokojnr.nadab.model.Login;
 
+import com.example.karokojnr.nadab.model.Order;
 import com.example.karokojnr.nadab.model.Products;
 
 import retrofit2.Call;
@@ -32,9 +33,9 @@ public interface HotelService {
     * */
     @POST("register/")
     Call<HotelRegister> addHotel(@Body Hotel hotel);
-//
-//    @POST("products/add")
-//    Call<Products> addProduct(@Body Product product);
+
+    @POST("orders/add")
+    Call<Order> placeOrder(@Body Order order);
 
     @FormUrlEncoded
     @POST("login/")
