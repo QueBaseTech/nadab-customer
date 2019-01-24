@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.karokojnr.nadab">
+    package="com.example.karokojnr.nadab_customer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -45,7 +45,7 @@
         </activity>
         <activity android:name=".CartActivity" />
         <provider android:name=".OrderProvider"
-            android:authorities="com.example.karokojnr.nadab"/>
+            android:authorities="com.example.karokojnr.nadab_customer"/>
     </application>
 
 </manifest>
