@@ -79,7 +79,7 @@ public class ItemDetails extends AppCompatActivity {
         itemImageUrl = intent.getStringExtra(Constants.M_IMAGE);
 
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContentResolver = this.getContentResolver();
         OrderDbHelper dbHelper = new OrderDbHelper(this);
         mDb = dbHelper.getWritableDatabase();

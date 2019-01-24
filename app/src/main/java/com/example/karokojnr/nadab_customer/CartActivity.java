@@ -114,11 +114,19 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/CartActivity.java
                 OrderContract.OrderEntry._CARTID,
                 OrderContract.OrderEntry.COLUMN_CART_NAME,
                 OrderContract.OrderEntry.COLUMN_CART_IMAGE,
                 OrderContract.OrderEntry.COLUMN_CART_QUANTITY,
                 OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE,
+=======
+                FragranceContract.FragranceEntry._CARTID,
+                FragranceContract.FragranceEntry.COLUMN_ITEM_NAME,
+                FragranceContract.FragranceEntry.COLUMN_UNIT_MEASURE,
+                FragranceContract.FragranceEntry.COLUMN_ITEM_PRICE,
+                FragranceContract.FragranceEntry.COLUMN_ITEM_IMAGE,
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c:app/src/main/java/com/example/karokojnr/nadab/CartActivity.java
         };
 
         // This loader will execute the ContentProvider's query method on a background thread

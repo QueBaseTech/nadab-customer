@@ -64,20 +64,25 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         DecimalFormat precision = new DecimalFormat("0.00");
 
-        Log.wtf(TAG, "onBindViewHolder: Name::" + name );
-        Log.wtf(TAG, "onBindViewHolder: Price::" + fragrancePrice );
-        Log.wtf(TAG, "onBindViewHolder: Qty::" + fragranceQuantity );
-
 
 
         //Set values
        // holder.itemView.setTag(id);
-        holder.fragName.setText(name);
-        holder.fragQuantity.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
-        holder.fragPrice.setText("Kshs." + precision.format(fragrancePrice));
-        Glide.with(mContext)
+//        holder.tvName.setText(product.getName ());
+        //holder.fragQuantity.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
+//        holder.tvUnitMeasure.setText("Quantity ordering: " + product.getUnitMeasure ());
+       // holder.fragPrice.setText("$" + precision.format(fragrancePrice));
+//        holder.tvPrice.setText("$" + product.getPrice ());
+
+
+        holder.tvName.setText(name);
+        holder.tvUnitMeasure.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
+        holder.tvPrice.setText("Kshs." + precision.format(fragrancePrice));
+       Glide.with(mContext)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+fragranceImage)
-                .into(holder.image);
+              /* .apply ( new RequestOptions ()
+                .placeholder(R.drawable.load))*/
+                .into(holder.imageView);
 
     }
 
@@ -106,14 +111,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
-        TextView fragName, fragQuantity, fragPrice;
-        ImageView image;
+        TextView tvName, tvUnitMeasure, tvPrice;
+        ImageView imageView;
         public CartViewHolder(View itemView) {
             super(itemView);
-            fragName = (TextView) itemView.findViewById(R.id.tvName);
-            fragQuantity = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
-            fragPrice = (TextView) itemView.findViewById(R.id.price);
-            image = (ImageView) itemView.findViewById(R.id.imageView);
+
+            tvName = (TextView) itemView.findViewById(R.id.tvName);
+            tvUnitMeasure = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
+            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
         }
 
     }
