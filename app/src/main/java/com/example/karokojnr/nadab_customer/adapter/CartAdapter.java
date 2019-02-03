@@ -3,7 +3,6 @@ package com.example.karokojnr.nadab_customer.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.karokojnr.nadab_customer.OrderContract;
+import com.example.karokojnr.nadab_customer.order.OrderContract;
 import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 
@@ -118,7 +117,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
             tvName = (TextView) itemView.findViewById(R.id.tvName);
             tvUnitMeasure = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
-            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            tvPrice = (TextView) itemView.findViewById(R.id.price);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
         }
 

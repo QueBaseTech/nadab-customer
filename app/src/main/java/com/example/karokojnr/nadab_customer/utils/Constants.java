@@ -17,4 +17,8 @@ public final class Constants {
     public static final String M_PRICE = "M_PRICE";
     public static final String M_ITEM_ID = "M_ITEM_ID";
 
+    public static final String M_ORDER_STATUS = "M_ORDER_STATUS";
+    public static final String M_ORDER_ID = "M_ORDER_ID";
+    public static final String M_ORDER_HOTEL = "M_ORDER_HOTEL";
+
 }

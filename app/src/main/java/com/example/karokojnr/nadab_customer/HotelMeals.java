@@ -32,11 +32,9 @@ public class HotelMeals extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TextView mNoProductsNotice;
     private List<Product> productList = new ArrayList<> ();
-    Toolbar toolbar;
-
+    private Toolbar toolbar;
     private static final String TAG = "Items";
-
-
+    private String hotelId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,7 @@ public class HotelMeals extends AppCompatActivity {
 
 
 
-        String hotelId = getIntent().getStringExtra(Constants.M_HOTEL_ID);
+        hotelId = getIntent().getStringExtra(Constants.M_HOTEL_ID);
 
         HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
         Call<Products> call = service.getHotelProducts(hotelId);
@@ -106,6 +104,7 @@ public class HotelMeals extends AppCompatActivity {
                 intent.putExtra(Constants.M_IMAGE, product.getImage ());
                 intent.putExtra(Constants.M_UNITMEASURE, product.getUnitMeasure ());
                 intent.putExtra(Constants.M_PRICE, product.getPrice ());
+                intent.putExtra(Constants.M_HOTEL_ID, hotelId);
 
                 startActivity(intent);
 

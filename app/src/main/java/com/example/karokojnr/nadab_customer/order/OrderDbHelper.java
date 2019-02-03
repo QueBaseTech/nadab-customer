@@ -1,25 +1,10 @@
-package com.example.karokojnr.nadab_customer;
+package com.example.karokojnr.nadab_customer.order;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-
 
 
 public class OrderDbHelper extends SQLiteOpenHelper {

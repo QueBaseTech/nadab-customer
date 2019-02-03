@@ -22,11 +22,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
+import com.example.karokojnr.nadab_customer.order.OrderContract;
+import com.example.karokojnr.nadab_customer.order.OrderDbHelper;
 import com.example.karokojnr.nadab_customer.utils.Constants;
+import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.text.NumberFormat;
 
-import static com.example.karokojnr.nadab_customer.OrderContract.OrderEntry.CART_TABLE;
+import static com.example.karokojnr.nadab_customer.order.OrderContract.OrderEntry.CART_TABLE;
 
 public class ItemDetails extends AppCompatActivity {
 
@@ -39,20 +42,20 @@ public class ItemDetails extends AppCompatActivity {
     private ImageView mImage;
 
 
-    String fragranceName, name, fragImage;
-    int rating;
-    int price;
+    private String fragranceName, name;
+    private int rating;
+    private int price;
     private int mQuantity = 1;
     private double mTotalPrice;
-    String imagePath;
-    TextView costTextView;
-    ContentResolver mContentResolver;
+    private TextView costTextView;
+    private ContentResolver mContentResolver;
     private SQLiteDatabase mDb;
 
     private int mNotificationsCount = 0;
     Button addToCartButton;
 
     // Item values
+    private String itemHotelId;
     private String itemName;
     private String itemPrice;
     private String itemUnitMeasure;
@@ -77,9 +80,13 @@ public class ItemDetails extends AppCompatActivity {
         itemPrice = intent.getStringExtra(Constants.M_PRICE);
         itemUnitMeasure = intent.getStringExtra(Constants.M_UNITMEASURE);
         itemImageUrl = intent.getStringExtra(Constants.M_IMAGE);
+        itemHotelId = intent.getStringExtra(Constants.M_HOTEL_ID);
 
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.wtf(TAG, "onCreate: "+e.getMessage());
+        }
         mContentResolver = this.getContentResolver();
         OrderDbHelper dbHelper = new OrderDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
@@ -181,9 +188,19 @@ public class ItemDetails extends AppCompatActivity {
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, mQuantity);
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, mTotalPrice);
 
-        mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
-
-        Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
+        String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL);
+        if(currentHotel == null){
+            utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL, itemHotelId);
+            mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
+            Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
+        } else if(currentHotel != itemHotelId) {
+            Toast.makeText(this, "You have incomplete orders from another hotel, you can't order from two hotels.", Toast.LENGTH_LONG).show();
+        } else if(currentHotel == itemHotelId) {
+            mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
+            Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Item not to Cart", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void addToCart(View view) {

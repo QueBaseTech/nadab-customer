@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NADAB</string>
+    <string name="app_name">Nadab Customer</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -62,7 +62,7 @@
 
     <string name="quantity">Quantity</string>
     <string name="brew_tea">ADD TO CART</string>
-    <string name="initial_cost">$0.00</string>
+    <string name="initial_cost">Kshs. 0.00</string>
     <string name="initial_quantity">1</string>
     <string name="total">Total</string>
     <string name="price">PRICE: </string>

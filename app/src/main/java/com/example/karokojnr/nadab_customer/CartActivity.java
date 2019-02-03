@@ -20,6 +20,8 @@ import com.example.karokojnr.nadab_customer.api.HotelService;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.OrderItem;
+import com.example.karokojnr.nadab_customer.order.OrderContract;
+import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.text.NumberFormat;
 
@@ -84,27 +86,37 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
 
         placeOrderBt = (Button) findViewById(R.id.button_order);
 
+        String orderStatus = utils.getOrderStatus(CartActivity.this);
+        if (orderStatus == "SENT")
+            placeOrderBt.setText("PAY");
+
         placeOrderBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-                Call<Order> call = service.placeOrder(order);
-                call.enqueue ( new Callback<Order>() {
-                    @Override
-                    public void onResponse(Call<Order> call, Response<Order> response) {
-                        if (response.body().isSuccess()){
-                            Toast.makeText(CartActivity.this, "Order placed successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(CartActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                String orderStatus = utils.getOrderStatus(CartActivity.this);
+                if (orderStatus == "NEW") {
+                    HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
+                    Call<Order> call = service.placeOrder(order);
+                    call.enqueue ( new Callback<Order>() {
+                        @Override
+                        public void onResponse(Call<Order> call, Response<Order> response) {
+                            if (response.body().isSuccess()){
+                                utils.setOrderStatus(CartActivity.this, "SENT");
+                                Toast.makeText(CartActivity.this, "Order placed successfully", Toast.LENGTH_SHORT).show();
+                                utils.setOrderId(CartActivity.this, response.body().getOrderId());
+                            } else {
+                                Toast.makeText(CartActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
-                        Log.wtf("API call", "onResponse: "+response.body().getMessage() );
-                    }
 
-                    @Override
-                    public void onFailure(Call<Order> call, Throwable t) {
-                        Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
-                    }
-                } );
+                        @Override
+                        public void onFailure(Call<Order> call, Throwable t) {
+                            Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
+                        }
+                    } );
+                } else if ( orderStatus == "SENT") {
+                    Toast.makeText(CartActivity.this, "Order already sent pay", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

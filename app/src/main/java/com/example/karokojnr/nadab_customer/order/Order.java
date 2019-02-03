@@ -1,4 +1,4 @@
-package com.example.karokojnr.nadab_customer;
+package com.example.karokojnr.nadab_customer.order;
 
 import android.database.Cursor;
 

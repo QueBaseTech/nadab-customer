@@ -20,7 +20,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <provider android:name="com.example.karokojnr.nadab_customer.OrderProvider"
+        <provider android:name="com.example.karokojnr.nadab_customer.order.OrderProvider"
             android:authorities="com.example.karokojnr.nadab_customer"
             android:enabled="true"
             android:exported="true"
