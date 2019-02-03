@@ -1,12 +1,16 @@
 package com.example.karokojnr.nadab_customer.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.R;
+import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 
 import java.util.ArrayList;
@@ -15,9 +19,11 @@ import java.util.ArrayList;
 public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> {
 
     private ArrayList<Hotel> mDataList;
+    private Context context;
 
-    public HotelAdapter(ArrayList<Hotel> mDataList) {
+    public HotelAdapter(ArrayList<Hotel> mDataList, Context context) {
         this.mDataList = mDataList;
+        this.context = context;
     }
 
    private  OnItemlickListener mListener;
@@ -44,6 +50,9 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
         holder.txtHotelName.setText(mDataList.get(position).getBusinessName ());
         holder.txtAddress.setText(mDataList.get(position).getAddress ());
         holder.txtPayBillNo.setText(mDataList.get(position).getPayBillNo ());
+        Glide.with(context)
+                .load(RetrofitInstance.BASE_URL+"images/uploads/hotels/thumb_"+mDataList.get(position).getProfile())
+                .into(holder.imageView);
     }
 
     @Override
@@ -54,12 +63,14 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
     class HotelViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtHotelName, txtAddress, txtPayBillNo;
+        ImageView imageView;
 
         HotelViewHolder(View itemView) {
             super(itemView);
             txtHotelName = (TextView) itemView.findViewById(R.id.txt_hotel_name);
             txtAddress = (TextView) itemView.findViewById(R.id.txt_address);
             txtPayBillNo = (TextView) itemView.findViewById(R.id.pay_bill_no);
+            imageView = (ImageView) itemView.findViewById(R.id.ivHotel);
 
 
 

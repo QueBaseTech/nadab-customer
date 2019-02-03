@@ -51,11 +51,12 @@ public class HotelsActivity extends AppCompatActivity {
             public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
                 assert response.body () != null;
                 generateHotelsList ( response.body ().getHotelsArrayList () );
-                Log.d ( TAG, "onResponse: fteched okay" );
+                Log.d ( TAG, "onResponse: fetched okay" );
             }
 
             @Override
             public void onFailure(Call<HotelsList> call, Throwable t) {
+                Log.wtf(TAG, "onFailure: "+t.getMessage() );
                 Toast.makeText ( HotelsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
             }
         } );
@@ -68,7 +69,7 @@ public class HotelsActivity extends AppCompatActivity {
     private void generateHotelsList(ArrayList<Hotel> empDataList) {
         recyclerView = (RecyclerView) findViewById ( R.id.recycler_view );
 
-        adapter = new HotelAdapter ( empDataList );
+        adapter = new HotelAdapter ( empDataList, this );
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager ( HotelsActivity.this );
 

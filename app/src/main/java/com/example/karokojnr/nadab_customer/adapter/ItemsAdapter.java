@@ -43,7 +43,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
         holder.unitMeasure.setText(product.getUnitMeasure());
         holder.price.setText("Ksh " + product.getPrice());
         Glide.with(context)
-                .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+product.getImage())
+                .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+product.getImage())
                 .into(holder.imageView);
     }
 

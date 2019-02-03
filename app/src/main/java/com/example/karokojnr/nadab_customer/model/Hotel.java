@@ -49,6 +49,16 @@ public class Hotel {
     @SerializedName("password")
     private String password;
 
+    @SerializedName("image")
+    private String profile;
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 
     public Hotel(String businessName, String address, String payBillNo) {
         this.businessName = businessName;
@@ -80,93 +90,3 @@ public class Hotel {
         this.payBillNo = payBillNo;
     }
 }
-
-    /*public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getBusinessName() {
-        return businessName;
-    }
-
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
-    }
-
-    public String getApplicantName() {
-        return applicantName;
-    }
-
-    public void setApplicantName(String applicantName) {
-        this.applicantName = applicantName;
-    }
-
-    public String getPayBillNo() {
-        return payBillNo;
-    }
-
-    public void setPayBillNo(String payBillNo) {
-        this.payBillNo = payBillNo;
-    }
-
-    public String getMobileNumber() {
-        return "0"+mobileNumber;
-    }
-
-    public void setMobileNumber(int mobileNumber) {
-        this.mobileNumber = mobileNumber;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getBusinessEmail() {
-        return businessEmail;
-    }
-
-    public void setBusinessEmail(String businessEmail) {
-        this.businessEmail = businessEmail;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Hotel{" +
-                "businessName='" + businessName + '\'' +
-                ", applicantName='" + applicantName + '\'' +
-                ", payBillNo='" + payBillNo + '\'' +
-                ", mobileNumber=" + mobileNumber +
-                ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
-                ", businessEmail='" + businessEmail + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", password='" + password + '\'' +
-                ", id='" + id + '\'' +
-                '}';
-    }
-}
-*/

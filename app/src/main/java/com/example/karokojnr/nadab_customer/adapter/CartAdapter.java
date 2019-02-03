@@ -78,7 +78,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.tvUnitMeasure.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
         holder.tvPrice.setText("Kshs." + precision.format(fragrancePrice));
        Glide.with(mContext)
-                .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+fragranceImage)
+                .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+fragranceImage)
               /* .apply ( new RequestOptions ()
                 .placeholder(R.drawable.load))*/
                 .into(holder.imageView);

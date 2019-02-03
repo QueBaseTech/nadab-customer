@@ -110,7 +110,7 @@ public class ItemDetails extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
         ratingBar.setRating(f);
         Glide.with(this)
-                .load(RetrofitInstance.BASE_URL+"images/uploads/thumbs/"+ itemImageUrl)
+                .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+ itemImageUrl)
                 .into(imageView);
 
         if (mQuantity == 1){

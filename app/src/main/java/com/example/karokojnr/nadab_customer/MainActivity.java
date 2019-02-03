@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
     /*Method to generate List of hotel using RecyclerView with custom adapter*/
     private void generateHotelsList(ArrayList<Hotel> empDataList) {
         recyclerView = (RecyclerView) findViewById ( R.id.recycler_view );
-        adapter = new HotelAdapter ( empDataList );
+        adapter = new HotelAdapter ( empDataList, this );
         recyclerView.setHasFixedSize(true);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
