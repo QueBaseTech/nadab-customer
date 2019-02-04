@@ -193,9 +193,9 @@ public class ItemDetails extends AppCompatActivity {
             utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL, itemHotelId);
             mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
             Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
-        } else if(currentHotel != itemHotelId) {
+        } else if(!currentHotel.equals(itemHotelId)) {
             Toast.makeText(this, "You have incomplete orders from another hotel, you can't order from two hotels.", Toast.LENGTH_LONG).show();
-        } else if(currentHotel == itemHotelId) {
+        } else if(currentHotel.equals(itemHotelId)) {
             mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
             Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
         } else {

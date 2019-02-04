@@ -88,14 +88,15 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         placeOrderBt = (Button) findViewById(R.id.button_order);
 
         String orderStatus = utils.getOrderStatus(CartActivity.this);
-        if (orderStatus == "SENT")
+        if (orderStatus.equals("SENT"))
             placeOrderBt.setText("PAY");
 
         placeOrderBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String orderStatus = utils.getOrderStatus(CartActivity.this);
-                if (orderStatus == "NEW") {
+                Log.wtf("ORDER Status", "onClick: "+ orderStatus );
+                if (orderStatus.equals("NEW")) {
                     HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
                     Call<Order> call = service.placeOrder(order);
                     call.enqueue ( new Callback<Order>() {
@@ -115,8 +116,8 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
                             Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
                         }
                     } );
-                } else if ( orderStatus == "SENT") {
-                    Toast.makeText(CartActivity.this, "Order already sent pay", Toast.LENGTH_SHORT).show();
+                } else if (orderStatus.equals("SENT")) {
+                    Toast.makeText(CartActivity.this, "Order already sent pay", Toast.LENGTH_LONG).show();
                 }
             }
         });
