@@ -21,6 +21,7 @@ import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.OrderItem;
 import com.example.karokojnr.nadab_customer.order.OrderContract;
+import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.text.NumberFormat;
@@ -184,8 +185,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         order.setTotalPrice(totalPrice);
         order.setTotalItems(cursor.getCount());
         order.setOrderStatus("NEW");
-        // TODO: 1/23/19 add hotel
-        order.setHotel("5c20b4c2af2005388a16bfc5");
+        order.setHotel(utils.getSharedPrefsString(this, Constants.M_ORDER_HOTEL));
         // TODO: 1/23/19 Fetch currently logged in user
         order.setCustomerId("5c2920a1fe16626fb1762e5f");
         order.setOrderPayments(null);
@@ -199,7 +199,6 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         cartAdapter.swapCursor(null);
-
     }
 
 }
