@@ -28,6 +28,8 @@ public class UserLogin {
     @SerializedName("mobileNumber")
     private String mobileNumber;
 
+    public UserLogin() { }
+
     public UserLogin(String username, String email, String fullName, String token, String id, String mobileNumber) {
         this.username = username;
         this.email = email;

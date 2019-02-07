@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // Start Home activity
                                 goHome();
                                 // Send FCM token to server
-                                // sendToken();
+                                 sendToken();
                             } else {
                                 mLoading.setVisibility(View.INVISIBLE);
                                 Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         mRegister.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent ( LoginActivity.this, MainActivity.class );
+                Intent intent = new Intent ( LoginActivity.this, RegisterActivity.class );
                 startActivity ( intent );
             }
         } );

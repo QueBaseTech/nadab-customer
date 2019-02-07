@@ -12,14 +12,18 @@ import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.Products;
 import com.example.karokojnr.nadab_customer.model.UserLogin;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 
@@ -49,8 +53,12 @@ public interface HotelService {
 
     // Send app token to server everytime it changes
     @FormUrlEncoded
-    @PUT("hotel/token")
+    @PUT("customer/token")
     Call<FCMToken> sendTokenToServer(@Header("x-token") String authToken, @Field("token") String token);
+
+    @Multipart
+    @POST("customer/register")
+    Call<UserLogin> addCustomer(@Part MultipartBody.Part fileToUpload, @Part("filename") RequestBody filename, @Part("fullName") RequestBody userName, @Part("mobileNumber") RequestBody mobileNumber, @Part("email") RequestBody userEmail, @Part("password") RequestBody password);
 
     /*
 

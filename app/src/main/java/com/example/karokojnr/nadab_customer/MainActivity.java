@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity
             //RECYCLER VIEW
             HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
             Call<HotelsList> call = service.getHotels ();
-            Log.wtf ( "URL Called", call.request ().url () + "" );
             call.enqueue ( new Callback<HotelsList> () {
                 @Override
                 public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
@@ -197,10 +196,8 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //Option Selected
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-
             startActivity(new Intent (MainActivity.this, HotelsActivity.class));
             return true;
         }else if (id == R.id.action_cart) {
@@ -212,6 +209,7 @@ public class MainActivity extends AppCompatActivity
            // notificationCount=0;//clear notification count
             invalidateOptionsMenu();
             return true;
+        }else if (id == R.id.nav_item6) {
         }else {
            // startActivity(new Intent(MainActivity.this, EmptyActivity.class));
 
@@ -273,7 +271,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_item5) {
             viewPager.setCurrentItem(4);
         }else if (id == R.id.nav_item6) {
-            viewPager.setCurrentItem(5);
+            Log.wtf(TAG, "onOptionsItemSelected: Logout");
+            SharedPrefManager.getInstance(getApplicationContext()).logout();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            this.finish();
         }else if (id == R.id.my_wishlist) {
             //startActivity(new Intent(MainActivity.this, WishlistActivity.class));
         }else if (id == R.id.my_cart) {
