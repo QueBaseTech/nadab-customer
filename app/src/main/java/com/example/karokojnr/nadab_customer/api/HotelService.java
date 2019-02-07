@@ -2,6 +2,7 @@ package com.example.karokojnr.nadab_customer.api;
 
 
 
+import com.example.karokojnr.nadab_customer.model.FCMToken;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelRegister;
 import com.example.karokojnr.nadab_customer.model.HotelsList;
@@ -9,6 +10,7 @@ import com.example.karokojnr.nadab_customer.model.Login;
 
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.Products;
+import com.example.karokojnr.nadab_customer.model.UserLogin;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,6 +19,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 
@@ -38,12 +41,18 @@ public interface HotelService {
     Call<Order> placeOrder(@Body Order order);
 
     @FormUrlEncoded
-    @POST("login/")
-    Call<Login> login(@Field("email") String email, @Field("password") String password);
+    @POST("customer/login")
+    Call<UserLogin> login(@Field("email") String email, @Field("password") String password);
 
     @GET("products/")
     Call<Products> getProducts(@Header("x-token") String token);
-/*
+
+    // Send app token to server everytime it changes
+    @FormUrlEncoded
+    @PUT("hotel/token")
+    Call<FCMToken> sendTokenToServer(@Header("x-token") String authToken, @Field("token") String token);
+
+    /*
 
     *//**
      * URL MANIPULATION

@@ -6,25 +6,29 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.FragranceProvider"/>
+    <uses-permission android:name="android.permission.FragranceProvider" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
+        android:exported="true"
         android:icon="@drawable/logo"
-        android:exported = "true"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <provider android:name="com.example.karokojnr.nadab_customer.order.OrderProvider"
+        <provider
+            android:name=".order.OrderProvider"
             android:authorities="com.example.karokojnr.nadab_customer"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="WrongManifestParent"/>
+            tools:ignore="WrongManifestParent" />
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -33,29 +37,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".SearchActivity" />
-
         <activity android:name=".HotelsActivity" />
-
         <activity android:name=".HotelMeals" />
-        <activity android:name=".ItemDetails"
+        <activity
+            android:name=".ItemDetails"
             android:parentActivityName=".HotelMeals"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HotelMeals"
-                android:exported = "true"
-                android:theme="@style/Theme.AppCompat.Light"/>
+                android:exported="true"
+                android:theme="@style/Theme.AppCompat.Light"
+                android:value=".HotelMeals" />
         </activity>
         <activity android:name=".CartActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>
