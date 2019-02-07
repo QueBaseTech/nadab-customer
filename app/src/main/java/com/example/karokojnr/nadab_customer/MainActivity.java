@@ -33,6 +33,7 @@ import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelsList;
 import com.example.karokojnr.nadab_customer.utils.Constants;
+import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
 import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.util.ArrayList;
@@ -67,54 +68,55 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(true) {
+        if(!SharedPrefManager.getInstance(this).isLoggedIn()) {
             startActivity(new Intent(this, LoginActivity.class));
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            this.finish();
+        } else {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-        //RECYCLER VIEW
-        HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-        Call<HotelsList> call = service.getHotels ();
-        Log.wtf ( "URL Called", call.request ().url () + "" );
-        call.enqueue ( new Callback<HotelsList> () {
-            @Override
-            public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
-                assert response.body () != null;
-                if (response == null) {
-                    Toast.makeText ( getApplicationContext (), "Something Went Wrong...!!", Toast.LENGTH_SHORT ).show ();
-                } else {
+            if (viewPager != null) {
+                setupViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager);
+            }
+            //RECYCLER VIEW
+            HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
+            Call<HotelsList> call = service.getHotels ();
+            Log.wtf ( "URL Called", call.request ().url () + "" );
+            call.enqueue ( new Callback<HotelsList> () {
+                @Override
+                public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
                     assert response.body () != null;
-                    for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
-                        hotelList.add ( response.body ().getHotelsArrayList ().get ( i ) );
+                    if (response == null) {
+                        Toast.makeText ( getApplicationContext (), "Something Went Wrong...!!", Toast.LENGTH_SHORT ).show ();
+                    } else {
+                        assert response.body () != null;
+                        for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
+                            hotelList.add ( response.body ().getHotelsArrayList ().get ( i ) );
+                        }
+                        Log.i ( "RESPONSE: ", "" + response.toString () );
                     }
-                    Log.i ( "RESPONSE: ", "" + response.toString () );
+                    generateHotelsList ( response.body ().getHotelsArrayList () );
                 }
-                generateHotelsList ( response.body ().getHotelsArrayList () );
-            }
-            @Override
-            public void onFailure(Call<HotelsList> call, Throwable t) {
-                Log.wtf(TAG, "onFailure: "+t.getMessage());
-                Toast.makeText ( MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
-            }
-        } );
-        //RECYCLERVIEW END
+                @Override
+                public void onFailure(Call<HotelsList> call, Throwable t) {
+                    Log.wtf(TAG, "onFailure: "+t.getMessage());
+                    Toast.makeText ( MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
+                }
+            } );
+        }
     }
 
     /*Method to generate List of hotel using RecyclerView with custom adapter*/
