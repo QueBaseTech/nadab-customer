@@ -96,7 +96,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View view) {
                 String orderStatus = utils.getOrderStatus(CartActivity.this);
                 Log.wtf("ORDER Status", "onClick: "+ orderStatus );
-                if (orderStatus.equals("NEW")) {
+                if (!orderStatus.equals("NEWs")) {
                     HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
                     Call<Order> call = service.placeOrder(order);
                     call.enqueue ( new Callback<Order>() {
@@ -186,9 +186,8 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         order.setTotalPrice(totalPrice);
         order.setTotalItems(cursor.getCount());
         order.setOrderStatus("NEW");
-        order.setHotel(utils.getSharedPrefsString(this, Constants.M_ORDER_HOTEL));
-        // TODO: 1/23/19 Fetch currently logged in user
-        order.setCustomerId("5c2920a1fe16626fb1762e5f");
+        order.setHotel(utils.getSharedPrefsString(this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL));
+        order.setCustomerId(utils.getSharedPrefsString(this, Constants.M_USER_SHARED_PREFERENCE, Constants.M_USER_ID));
         order.setOrderPayments(null);
 
         TextView totalCost = (TextView) findViewById(R.id.totalPrice);

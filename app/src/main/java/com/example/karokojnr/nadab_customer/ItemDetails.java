@@ -188,7 +188,7 @@ public class ItemDetails extends AppCompatActivity {
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, mQuantity);
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, mTotalPrice);
 
-        String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL);
+        String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
         if(currentHotel == null){
             utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL, itemHotelId);
             mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);

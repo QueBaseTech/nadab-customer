@@ -10,33 +10,20 @@ public class UserLogin {
     @SerializedName("message")
     private String message;
 
-    @SerializedName("username")
-    private String username;
-
-    @SerializedName("email")
-    private String email;
-
-    @SerializedName("fullName")
-    private String fullName;
-
     @SerializedName("token")
     private String token;
 
-    @SerializedName("_id")
-    private String id;
-
-    @SerializedName("mobileNumber")
-    private String mobileNumber;
+    @SerializedName("customer")
+    private Customer customer;
 
     public UserLogin() { }
 
-    public UserLogin(String username, String email, String fullName, String token, String id, String mobileNumber) {
-        this.username = username;
-        this.email = email;
-        this.fullName = fullName;
-        this.token = token;
-        this.id = id;
-        this.mobileNumber = mobileNumber;
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public boolean isSuccess() {
@@ -51,27 +38,13 @@ public class UserLogin {
         this.message = message;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getMobileNumber() {
-        return mobileNumber;
+    @Override
+    public String toString() {
+        return "UserLogin{" +
+                "success=" + success +
+                ", message='" + message + '\'' +
+                ", token='" + token + '\'' +
+                ", customer='" + customer.toString() + '\'' +
+                '}';
     }
 }

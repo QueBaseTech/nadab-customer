@@ -150,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                     if(response.body().isSuccess()){
                         // Persist to local storage
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(response.body());
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(response.body().getCustomer(), response.body().getToken());
                         // Start Home activity
                         goHome();
                         // Send FCM token to server

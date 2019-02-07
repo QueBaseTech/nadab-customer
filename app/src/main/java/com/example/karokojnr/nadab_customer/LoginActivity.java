@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             if(response.body().isSuccess()){
                                 // Persist to local storage
-                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(response.body());
+                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(response.body().getCustomer(), response.body().getToken());
                                 // Start Home activity
                                 goHome();
                                 // Send FCM token to server

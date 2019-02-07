@@ -63,8 +63,8 @@ public class utils {
     }
 
 
-    public static final String getSharedPrefsString(Context context, String field) {
-        SharedPreferences sharedPreferences =   context.getSharedPreferences(Constants.M_SHARED_PREFERENCE, Context.MODE_PRIVATE);
+    public static final String getSharedPrefsString(Context context, String prefs, String field) {
+        SharedPreferences sharedPreferences =   context.getSharedPreferences(prefs, Context.MODE_PRIVATE);
         return sharedPreferences.getString(field, null);
     }
 
