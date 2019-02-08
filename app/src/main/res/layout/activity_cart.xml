@@ -51,6 +51,7 @@
         </TableLayout>
 
         <Button
+<<<<<<< HEAD
             android:id="@+id/button_order"
             android:layout_width="100dp"
             android:layout_height="50dp"
@@ -61,6 +62,19 @@
             android:text="ORDER"
             android:textColor="#FFF"
             android:textSize="16dp"
+=======
+            android:id="@+id/button_payment"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/priceLayout"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:background="@color/colorPrimary"
+            android:text="ORDER"
+            android:onClick="paymentClick"
+            android:textColor="#FFF"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
             tools:ignore="OnClick" />
 
     </RelativeLayout>

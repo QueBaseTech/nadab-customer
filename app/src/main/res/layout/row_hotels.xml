@@ -22,12 +22,15 @@
             android:layout_height="wrap_content" />
 
         <!-- TextView Employee Email -->
+<<<<<<< HEAD
         <ImageView
             android:id="@+id/ivHotel"
             android:layout_width="match_parent"
             android:layout_height="200.0dp"
             card_view:srcCompat="@android:color/darker_gray" />
 
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
         <TextView
             android:id="@+id/txt_address"
             android:layout_width="match_parent"

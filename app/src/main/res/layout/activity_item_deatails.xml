@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+<<<<<<< HEAD
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="@style/AppTheme"
     android:background="@color/colorAccent">
+=======
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
     <RelativeLayout
         android:id="@+id/detail"
@@ -21,6 +27,7 @@
             android:padding="@dimen/activity_horizontal_margin"
             />
 
+<<<<<<< HEAD
 
         <TextView
             android:id="@+id/tvName"
@@ -31,12 +38,21 @@
             android:textSize="25sp"
             android:textAllCaps="true"
             android:textStyle="bold"
+=======
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_margin"
+            android:textSize="15sp"
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
             tools:text="Cool"
             android:layout_marginTop="33dp"
             android:layout_below="@+id/imageView"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true" />
 
+<<<<<<< HEAD
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_cart"
             android:background="@color/colorPrimary"
@@ -50,14 +66,30 @@
             app:layout_anchorGravity="bottom|end"
             tools:ignore="NotSibling" />
 
+=======
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CustomRatingLevel"
+            android:id="@+id/ratingLevel"
+            android:layout_below="@+id/tvName"
+            android:numStars="5"
+            android:isIndicator="true"/>
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
         <TableLayout
             android:layout_width="fill_parent"
             android:id="@+id/priceLinearLayout"
+<<<<<<< HEAD
             android:layout_below="@+id/btn_cart"
             android:padding="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             >
+=======
+            android:layout_below="@+id/ratingLevel"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content">
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
             <TableRow
                 android:layout_width="fill_parent"
@@ -69,50 +101,76 @@
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+<<<<<<< HEAD
                     android:textStyle="bold"
                     android:text="Price:"/>
+=======
+                    android:text="PRICE"/>
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="6"
+<<<<<<< HEAD
                     android:textColor="@android:color/white"
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
                     android:textSize="16sp"
                     android:gravity="center"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvPrice" />
             </TableRow>
+<<<<<<< HEAD
         </TableLayout>
 
 
+=======
+
+        </TableLayout>
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
         <TableLayout
             android:layout_width="fill_parent"
             android:id="@+id/unitMeasureLinearLayout"
             android:layout_below="@+id/priceLinearLayout"
             android:padding="@dimen/activity_horizontal_margin"
+<<<<<<< HEAD
             android:outlineSpotShadowColor="@android:color/white"
             android:background="@drawable/border"
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
             android:layout_height="wrap_content">
 
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+<<<<<<< HEAD
                 android:layout_marginBottom="20dp"
                 >
+=======
+                android:layout_marginBottom="20dp">
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+<<<<<<< HEAD
                     android:textStyle="bold"
                     android:text="Unit Measure:"/>
+=======
+                    android:text="Unit Measure"/>
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="6"
                     android:textSize="16sp"
                     android:gravity="center"
+<<<<<<< HEAD
                     android:textColor="@android:color/white"
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
                     android:layout_height="wrap_content"
                     android:id="@+id/tvUnitMeasure" />
             </TableRow>
@@ -132,10 +190,15 @@
             <TextView
                 android:id="@+id/quantityLabel"
                 android:layout_width="wrap_content"
+<<<<<<< HEAD
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:text="Quantity:" />
+=======
+                android:layout_height="wrap_content"
+                android:text="Quantity" />
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,7 +213,10 @@
                     android:background="@null"
                     android:onClick="decrement"
                     android:textSize="18sp"
+<<<<<<< HEAD
                     android:textColor="@android:color/white"
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
                     android:text="-" />
 
                 <TextView
@@ -160,8 +226,13 @@
                     android:layout_gravity="center"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
+<<<<<<< HEAD
                     android:textColor="@android:color/white"
                     android:text="@string/initial_quantity"
+=======
+                    android:text="@string/initial_quantity"
+                    android:textColor="@android:color/black"
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
                     android:textSize="22sp" />
 
                 <Button
@@ -171,7 +242,10 @@
                     android:background="@null"
                     android:onClick="increment"
                     android:textSize="22sp"
+<<<<<<< HEAD
                     android:textColor="@android:color/white"
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
                     android:text="+" />
             </LinearLayout>
 
@@ -197,7 +271,10 @@
 
             <TextView
                 android:id="@+id/cost_text_view"
+<<<<<<< HEAD
                 android:textColor="@android:color/white"
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
                 style="@style/FormTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -206,8 +283,11 @@
 
         </LinearLayout>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
         <Button
             android:id="@+id/cart_button"
             android:layout_width="wrap_content"
@@ -215,6 +295,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/quantityTotal"
             android:layout_gravity="center"
+<<<<<<< HEAD
             android:background="@color/colorPrimary"
             android:textColor="@android:color/white"
             android:onClick="addToCart"
@@ -222,6 +303,11 @@
 
 
 
+=======
+            android:onClick="addToCart"
+            android:text="ADD TO CART" />
+
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
     </RelativeLayout>
 
 </ScrollView>

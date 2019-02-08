@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+<<<<<<< HEAD
     package="com.example.karokojnr.nadab_customer">
+=======
+    package="com.example.karokojnr.nadab">
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.FragranceProvider"/>
+=======
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
 
     <application
@@ -17,6 +24,7 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+<<<<<<< HEAD
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
@@ -25,6 +33,16 @@
             android:enabled="true"
             android:exported="true"
             tools:ignore="WrongManifestParent"/>
+=======
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <provider android:name="com.example.karokojnr.nadab.FragranceProvider"
+        android:authorities="com.example.karokojnr.nadab"
+        android:enabled="true"
+        android:exported="true"
+        tools:ignore="WrongManifestParent">
+        </provider>
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -46,6 +64,7 @@
         <activity android:name=".HotelsActivity" />
 
         <activity android:name=".HotelMeals" />
+<<<<<<< HEAD
         <activity android:name=".ItemDetails"
             android:parentActivityName=".HotelMeals"
             tools:targetApi="jelly_bean">
@@ -56,6 +75,14 @@
                 android:theme="@style/Theme.AppCompat.Light"/>
         </activity>
         <activity android:name=".CartActivity" />
+=======
+
+        <activity android:name=".ItemDeatails"
+            android:theme="@style/Theme.AppCompat.Light"/>
+
+        <activity android:name=".CartActivity" />
+
+>>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
     </application>
 
 </manifest>
