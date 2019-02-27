@@ -187,6 +187,8 @@ public class ItemDetails extends AppCompatActivity {
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_IMAGE, itemImageUrl);
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, mQuantity);
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, mTotalPrice);
+        cartValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS, "NEW");
+        cartValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, "Null");
 
         String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
         if(currentHotel == null){

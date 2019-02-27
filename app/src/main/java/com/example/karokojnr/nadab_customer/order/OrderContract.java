@@ -78,16 +78,9 @@ public class OrderContract {
         public final static String COLUMN_CART_NAME = "cartname";
         public final static String COLUMN_CART_IMAGE = "cartimageurl";
         public final static String COLUMN_CART_QUANTITY = "cartquantity";
+        public final static String COLUMN_CART_ORDER_STATUS = "cartorderstatus";
+        public final static String COLUMN_CART_ORDER_ID = "cartorderid";
         public final static String COLUMN_CART_TOTAL_PRICE = "carttotalprice";
-
-        public final static String COLUMN_ITEM_NAME = "name";
-        public final static String COLUMN_UNIT_MEASURE = "unitmeasure";
-        public final static String COLUMN_ITEM_PRICE = "price";
-        public final static String COLUMN_ITEM_IMAGE = "image";
-
-
-
-
 
     }
 

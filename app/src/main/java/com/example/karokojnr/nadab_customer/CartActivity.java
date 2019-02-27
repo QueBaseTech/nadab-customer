@@ -30,6 +30,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static java.lang.Integer.parseInt;
+
 
 public class CartActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -63,21 +65,13 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
             // Called when a user swipes left or right on a ViewHolder
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // Here is where you'll implement swipe to delete
-
-                // COMPLETED (1) Construct the URI for the item to delete
-                //[Hint] Use getTag (from the adapter code) to get the id of the swiped item
-                // Retrieve the id of the task to delete
-                int id = (int) viewHolder.itemView.getTag();
-
-                // Build appropriate uri with String row id appended
+                TextView tvId = viewHolder.itemView.findViewById(R.id.tvId);
+                int id = parseInt(tvId.getText().toString());
                 String stringId = Integer.toString(id);
                 Uri uri = OrderContract.OrderEntry.CONTENT_URI;
                 uri = uri.buildUpon().appendPath(stringId).build();
 
-                // COMPLETED (2) Delete a single row of data using a ContentResolver
                 getContentResolver().delete(uri, null, null);
-                // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
                 getLoaderManager().restartLoader(CART_LOADER, null, CartActivity.this);
 
             }
@@ -96,7 +90,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View view) {
                 String orderStatus = utils.getOrderStatus(CartActivity.this);
                 Log.wtf("ORDER Status", "onClick: "+ orderStatus );
-                if (!orderStatus.equals("NEWs")) {
+                if (orderStatus.equals("NEW")) {
                     HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
                     Call<Order> call = service.placeOrder(order);
                     call.enqueue ( new Callback<Order>() {
@@ -133,6 +127,8 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
                 OrderContract.OrderEntry.COLUMN_CART_IMAGE,
                 OrderContract.OrderEntry.COLUMN_CART_QUANTITY,
                 OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE,
+                OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS,
+                OrderContract.OrderEntry.COLUMN_CART_ORDER_ID,
         };
 
         // This loader will execute the ContentProvider's query method on a background thread

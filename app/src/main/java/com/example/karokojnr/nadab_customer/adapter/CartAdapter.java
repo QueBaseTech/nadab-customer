@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,6 +52,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         int image = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_IMAGE);
         int quantity = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_QUANTITY);
         int price = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE);
+        int status = mCursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS);
 
         mCursor.moveToPosition(position); // get to the right location in the cursor
 
@@ -60,29 +62,28 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         String fragranceImage = mCursor.getString(image);
         int fragranceQuantity = mCursor.getInt(quantity);
         Double fragrancePrice = mCursor.getDouble(price);
+        String orderStatus = mCursor.getString(status);
 
         DecimalFormat precision = new DecimalFormat("0.00");
 
 
-
-        //Set values
-       // holder.itemView.setTag(id);
-//        holder.tvName.setText(product.getName ());
-        //holder.fragQuantity.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
-//        holder.tvUnitMeasure.setText("Quantity ordering: " + product.getUnitMeasure ());
-       // holder.fragPrice.setText("$" + precision.format(fragrancePrice));
-//        holder.tvPrice.setText("$" + product.getPrice ());
-
-
+        holder.tvId.setText("" + id);
         holder.tvName.setText(name);
         holder.tvUnitMeasure.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
         holder.tvPrice.setText("Kshs." + precision.format(fragrancePrice));
        Glide.with(mContext)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+fragranceImage)
-              /* .apply ( new RequestOptions ()
-                .placeholder(R.drawable.load))*/
                 .into(holder.imageView);
 
+       if(orderStatus.equals("NEW")){
+           holder.button1.setText("Order");
+           holder.button1.setText("Edit");
+       }
+
+        if(orderStatus.equals("SENT")){
+            holder.button1.setText("Cancel");
+            holder.button1.setVisibility(View.GONE);
+        }
     }
 
 
@@ -110,15 +111,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvUnitMeasure, tvPrice;
+        TextView tvName, tvUnitMeasure, tvPrice, tvId;
         ImageView imageView;
+        Button button1, button2;
         public CartViewHolder(View itemView) {
             super(itemView);
 
+            tvId = (TextView) itemView.findViewById(R.id.tvId);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
             tvUnitMeasure = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
             tvPrice = (TextView) itemView.findViewById(R.id.price);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            button1 = (Button) itemView.findViewById(R.id.edit_cart_item);
+            button2 = (Button) itemView.findViewById(R.id.order_item);
         }
 
     }

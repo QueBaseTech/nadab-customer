@@ -27,9 +27,11 @@ public class OrderDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_CART_TABLE = "CREATE TABLE " + OrderContract.OrderEntry.CART_TABLE + " (" +
                 OrderContract.OrderEntry._CARTID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                OrderContract.OrderEntry.COLUMN_CART_NAME + " TEXT UNIQUE NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_CART_NAME + " TEXT NOT NULL, " +
                 OrderContract.OrderEntry.COLUMN_CART_IMAGE + " TEXT NOT NULL, " +
                 OrderContract.OrderEntry.COLUMN_CART_QUANTITY + " INTEGER NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS + " TEXT NOT NULL, " +
+                OrderContract.OrderEntry.COLUMN_CART_ORDER_ID + " TEXT  NOT NULL, " +
                 OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE + " REAL NOT NULL " + " );";
 
         db.execSQL(SQL_CREATE_CART_TABLE);
