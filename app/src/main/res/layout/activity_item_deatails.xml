@@ -1,195 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ProfileActivity">
 
-    <RelativeLayout
-        android:id="@+id/detail"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="218dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/activity_horizontal_margin"
-            />
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/activity_vertical_margin"
-            android:textSize="15sp"
-            tools:text="Cool"
-            android:layout_marginTop="33dp"
-            android:layout_below="@+id/imageView"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true" />
-
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/CustomRatingLevel"
-            android:id="@+id/ratingLevel"
-            android:layout_below="@+id/tvName"
-            android:numStars="5"
-            android:isIndicator="true"/>
-
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:id="@+id/priceLinearLayout"
-            android:layout_below="@+id/ratingLevel"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:layout_height="wrap_content">
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="PRICE"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="6"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tvPrice" />
-            </TableRow>
-
-        </TableLayout>
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:id="@+id/unitMeasureLinearLayout"
-            android:layout_below="@+id/priceLinearLayout"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:layout_height="wrap_content">
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Unit Measure"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="6"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tvUnitMeasure" />
-            </TableRow>
-
-        </TableLayout>
-        <LinearLayout
-            android:id="@+id/quantityLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/unitMeasureLinearLayout"
-            android:paddingBottom="@dimen/default_gap"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/default_gap">
-
-            <TextView
-                android:id="@+id/quantityLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quantity" />
-
-            <LinearLayout
+            <ImageView
+                android:id="@+id/ivImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:adjustViewBounds="true"
+                android:src="@drawable/photocercle"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7" />
 
-                <Button
-                    android:id="@+id/decrement_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@null"
-                    android:onClick="decrement"
-                    android:textSize="18sp"
-                    android:text="-" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:popupTheme="@style/AppTheme" />
 
-                <TextView
-                    android:id="@+id/quantity_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="@string/initial_quantity"
-                    android:textColor="@android:color/black"
-                    android:textSize="22sp" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
-                <Button
-                    android:id="@+id/increment_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@null"
-                    android:onClick="increment"
-                    android:textSize="22sp"
-                    android:text="+" />
-            </LinearLayout>
+    <include layout="@layout/content_itemdetails" />
 
-        </LinearLayout>
+   <!-- <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_exit_to_app_black_24dp"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        tools:ignore="VectorDrawableCompat" />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/quantityTotal"
-            android:paddingTop="@dimen/default_gap"
-            android:layout_below="@+id/quantityLinearLayout"
-            android:paddingBottom="@dimen/default_gap"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/total"
-                style="@style/FormTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="TOTAL" />
-
-            <TextView
-                android:id="@+id/cost_text_view"
-                style="@style/FormTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/cart_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/quantityTotal"
-            android:layout_gravity="center"
-            android:onClick="addToCart"
-            android:text="ADD TO CART" />
-
-    </RelativeLayout>
-
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

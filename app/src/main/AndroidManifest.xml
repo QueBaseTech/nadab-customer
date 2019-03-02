@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.karokojnr.nadab">
+    package="com.example.karokojnr.nadab_customer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FragranceProvider" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<<<<<<< HEAD
+    <uses-permission android:name="android.permission.VIBRATE" />
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
 
 
     <application
         android:allowBackup="true"
+        android:exported="true"
         android:icon="@drawable/logo"
-        android:exported = "true"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <provider android:name="com.example.karokojnr.nadab.FragranceProvider"
-        android:authorities="com.example.karokojnr.nadab"
-        android:enabled="true"
-        android:exported="true"
-        tools:ignore="WrongManifestParent">
-        </provider>
+        <provider
+            android:name=".order.OrderProvider"
+            android:authorities="com.example.karokojnr.nadab_customer"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="WrongManifestParent" />
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -32,25 +40,65 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".SearchActivity" />
-
         <activity android:name=".HotelsActivity" />
-
         <activity android:name=".HotelMeals" />
-
-        <activity android:name=".ItemDeatails"
-            android:theme="@style/Theme.AppCompat.Light"/>
-
+        <activity
+            android:name=".ItemDetails"
+            android:parentActivityName=".HotelMeals"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:exported="true"
+                android:theme="@style/Theme.AppCompat.Light"
+                android:value=".HotelMeals" />
+        </activity>
         <activity android:name=".CartActivity" />
+<<<<<<< HEAD
+        <activity android:name=".ProfileActivity" />
 
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Create account" />
+=======
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Create account"></activity>
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
+        <service
+            android:name=".notifications.MyFirebaseInstance">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".notifications.OrdersNotificationsService"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/a"/>
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
