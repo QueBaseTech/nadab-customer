@@ -2,8 +2,15 @@ package com.example.karokojnr.nadab_customer.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+<<<<<<< HEAD
 
 import com.example.karokojnr.nadab_customer.model.Customer;
+=======
+import android.util.Log;
+
+import com.example.karokojnr.nadab_customer.model.Customer;
+import com.example.karokojnr.nadab_customer.model.UserLogin;
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
 
 
 //here for this class we are using a singleton pattern
@@ -34,7 +41,10 @@ public class SharedPrefManager {
         editor.putString (Constants.M_USERNAME, user.getUsername());
         editor.putString (Constants.M_USERFULLNAME, user.getFullName());
         editor.putString (Constants.M_USER_MOBILE, user.getMobileNumber());
+<<<<<<< HEAD
         editor.putString (Constants.M_PROFILE, user.getProfile ());
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
         editor.putString (Constants.M_SHARED_PREFERENCE_LOGIN_TOKEN, token);
         editor.apply();
         editor.commit();
@@ -52,6 +62,7 @@ public class SharedPrefManager {
     }
 
     //this method will give the logged in user
+<<<<<<< HEAD
     public CustomerSharedPreference getUser() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(Constants.M_USER_SHARED_PREFERENCE, Context.MODE_PRIVATE);
         return new CustomerSharedPreference (
@@ -62,6 +73,16 @@ public class SharedPrefManager {
                 sharedPreferences.getString(Constants.M_USER_MOBILE, null),
                 sharedPreferences.getString(Constants.M_PROFILE, null)
 
+=======
+    public Customer getUser() {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(Constants.M_USER_SHARED_PREFERENCE, Context.MODE_PRIVATE);
+        return new Customer (
+                sharedPreferences.getString(Constants.M_USERNAME, null),
+                sharedPreferences.getString(Constants.M_USER_EMAIL, null),
+                sharedPreferences.getString(Constants.M_USERFULLNAME, null),
+                sharedPreferences.getString(Constants.M_USER_ID, null),
+                sharedPreferences.getString(Constants.M_USER_MOBILE, null)
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
         );
     }
 

@@ -62,7 +62,11 @@ public class HotelMeals extends AppCompatActivity {
         } );
 
 
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/HotelMeals.java
         hotelId = getIntent ().getStringExtra ( Constants.M_HOTEL_ID );
+=======
+        hotelId = getIntent().getStringExtra(Constants.M_HOTEL_ID);
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/HotelMeals.java
 
         HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
         Call<Products> call = service.getHotelProducts ( hotelId );

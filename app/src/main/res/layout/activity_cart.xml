@@ -31,6 +31,21 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical" >
 
+<<<<<<< HEAD
     </android.support.v7.widget.RecyclerView>-->
+=======
+        <Button
+            android:id="@+id/button_order"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/priceLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:background="@color/colorPrimary"
+            android:text="ORDER"
+            android:textColor="#FFF"
+            android:textSize="16dp"
+            tools:ignore="OnClick" />
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
 
 </android.support.constraint.ConstraintLayout>

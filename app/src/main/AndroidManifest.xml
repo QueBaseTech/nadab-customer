@@ -10,7 +10,10 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.VIBRATE" />
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
 
 
     <application
@@ -57,6 +60,7 @@
                 android:value=".HotelMeals" />
         </activity>
         <activity android:name=".CartActivity" />
+<<<<<<< HEAD
         <activity android:name=".ProfileActivity" />
 
         <activity
@@ -65,6 +69,14 @@
         <activity
             android:name=".RegisterActivity"
             android:label="Create account" />
+=======
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Create account"></activity>
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
         <service
             android:name=".notifications.MyFirebaseInstance">
             <intent-filter>

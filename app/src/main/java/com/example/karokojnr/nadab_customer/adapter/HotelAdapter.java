@@ -12,9 +12,12 @@ import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Hotel;
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/adapter/HotelAdapter.java
 
 import android.widget.Filter;
 import android.widget.Filterable;
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/adapter/HotelAdapter.java
 
 import java.util.ArrayList;
 
@@ -22,13 +25,19 @@ import java.util.ArrayList;
 public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> implements Filterable{
 
     private ArrayList<Hotel> mDataList;
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/adapter/HotelAdapter.java
     private ArrayList<Hotel> mFilteredList;
 
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/adapter/HotelAdapter.java
     private Context context;
 
     public HotelAdapter(ArrayList<Hotel> mDataList, Context context) {
         this.mDataList = mDataList;
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/adapter/HotelAdapter.java
         mFilteredList = mDataList;
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/adapter/HotelAdapter.java
         this.context = context;
     }
 

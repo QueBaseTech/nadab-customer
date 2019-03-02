@@ -46,7 +46,11 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
+<<<<<<< HEAD
     EditText mobileNumber, userName, userEmail, city, password, passwordAgain;
+=======
+    EditText mobileNumber, userName, applicantName, paybillNumber, address, userEmail, city, password, passwordAgain;
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
     Button addHotel;
     ProgressBar mLoading;
     ImageView ivImage;

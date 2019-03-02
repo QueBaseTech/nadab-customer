@@ -17,7 +17,10 @@ public final class Constants {
     public static final String M_USER_ID = "M_USER_ID";
     public static final String M_USER_MOBILE = "M_USER_MOBILE";
     public static final String M_USERFULLNAME = "M_USERFULLNAME";
+<<<<<<< HEAD
     public static final String M_PROFILE = "M_PROFILE";
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
 
     public static final String M_HOTEL_ID = "M_HOTEL_ID";
     public static final String M_NAME = "M_NAME";
@@ -31,7 +34,10 @@ public final class Constants {
 
     public static final String FIREBASE_TOKEN = "FIREBASE_TOKEN";
     public static final String ADMIN_CHANNEL_ID = "ADMIN_CHANNEL_ID";
+<<<<<<< HEAD
 
     public static final String IS_LOGGED_IN = "isLoggedIn";
 
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
 }

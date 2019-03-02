@@ -5,8 +5,14 @@ package com.example.karokojnr.nadab_customer.api;
 import com.example.karokojnr.nadab_customer.model.FCMToken;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelRegister;
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/api/HotelService.java
 
 import com.example.karokojnr.nadab_customer.model.HotelsList;
+=======
+import com.example.karokojnr.nadab_customer.model.HotelsList;
+import com.example.karokojnr.nadab_customer.model.Login;
+
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/api/HotelService.java
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.Products;
 import com.example.karokojnr.nadab_customer.model.UserLogin;

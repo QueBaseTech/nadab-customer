@@ -11,8 +11,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,7 +73,10 @@ public class ItemDetails extends AppCompatActivity {
     private TextView tvPrice;
     private TextView tvUnitMeasure;
     private RatingBar ratingBar;
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
     private Toolbar mTopToolbar;
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
 
 
     @Override
@@ -79,6 +85,7 @@ public class ItemDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_deatails);
 
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
         mTopToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mTopToolbar);
 
@@ -110,6 +117,20 @@ public class ItemDetails extends AppCompatActivity {
         } catch (NullPointerException e) {
             Log.wtf(TAG, "onCreate: "+e.getMessage());
         }*/
+=======
+        Intent intent = getIntent();
+        itemName = intent.getStringExtra(Constants.M_NAME);
+        itemPrice = intent.getStringExtra(Constants.M_PRICE);
+        itemUnitMeasure = intent.getStringExtra(Constants.M_UNITMEASURE);
+        itemImageUrl = intent.getStringExtra(Constants.M_IMAGE);
+        itemHotelId = intent.getStringExtra(Constants.M_HOTEL_ID);
+
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.wtf(TAG, "onCreate: "+e.getMessage());
+        }
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
         mContentResolver = this.getContentResolver();
         OrderDbHelper dbHelper = new OrderDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
@@ -120,6 +141,7 @@ public class ItemDetails extends AppCompatActivity {
 //        Intent intentThatStartedThisActivity = getIntent();
         addToCartButton = (Button) findViewById(R.id.cart_button);
         costTextView = (TextView) findViewById(R.id.cost_text_view);
+<<<<<<< HEAD:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
         imageView = (ImageView) findViewById(R.id.ivImage);
         tvName = (TextView) findViewById(R.id.tvName);
       //  tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
@@ -132,6 +154,20 @@ public class ItemDetails extends AppCompatActivity {
         setTitle(fragranceName);
         /*ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
         ratingBar.setRating(f);*/
+=======
+        imageView = (ImageView) findViewById(R.id.imageView);
+        tvName = (TextView) findViewById(R.id.tvName);
+        tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
+        tvPrice = (TextView) findViewById(R.id.tvPrice);
+
+        tvName.setText(itemName);
+        tvUnitMeasure.setText(itemUnitMeasure);
+        tvPrice.setText("Kshs." + price);
+        float f = Float.parseFloat(Double.toString(rating));
+        setTitle(fragranceName);
+        ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
+        ratingBar.setRating(f);
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035:app/src/main/java/com/example/karokojnr/nadab_customer/ItemDetails.java
         Glide.with(this)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+ itemImageUrl)
                 .into(imageView);

@@ -22,15 +22,22 @@ public class Customer {
     @SerializedName("mobileNumber")
     private String mobileNumber;
 
+<<<<<<< HEAD
 
     public Customer(String username, String email, String fullName, String id, String mobileNumber, String profile) {
+=======
+    public Customer(String username, String email, String fullName, String id, String mobileNumber) {
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
         this.username = username;
         this.email = email;
         this.fullName = fullName;
         this.id = id;
         this.mobileNumber = mobileNumber;
+<<<<<<< HEAD
         this.profile = profile;
 
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
     }
 
     public void setUsername(String username) {

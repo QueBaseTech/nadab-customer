@@ -109,7 +109,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             if(response.body().isSuccess()){
                                 // Persist to local storage
+<<<<<<< HEAD
                                 Log.wtf ( TAG, "onResponse: "+response.body().getCustomer()  );
+=======
+>>>>>>> 935f7615d5a021a25410c0df430c0d0098766035
                                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(response.body().getCustomer(), response.body().getToken());
                                 // Start Home activity
                                 goHome();

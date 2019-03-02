@@ -1,7 +1,6 @@
 package com.example.karokojnr.nadab_customer;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,11 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,7 +32,7 @@ import retrofit2.Response;
 
 
 public class CartActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private Toolbar toolbar;
+
     private static final int CART_LOADER = 0;
 
     /** Adapter for the ListView */
@@ -51,25 +47,6 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-
-        toolbar = (Toolbar) findViewById ( R.id.toolbar );
-        setSupportActionBar ( toolbar );
-
-        getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
-        getSupportActionBar ().setDisplayShowHomeEnabled ( true );
-
-        //toolbar.setNavigationIcon(R.drawable.ic_arrow);
-        toolbar.setNavigationOnClickListener ( new View.OnClickListener () {
-
-            @Override
-            public void onClick(View view) {
-
-                // Your code
-                finish ();
-            }
-        } );
-
-
 
         mRecyclerView = (RecyclerView) findViewById(R.id.cart_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -223,36 +200,5 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<Cursor> loader) {
         cartAdapter.swapCursor(null);
     }
-
-    //menu
-    @Override
-    public boolean onCreateOptionsMenu (Menu menu){
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater ().inflate ( R.menu.main_minor, menu );
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected (MenuItem item){
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId ();
-
-        /*//noinspection SimplifiableIfStatement
-        if (id == R.id.action_cart) {
-            startActivity(new Intent (HotelMeals.this, CartActivity.class));
-
-            // notificationCount=0;//clear notification count
-            invalidateOptionsMenu();
-
-            //Toast.makeText ( HotelMeals.this, "Action clicked", Toast.LENGTH_LONG ).show ();
-            return true;
-        }
-*/
-        return super.onOptionsItemSelected ( item );
-    }
-
-
 
 }
