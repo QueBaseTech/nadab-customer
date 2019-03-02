@@ -5,6 +5,7 @@ package com.example.karokojnr.nadab_customer.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 /*
 * List of hotels model
 * Used to read data from API
@@ -22,4 +23,6 @@ public class HotelsList {
     public void setHotelsArrayList(ArrayList<Hotel> hotelsArrayList) {
         this.hotelsList = hotelsArrayList;
     }
+
+
 }

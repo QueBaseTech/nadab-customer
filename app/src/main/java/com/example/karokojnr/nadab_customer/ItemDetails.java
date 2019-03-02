@@ -9,8 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,7 +70,7 @@ public class ItemDetails extends AppCompatActivity {
     private TextView tvPrice;
     private TextView tvUnitMeasure;
     private RatingBar ratingBar;
-    private FloatingActionButton goToCart;
+    private Toolbar mTopToolbar;
 
 
     @Override
@@ -77,41 +79,55 @@ public class ItemDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_deatails);
 
+        mTopToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mTopToolbar);
+
+
+        getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
+        getSupportActionBar ().setDisplayShowHomeEnabled ( true );
+
+        mTopToolbar.setNavigationIcon(R.drawable.ic_arrow);
+        mTopToolbar.setNavigationOnClickListener ( new View.OnClickListener () {
+
+            @Override
+            public void onClick(View view) {
+
+                // Your code
+                finish ();
+            }
+        } );
+
+
         Intent intent = getIntent();
         itemName = intent.getStringExtra(Constants.M_NAME);
         itemPrice = intent.getStringExtra(Constants.M_PRICE);
-        itemUnitMeasure = intent.getStringExtra(Constants.M_UNITMEASURE);
+       // itemUnitMeasure = intent.getStringExtra(Constants.M_UNITMEASURE);
         itemImageUrl = intent.getStringExtra(Constants.M_IMAGE);
         itemHotelId = intent.getStringExtra(Constants.M_HOTEL_ID);
 
-        try {
+       /* try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {
             Log.wtf(TAG, "onCreate: "+e.getMessage());
-        }
+        }*/
         mContentResolver = this.getContentResolver();
         OrderDbHelper dbHelper = new OrderDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
 
-//      Intent intentThatStartedThisActivity = getIntent();
+
+
+
+//        Intent intentThatStartedThisActivity = getIntent();
         addToCartButton = (Button) findViewById(R.id.cart_button);
         costTextView = (TextView) findViewById(R.id.cost_text_view);
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.ivImage);
         tvName = (TextView) findViewById(R.id.tvName);
-        tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
+      //  tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
         tvPrice = (TextView) findViewById(R.id.tvPrice);
-        goToCart = findViewById ( R.id.btn_cart );
-        goToCart.setOnClickListener ( new View.OnClickListener () {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent ( getApplicationContext (), CartActivity.class );
-                startActivity ( intent );
-            }
-        } );
 
         tvName.setText(itemName);
-        tvUnitMeasure.setText(itemUnitMeasure);
-        tvPrice.setText("Kshs." + price);
+//        tvUnitMeasure.setText(itemUnitMeasure);
+        tvPrice.setText("Kshs." + itemPrice);
         float f = Float.parseFloat(Double.toString(rating));
         setTitle(fragranceName);
         /*ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
@@ -129,6 +145,8 @@ public class ItemDetails extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         // Get the notifications MenuItem and
@@ -195,7 +213,7 @@ public class ItemDetails extends AppCompatActivity {
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, mQuantity);
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, mTotalPrice);
 
-        String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL);
+        String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
         if(currentHotel == null){
             utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL, itemHotelId);
             mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);

@@ -13,16 +13,22 @@ import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 
+import android.widget.Filter;
+import android.widget.Filterable;
+
 import java.util.ArrayList;
 
 
-public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> {
+public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> implements Filterable{
 
     private ArrayList<Hotel> mDataList;
+    private ArrayList<Hotel> mFilteredList;
+
     private Context context;
 
     public HotelAdapter(ArrayList<Hotel> mDataList, Context context) {
         this.mDataList = mDataList;
+        mFilteredList = mDataList;
         this.context = context;
     }
 
@@ -59,6 +65,52 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
     public int getItemCount() {
         return mDataList.size();
     }
+
+    //Search bar filter
+
+
+    @Override
+    public Filter getFilter() {
+
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty()) {
+
+                    mFilteredList = mDataList;
+                } else {
+
+                    ArrayList<Hotel> filteredList = new ArrayList<>();
+
+                    for (Hotel androidVersion : mDataList) {
+
+                        if (androidVersion.getBusinessName ().toLowerCase().contains(charString) || androidVersion.getAddress ().toLowerCase().contains(charString) || androidVersion.getPayBillNo ().toLowerCase().contains(charString)) {
+
+                            filteredList.add(androidVersion);
+                        }
+                    }
+
+                    mFilteredList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredList = (ArrayList<Hotel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    //End of Search filter
+
 
     class HotelViewHolder extends RecyclerView.ViewHolder {
 

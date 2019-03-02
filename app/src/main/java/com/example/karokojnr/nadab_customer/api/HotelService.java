@@ -2,21 +2,27 @@ package com.example.karokojnr.nadab_customer.api;
 
 
 
+import com.example.karokojnr.nadab_customer.model.FCMToken;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelRegister;
-import com.example.karokojnr.nadab_customer.model.HotelsList;
-import com.example.karokojnr.nadab_customer.model.Login;
 
+import com.example.karokojnr.nadab_customer.model.HotelsList;
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.Products;
+import com.example.karokojnr.nadab_customer.model.UserLogin;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 
@@ -27,7 +33,6 @@ public interface HotelService {
 
     @GET("hotels/")
     Call<HotelsList> getHotels();
-
     /*
     * Post a new hotel
     * */
@@ -38,12 +43,22 @@ public interface HotelService {
     Call<Order> placeOrder(@Body Order order);
 
     @FormUrlEncoded
-    @POST("login/")
-    Call<Login> login(@Field("email") String email, @Field("password") String password);
+    @POST("customer/login")
+    Call<UserLogin> login(@Field("email") String email, @Field("password") String password);
 
     @GET("products/")
     Call<Products> getProducts(@Header("x-token") String token);
-/*
+
+    // Send app token to server everytime it changes
+    @FormUrlEncoded
+    @PUT("customer/token")
+    Call<FCMToken> sendTokenToServer(@Header("x-token") String authToken, @Field("token") String token);
+
+    @Multipart
+    @POST("customer/register")
+    Call<UserLogin> addCustomer(@Part MultipartBody.Part fileToUpload, @Part("filename") RequestBody filename, @Part("fullName") RequestBody userName, @Part("mobileNumber") RequestBody mobileNumber, @Part("email") RequestBody userEmail, @Part("password") RequestBody password);
+
+    /*
 
     *//**
      * URL MANIPULATION

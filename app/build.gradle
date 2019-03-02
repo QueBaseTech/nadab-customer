@@ -3,11 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-<<<<<<< HEAD
         applicationId "com.example.karokojnr.nadab_customer"
-=======
-        applicationId "com.example.karokojnr.nadab"
->>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -46,10 +42,12 @@ dependencies {
 
     // glide
     implementation 'com.github.bumptech.glide:glide:4.3.1'
-<<<<<<< HEAD
+
+    // Easy permissions
+    implementation 'pub.devrel:easypermissions:0.2.0'
 
     // FCM
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
-=======
->>>>>>> cfe102e17e719d51a50d7e71a18ad6f56d448d9c
 }
+
+apply plugin: 'com.google.gms.google-services'

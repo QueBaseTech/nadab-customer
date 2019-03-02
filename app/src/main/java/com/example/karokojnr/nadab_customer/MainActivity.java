@@ -25,14 +25,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.adapter.HotelAdapter;
 import com.example.karokojnr.nadab_customer.api.HotelService;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
+import com.example.karokojnr.nadab_customer.model.Customer;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelsList;
 import com.example.karokojnr.nadab_customer.utils.Constants;
+import com.example.karokojnr.nadab_customer.utils.CustomerSharedPreference;
+import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
 import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.util.ArrayList;
@@ -60,6 +67,9 @@ public class MainActivity extends AppCompatActivity
     static ViewPager viewPager;
     static TabLayout tabLayout;
     private ActionBar actionBar;
+    private LinearLayout nav_header;
+    private ImageView ivImage;
+    private TextView user_name, user_email;
 
 
     @Override
@@ -67,51 +77,82 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if(!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            this.finish();
+        } else {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View headerView = navigationView.getHeaderView ( 0 );
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+            navigationView.setNavigationItemSelectedListener(this);
 
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-        //RECYCLER VIEW
-        HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-        Call<HotelsList> call = service.getHotels ();
-        Log.wtf ( "URL Called", call.request ().url () + "" );
-        call.enqueue ( new Callback<HotelsList> () {
-            @Override
-            public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
-                assert response.body () != null;
-                if (response == null) {
-                    Toast.makeText ( getApplicationContext (), "Something Went Wrong...!!", Toast.LENGTH_SHORT ).show ();
-                } else {
-                    assert response.body () != null;
-                    for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
-                        hotelList.add ( response.body ().getHotelsArrayList ().get ( i ) );
-                    }
-                    Log.i ( "RESPONSE: ", "" + response.toString () );
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+
+            ivImage = (ImageView) headerView.findViewById ( R.id.ivImage );
+            //user_name = (TextView) headerView.findViewById ( R.id.tv_user_name ) ;
+            user_email = (TextView) headerView.findViewById ( R.id.tv_user_email ) ;
+
+
+
+            //getting the current user
+            CustomerSharedPreference customer = SharedPrefManager.getInstance(this).getUser ();
+            //user_name.setText(String.valueOf(customer.getFullName ()));
+            user_email.setText(String.valueOf ( customer.getEmail ()));
+            //tv_user_mobile.setText(String.valueOf ( customer.getMobileNumber ()));
+            Glide.with(this)
+                    .load(RetrofitInstance.BASE_URL+"images/uploads/customers/"+ String.valueOf ( customer.getIvImage ()))
+                    .into(ivImage);
+
+
+//            nav_header = (LinearLayout) findViewById ( R.id.nav_view)
+            navigationView.setOnClickListener ( new View.OnClickListener () {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+
                 }
-                generateHotelsList ( response.body ().getHotelsArrayList () );
+            } );
+
+            if (viewPager != null) {
+                setupViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager);
             }
-            @Override
-            public void onFailure(Call<HotelsList> call, Throwable t) {
-                Log.wtf(TAG, "onFailure: "+t.getMessage());
-                Toast.makeText ( MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
-            }
-        } );
-        //RECYCLERVIEW END
+            //RECYCLER VIEW
+            HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
+            Call<HotelsList> call = service.getHotels ();
+            call.enqueue ( new Callback<HotelsList> () {
+                @Override
+                public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
+                    assert response.body () != null;
+                    if (response == null) {
+                        Toast.makeText ( getApplicationContext (), "Something Went Wrong...!!", Toast.LENGTH_SHORT ).show ();
+                    } else {
+                        assert response.body () != null;
+                        for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
+                            hotelList.add ( response.body ().getHotelsArrayList ().get ( i ) );
+                        }
+                        Log.i ( "RESPONSE: ", "" + response.toString () );
+                    }
+                    generateHotelsList ( response.body ().getHotelsArrayList () );
+                }
+                @Override
+                public void onFailure(Call<HotelsList> call, Throwable t) {
+                    Log.wtf(TAG, "onFailure: "+t.getMessage());
+                    Toast.makeText ( MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
+                }
+            } );
+        }
     }
 
     /*Method to generate List of hotel using RecyclerView with custom adapter*/
@@ -125,7 +166,7 @@ public class MainActivity extends AppCompatActivity
             recyclerView.setLayoutManager(new GridLayoutManager (this, 4));
         }
 
-       // recyclerView.setLayoutManager ( layoutManager );
+        // recyclerView.setLayoutManager ( layoutManager );
 
         recyclerView.setAdapter ( adapter );
         recyclerView.addOnItemTouchListener ( new RecyclerTouchListener ( getApplicationContext (), recyclerView, new RecyclerTouchListener.ClickListener () {
@@ -151,7 +192,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         invalidateOptionsMenu();
     }
-
+    //Styling for double press back button
+    private static long back_pressed;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -160,55 +202,42 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        //
+        if (back_pressed + 2000 > System.currentTimeMillis()){
+            super.onBackPressed();
+        }
+        else{
+            Toast.makeText(this, "Press once again to exit", Toast.LENGTH_SHORT).show();
+            back_pressed = System.currentTimeMillis();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // Get the notifications MenuItem and
-        // its LayerDrawable (layer-list)
         MenuItem item = menu.findItem(R.id.action_cart);
-        //Notifications
-
-       // NotificationCountSetClass.setAddToCart(MainActivity.this, item,notificationCountCart);
-
-
-        // force the ActionBar to relayout its MenuItems.
-        // onCreateOptionsMenu(Menu) will be called again.
         invalidateOptionsMenu();
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //Option Selected
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-
-            startActivity(new Intent (MainActivity.this, HotelsActivity.class));
+            startActivity(new Intent (MainActivity.this, SearchActivity.class));
             return true;
         }else if (id == R.id.action_cart) {
 
-            /*NotificationCountSetClass.setAddToCart(MainActivity.this, item, notificationCount);
-            invalidateOptionsMenu();*/
             startActivity(new Intent(MainActivity.this, CartActivity.class));
 
-           // notificationCount=0;//clear notification count
+             notificationCountCart=0;
             invalidateOptionsMenu();
             return true;
-        }else {
-           // startActivity(new Intent(MainActivity.this, EmptyActivity.class));
 
         }
         return super.onOptionsItemSelected(item);
@@ -216,39 +245,6 @@ public class MainActivity extends AppCompatActivity
 
     private void setupViewPager(ViewPager viewPager) {
 
-        //Imade selected
-        /*Adapter adapter = new Adapter(getSupportFragmentManager());
-        ImageListFragment fragment = new ImageListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", 1);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_1));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 2);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_2));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 3);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_3));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 4);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_4));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 5);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_5));
-        fragment = new ImageListFragment();
-        bundle = new Bundle();
-        bundle.putInt("type", 6);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.item_6));
-        viewPager.setAdapter(adapter);*/
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -257,105 +253,22 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_item1) {
+        if (id == R.id.home) {
             viewPager.setCurrentItem(0);
-        } else if (id == R.id.nav_item2) {
-//            viewPager.setCurrentItem(1);
-//        } else if (id == R.id.nav_item3) {
-//            viewPager.setCurrentItem(2);
-//        } else if (id == R.id.nav_item4) {
-//            viewPager.setCurrentItem(3);
-        } else if (id == R.id.nav_item5) {
-            viewPager.setCurrentItem(4);
-        }else if (id == R.id.nav_item6) {
-            viewPager.setCurrentItem(5);
-        }else if (id == R.id.my_wishlist) {
-            //startActivity(new Intent(MainActivity.this, WishlistActivity.class));
-        }else if (id == R.id.my_cart) {
-            startActivity(new Intent(MainActivity.this, CartActivity.class));
-        }else {
-           // startActivity(new Intent(MainActivity.this, EmptyActivity.class));
+        } else if (id == R.id.my_profile) {
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+        }else if (id == R.id.sign_out) {
+            Log.wtf(TAG, "onOptionsItemSelected: Logout");
+            SharedPrefManager.getInstance(getApplicationContext()).logout();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            this.finish();
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-/*
-
-    @Override
-    public void onItemClick(int position) {
-
-        Hotel hotel = hotelList.get ( position );
-        Toast.makeText ( getApplicationContext (), hotel.getBusinessName () + " is selected!", Toast.LENGTH_SHORT ).show ();
-       // Intent intent = new Intent ( this, SearchActivity.class );
-        */
-/*Hotel clickedHotel = dataList.get(position);
-
-        intent.putExtra(EXTRA_URL, clickedHotel.getBusinessName ());
-        intent.putExtra(EXTRA_CREATOR, clickedHotel.getAddress ());
-        intent.putExtra(EXTRA_LIKES, clickedHotel.getPayBillNo ());*//*
 
 
-       // startActivity ( intent );
-
-    }
-*/
-
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
-
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
-    }
-
-
-
-    public void getProductList() {
-        HotelService apiInterface = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-        Call<HotelsList> call = apiInterface.getHotels  ();
-        call.enqueue ( new Callback<HotelsList> () {
-            @Override
-            public void onResponse(Call<HotelsList> call, Response<HotelsList> response) {
-                if (response == null) {
-                    Toast.makeText ( getApplicationContext (), "Something Went Wrong...!!", Toast.LENGTH_SHORT ).show ();
-                    //edited
-                } else {
-                    assert response.body () != null;
-                    for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
-                        hotelList.add ( response.body ().getHotelsArrayList ().get ( i ) );
-                    }
-                    Log.i ( "RESPONSE: ", "" + response.toString () );
-                }
-                //adapter.notifyDataSetChanged ();
-            }
-            @Override
-            public void onFailure(Call<HotelsList> call, Throwable t) {
-                Toast.makeText ( getApplicationContext (), "Unable to fetch json: " + t.getMessage (), Toast.LENGTH_LONG ).show ();
-                Log.e ( "ERROR: ", t.getMessage () );
-            }
-        } );
-    }
 }
