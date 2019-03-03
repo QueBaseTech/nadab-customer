@@ -2,11 +2,7 @@ package com.example.karokojnr.nadab_customer.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
 import com.example.karokojnr.nadab_customer.model.Customer;
-import com.example.karokojnr.nadab_customer.model.UserLogin;
-
 
 //here for this class we are using a singleton pattern
 
@@ -35,6 +31,7 @@ public class SharedPrefManager {
         editor.putString (Constants.M_USER_EMAIL, user.getEmail());
         editor.putString (Constants.M_USERNAME, user.getUsername());
         editor.putString (Constants.M_USERFULLNAME, user.getFullName());
+        editor.putString (Constants.M_PROFILE, user.getProfile ());
         editor.putString (Constants.M_USER_MOBILE, user.getMobileNumber());
         editor.putString (Constants.M_SHARED_PREFERENCE_LOGIN_TOKEN, token);
         editor.apply();
@@ -53,14 +50,15 @@ public class SharedPrefManager {
     }
 
     //this method will give the logged in user
-    public Customer getUser() {
+    public CustomerSharedPreference getUser() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(Constants.M_USER_SHARED_PREFERENCE, Context.MODE_PRIVATE);
-        return new Customer (
+        return new CustomerSharedPreference (
+                sharedPreferences.getString(Constants.M_USER_ID, null),
                 sharedPreferences.getString(Constants.M_USERNAME, null),
                 sharedPreferences.getString(Constants.M_USER_EMAIL, null),
                 sharedPreferences.getString(Constants.M_USERFULLNAME, null),
-                sharedPreferences.getString(Constants.M_USER_ID, null),
-                sharedPreferences.getString(Constants.M_USER_MOBILE, null)
+                sharedPreferences.getString(Constants.M_USER_MOBILE, null),
+                sharedPreferences.getString(Constants.M_PROFILE, null)
         );
     }
 

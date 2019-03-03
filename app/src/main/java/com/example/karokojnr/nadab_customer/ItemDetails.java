@@ -10,6 +10,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,7 +68,7 @@ public class ItemDetails extends AppCompatActivity {
     private TextView tvPrice;
     private TextView tvUnitMeasure;
     private RatingBar ratingBar;
-
+    private Toolbar mTopToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,19 +76,38 @@ public class ItemDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_deatails);
 
+        mTopToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mTopToolbar);
+
+
+        getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
+        getSupportActionBar ().setDisplayShowHomeEnabled ( true );
+
+        mTopToolbar.setNavigationIcon(R.drawable.ic_arrow);
+        mTopToolbar.setNavigationOnClickListener ( new View.OnClickListener () {
+
+            @Override
+            public void onClick(View view) {
+
+                // Your code
+                finish ();
+            }
+        } );
+
+
         Intent intent = getIntent();
         itemName = intent.getStringExtra(Constants.M_NAME);
         itemPrice = intent.getStringExtra(Constants.M_PRICE);
-        itemUnitMeasure = intent.getStringExtra(Constants.M_UNITMEASURE);
+       // itemUnitMeasure = intent.getStringExtra(Constants.M_UNITMEASURE);
         itemImageUrl = intent.getStringExtra(Constants.M_IMAGE);
         itemHotelId = intent.getStringExtra(Constants.M_HOTEL_ID);
 
-        try {
+       /* try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {
             Log.wtf(TAG, "onCreate: "+e.getMessage());
-        }
-        mContentResolver = this.getContentResolver();
+        }*/
+      mContentResolver = this.getContentResolver();
         OrderDbHelper dbHelper = new OrderDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
 
@@ -97,18 +117,18 @@ public class ItemDetails extends AppCompatActivity {
 //        Intent intentThatStartedThisActivity = getIntent();
         addToCartButton = (Button) findViewById(R.id.cart_button);
         costTextView = (TextView) findViewById(R.id.cost_text_view);
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.ivImage);
         tvName = (TextView) findViewById(R.id.tvName);
-        tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
+      //  tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
         tvPrice = (TextView) findViewById(R.id.tvPrice);
 
         tvName.setText(itemName);
-        tvUnitMeasure.setText(itemUnitMeasure);
-        tvPrice.setText("Kshs." + price);
+//        tvUnitMeasure.setText(itemUnitMeasure);
+        tvPrice.setText("Kshs." + itemPrice);
         float f = Float.parseFloat(Double.toString(rating));
         setTitle(fragranceName);
-        ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
-        ratingBar.setRating(f);
+        /*ratingBar = (RatingBar) findViewById(R.id.ratingLevel);
+        ratingBar.setRating(f);*/
         Glide.with(this)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+ itemImageUrl)
                 .into(imageView);
@@ -122,6 +142,8 @@ public class ItemDetails extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         // Get the notifications MenuItem and

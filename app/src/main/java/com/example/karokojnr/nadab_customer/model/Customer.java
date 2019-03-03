@@ -22,12 +22,13 @@ public class Customer {
     @SerializedName("mobileNumber")
     private String mobileNumber;
 
-    public Customer(String username, String email, String fullName, String id, String mobileNumber) {
+    public Customer(String username, String email, String fullName, String id, String mobileNumber, String profile) {
         this.username = username;
         this.email = email;
         this.fullName = fullName;
         this.id = id;
         this.mobileNumber = mobileNumber;
+        this.profile = profile;
     }
 
     public void setUsername(String username) {

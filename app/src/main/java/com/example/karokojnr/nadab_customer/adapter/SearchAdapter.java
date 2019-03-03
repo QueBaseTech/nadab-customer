@@ -15,22 +15,24 @@ import com.example.karokojnr.nadab_customer.model.Hotel;
 
 import android.widget.Filter;
 import android.widget.Filterable;
+
 import java.util.ArrayList;
 
 
-public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> implements Filterable{
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.HotelViewHolder> implements Filterable{
 
     private ArrayList<Hotel> mDataList;
     private ArrayList<Hotel> mFilteredList;
+
     private Context context;
 
-    public HotelAdapter(ArrayList<Hotel> mDataList, Context context) {
-        this.mDataList = mDataList;
-        mFilteredList = mDataList;
+    public SearchAdapter(ArrayList<Hotel> mArrayList, Context context) {
+        mDataList = mArrayList;
+        mFilteredList = mArrayList;
         this.context = context;
     }
 
-   private  OnItemlickListener mListener;
+    private  OnItemlickListener mListener;
     public interface OnItemlickListener{
         void onItemClick(int position);
     }
@@ -40,20 +42,22 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     @Override
     public HotelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //correct
+        /*//correct
         LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_hotels, parent, false);
+                .inflate(R.layout.card_row, parent, false);*/
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_hotels, parent, false);
 
+/*
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.row_hotels, parent, false);
+        View view = layoutInflater.inflate(R.layout.card_row, parent, false);*/
         return new HotelViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(HotelViewHolder holder, int position) {
-        holder.txtHotelName.setText(mDataList.get(position).getBusinessName ());
-        holder.txtAddress.setText(mDataList.get(position).getAddress ());
-        holder.txtPayBillNo.setText(mDataList.get(position).getPayBillNo ());
+    public void onBindViewHolder(SearchAdapter.HotelViewHolder holder, int position) {
+        holder.txtHotelName.setText(mFilteredList.get(position).getBusinessName ());
+        holder.txtAddress.setText(mFilteredList.get(position).getAddress ());
+        holder.txtPayBillNo.setText(mFilteredList.get(position).getPayBillNo ());
         Glide.with(context)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/hotels/thumb_"+mDataList.get(position).getProfile())
                 .into(holder.imageView);
@@ -61,7 +65,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     @Override
     public int getItemCount() {
-        return mDataList.size();
+        return mFilteredList.size();
     }
 
     //Search bar filter
@@ -83,11 +87,11 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
                     ArrayList<Hotel> filteredList = new ArrayList<>();
 
-                    for (Hotel androidVersion : mDataList) {
+                    for (Hotel hotel : mDataList) {
 
-                        if (androidVersion.getBusinessName ().toLowerCase().contains(charString) || androidVersion.getAddress ().toLowerCase().contains(charString) || androidVersion.getPayBillNo ().toLowerCase().contains(charString)) {
+                        if (hotel.getBusinessName ().toLowerCase().contains(charString) || hotel.getAddress ().toLowerCase().contains(charString) || hotel.getPayBillNo ().toLowerCase().contains(charString)) {
 
-                            filteredList.add(androidVersion);
+                            filteredList.add(hotel);
                         }
                     }
 
@@ -110,7 +114,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
     //End of Search filter
 
 
-    class HotelViewHolder extends RecyclerView.ViewHolder {
+    public class HotelViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtHotelName, txtAddress, txtPayBillNo;
         ImageView imageView;

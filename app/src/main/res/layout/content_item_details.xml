@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_item_details"
+    tools:context=".ItemDetails">
+
+    <RelativeLayout
+        android:id="@+id/detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_horizontal_margin"
+            />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_margin"
+            android:textSize="18sp"
+            tools:text="Cool"
+            android:textStyle="bold"
+            android:layout_marginTop="33dp"
+            android:layout_below="@+id/imageView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true" />
+
+
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:id="@+id/priceLinearLayout"
+            android:layout_below="@+id/tvName"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="PRICE"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvPrice" />
+            </TableRow>
+
+        </TableLayout>
+        <!--<TableLayout
+            android:layout_width="fill_parent"
+            android:id="@+id/unitMeasureLinearLayout"
+            android:layout_below="@+id/priceLinearLayout"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Unit Measure"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvUnitMeasure" />
+            </TableRow>
+
+        </TableLayout>-->
+        <LinearLayout
+            android:id="@+id/quantityLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/priceLinearLayout"
+            android:paddingBottom="@dimen/default_gap"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/default_gap">
+
+            <TextView
+                android:id="@+id/quantityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quantity" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/decrement_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@null"
+                    android:onClick="decrement"
+                    android:textSize="18sp"
+                    android:text="-" />
+
+                <TextView
+                    android:id="@+id/quantity_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@string/initial_quantity"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp" />
+
+                <Button
+                    android:id="@+id/increment_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@null"
+                    android:onClick="increment"
+                    android:textSize="22sp"
+                    android:text="+" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/quantityTotal"
+            android:paddingTop="@dimen/default_gap"
+            android:layout_below="@+id/quantityLinearLayout"
+            android:paddingBottom="@dimen/default_gap"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/total"
+                style="@style/FormTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="TOTAL" />
+
+            <TextView
+                android:id="@+id/cost_text_view"
+                style="@style/FormTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/cart_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/quantityTotal"
+            android:layout_gravity="center"
+            android:onClick="addToCart"
+            android:text="ADD TO CART" />
+
+    </RelativeLayout>
+
+</ScrollView>
