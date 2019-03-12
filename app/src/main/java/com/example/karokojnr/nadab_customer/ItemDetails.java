@@ -1,12 +1,16 @@
 package com.example.karokojnr.nadab_customer;
 import android.app.AlertDialog;
+import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +27,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
+import com.example.karokojnr.nadab_customer.model.Order;
+import com.example.karokojnr.nadab_customer.model.OrderItem;
 import com.example.karokojnr.nadab_customer.order.OrderContract;
 import com.example.karokojnr.nadab_customer.order.OrderDbHelper;
 import com.example.karokojnr.nadab_customer.utils.Constants;
@@ -32,7 +38,7 @@ import java.text.NumberFormat;
 
 import static com.example.karokojnr.nadab_customer.order.OrderContract.OrderEntry.CART_TABLE;
 
-public class ItemDetails extends AppCompatActivity {
+public class ItemDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String  FRAGRANCE_NAME = "fragranceName";
     public static final String  FRAGRANCE_DESCRIPTION = "fragranceDescription";
@@ -69,6 +75,13 @@ public class ItemDetails extends AppCompatActivity {
     private TextView tvUnitMeasure;
     private RatingBar ratingBar;
     private Toolbar mTopToolbar;
+
+    private Cursor mCursor;
+    boolean exists = false;
+    double unitPrice;
+    int qty = 0;
+    int id = 0;
+    private static final int CART_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,23 +120,18 @@ public class ItemDetails extends AppCompatActivity {
         } catch (NullPointerException e) {
             Log.wtf(TAG, "onCreate: "+e.getMessage());
         }*/
-      mContentResolver = this.getContentResolver();
-        OrderDbHelper dbHelper = new OrderDbHelper(this);
-        mDb = dbHelper.getWritableDatabase();
-
-
-
-
-//        Intent intentThatStartedThisActivity = getIntent();
+       mContentResolver = this.getContentResolver();
+       OrderDbHelper dbHelper = new OrderDbHelper(this);
+       mDb = dbHelper.getWritableDatabase();
         addToCartButton = (Button) findViewById(R.id.cart_button);
         costTextView = (TextView) findViewById(R.id.cost_text_view);
         imageView = (ImageView) findViewById(R.id.ivImage);
         tvName = (TextView) findViewById(R.id.tvName);
-      //  tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
+        //  tvUnitMeasure = (TextView) findViewById(R.id.tvUnitMeasure);
         tvPrice = (TextView) findViewById(R.id.tvPrice);
 
         tvName.setText(itemName);
-//        tvUnitMeasure.setText(itemUnitMeasure);
+        //        tvUnitMeasure.setText(itemUnitMeasure);
         tvPrice.setText("Kshs." + itemPrice);
         float f = Float.parseFloat(Double.toString(rating));
         setTitle(fragranceName);
@@ -137,6 +145,8 @@ public class ItemDetails extends AppCompatActivity {
             mTotalPrice = Integer.parseInt(itemPrice);
             displayCost(mTotalPrice);
         }
+
+        getLoaderManager().initLoader(CART_LOADER, null, this);
 
     }
 
@@ -213,20 +223,33 @@ public class ItemDetails extends AppCompatActivity {
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, "Null");
 
         String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
-        Log.wtf(TAG, "addValuesToCart: "+currentHotel );
 
-        if(currentHotel.equals("none")){
-            utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL, itemHotelId);
-            utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_STATUS, "NEW");
-            mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
-            Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
-        } else if(!currentHotel.equals(itemHotelId)) {
-            Toast.makeText(this, "You have incomplete orders from another hotel, you can't order from two hotels.", Toast.LENGTH_LONG).show();
-        } else if(currentHotel.equals(itemHotelId)) {
-            mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
-            Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
+        // Check if item already exists in database and it's not ordered, if so, updated the qty otherwise add a new entry
+
+        unitPrice = mTotalPrice/mQuantity;
+
+        if(exists) {
+            int items = mQuantity + qty;
+            Uri uri = OrderContract.OrderEntry.CONTENT_URI;
+            uri = uri.buildUpon().appendPath(Integer.toString(id)).build();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, items);
+            contentValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, (unitPrice*items));
+            getContentResolver().update(uri, contentValues, "_id = ?", new String[id]);
         } else {
-            Toast.makeText(this, "Item not to Cart", Toast.LENGTH_SHORT).show();
+            if(currentHotel.equals("none")){
+                utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL, itemHotelId);
+                utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_STATUS, "NEW");
+                mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
+                Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
+            } else if(!currentHotel.equals(itemHotelId)) {
+                Toast.makeText(this, "You have incomplete orders from another hotel, you can't order from two hotels.", Toast.LENGTH_LONG).show();
+            } else if(currentHotel.equals(itemHotelId)) {
+                mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
+                Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Item not to Cart", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -255,13 +278,70 @@ public class ItemDetails extends AppCompatActivity {
         alertDialog.show();
     }
 
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (mCursor == c) {
+            return null; // bc nothing has changed
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c; // new cursor value assigned
 
+        return temp;
+    }
+
+    private void checkIfItemExits(Cursor cursor) {
+        for (int i = 0; i<cursor.getCount(); i++)
+        {
+            int dbId = cursor.getColumnIndex(OrderContract.OrderEntry._CARTID);
+            int dbName = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_NAME);
+            int dbQty = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_QUANTITY);
+
+            cursor.moveToPosition(i);
+
+            qty = cursor.getInt(dbQty);
+            id = cursor.getInt(dbId);
+            String name = cursor.getString(dbName);
+            exists = !name.isEmpty();
+        }
+    }
     private void updateNotificationsBadge(int count) {
         mNotificationsCount = count;
         Log.wtf(TAG, "updateNotificationsBadge: "+count );
         // force the ActionBar to relayout its MenuItems.
         // onCreateOptionsMenu(Menu) will be called again.
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Define a projection that specifies the columns from the table we care about.
+        String[] projection = {
+                OrderContract.OrderEntry._CARTID,
+                OrderContract.OrderEntry.COLUMN_CART_QUANTITY,
+                OrderContract.OrderEntry.COLUMN_CART_NAME,
+                OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE,
+        };
+
+        String selection = OrderContract.OrderEntry.COLUMN_CART_NAME + "=? and " + OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS + "='NEW'";
+
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                OrderContract.OrderEntry.CONTENT_URI,   // Provider content URI to query
+                projection,             // Columns to include in the resulting Cursor
+                selection,                   // No selection clause
+                new String[]{itemName},                   // No selection arguments
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        swapCursor(data);
+        checkIfItemExits(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        swapCursor(null);
     }
 
     /*
