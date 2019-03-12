@@ -1,16 +1,24 @@
 package com.example.karokojnr.nadab_customer.adapter;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.karokojnr.nadab_customer.CartActivity;
 import com.example.karokojnr.nadab_customer.order.OrderContract;
 import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
@@ -60,10 +68,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         final int id = mCursor.getInt(idIndex);
         String name = mCursor.getString(fragranceName);
         String fragranceImage = mCursor.getString(image);
-        int fragranceQuantity = mCursor.getInt(quantity);
+        final int fragranceQuantity = mCursor.getInt(quantity);
         Double fragrancePrice = mCursor.getDouble(price);
         String orderStatus = mCursor.getString(status);
-
+        final double unitPrice = fragrancePrice/fragranceQuantity;
         DecimalFormat precision = new DecimalFormat("0.00");
 
 
@@ -71,18 +79,67 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.tvName.setText(name);
         holder.tvUnitMeasure.setText("Quantity ordering: " + String.valueOf(fragranceQuantity));
         holder.tvPrice.setText("Kshs." + precision.format(fragrancePrice));
-       Glide.with(mContext)
+        Glide.with(mContext)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+fragranceImage)
                 .into(holder.imageView);
 
        if(orderStatus.equals("NEW")){
-           holder.button1.setText("Order");
-           holder.button1.setText("Edit");
+           holder.order.setText("Order");
+           holder.edit.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                   View dialogLayout = inflater.inflate(R.layout.edit_cart_item, null);
+                   final TextView qty = dialogLayout.findViewById(R.id.quantity_text_view);
+                   qty.setText(String.valueOf(fragranceQuantity));
+                   Button decrement = dialogLayout.findViewById(R.id.decrement_button);
+                   Button increment = dialogLayout.findViewById(R.id.increment_button);
+
+                   decrement.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           int items = Integer.parseInt(qty.getText().toString());
+                           if(items > 1)
+                               qty.setText(""+(items-1));
+                       }
+                   });
+
+                   increment.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           int items = Integer.parseInt(qty.getText().toString());
+                           qty.setText(""+(items+1));
+                       }
+                   });
+
+                   builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+
+                       }
+                   });
+                   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                           int items = Integer.parseInt(qty.getText().toString());
+                           Uri uri = OrderContract.OrderEntry.CONTENT_URI;
+                           uri = uri.buildUpon().appendPath(Integer.toString(id)).build();
+                           ContentValues contentValues = new ContentValues();
+                           contentValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, items);
+                           contentValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, (unitPrice*items));
+                           mContext.getContentResolver().update(uri, contentValues, "_id = ?", new String[id]);
+                       }
+                   });
+                   builder.setView(dialogLayout);
+                   builder.show();
+               }
+           });
        }
 
         if(orderStatus.equals("SENT")){
-            holder.button1.setText("Cancel");
-            holder.button1.setVisibility(View.GONE);
+            holder.order.setText("Cancel");
+            holder.edit.setVisibility(View.GONE);
         }
     }
 
@@ -112,8 +169,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvUnitMeasure, tvPrice, tvId;
-        ImageView imageView;
-        Button button1, button2;
+        ImageView imageView, edit;
+        Button order;
         public CartViewHolder(View itemView) {
             super(itemView);
 
@@ -122,8 +179,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             tvUnitMeasure = (TextView) itemView.findViewById(R.id.tvUnitMeasure);
             tvPrice = (TextView) itemView.findViewById(R.id.price);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            button1 = (Button) itemView.findViewById(R.id.edit_cart_item);
-            button2 = (Button) itemView.findViewById(R.id.order_item);
+            order = (Button) itemView.findViewById(R.id.order_item);
+            edit = (ImageView) itemView.findViewById(R.id.edit_cart_item);
         }
 
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -61,16 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/tvName"
-        android:layout_marginEnd="47dp"
+        android:layout_marginEnd="14dp"
         android:text="Order" />
-
-    <Button
-        android:id="@+id/edit_cart_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignStart="@+id/order_item"
-        android:text="Edit" />
 
     <TextView
         android:id="@+id/tvId"
@@ -79,6 +72,16 @@
         android:layout_alignBottom="@+id/imageView"
         android:layout_alignStart="@+id/tvName"
         android:text="TextView"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_alignLeft="@+id/tvName" />
+
+    <ImageView
+        android:id="@+id/edit_cart_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/price"
+        android:layout_marginEnd="31dp"
+        app:srcCompat="@drawable/ic_mode_edit_black_18dp" />
 
 </RelativeLayout>

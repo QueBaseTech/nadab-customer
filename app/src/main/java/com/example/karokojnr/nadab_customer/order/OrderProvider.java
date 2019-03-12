@@ -176,6 +176,23 @@ public class OrderProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        final SQLiteDatabase db = orderDbHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+        int cartUpdated;
+
+        switch (match) {
+            case CART_ID:
+                String id = uri.getPathSegments().get(1);
+                cartUpdated = db.update(OrderContract.OrderEntry.CART_TABLE, contentValues, s, new String[]{id});
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if (cartUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return cartUpdated;
     }
 }

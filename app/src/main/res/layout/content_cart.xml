@@ -57,11 +57,20 @@
 
         </TableLayout>
 
+        <TextView
+            android:id="@+id/no_orders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/priceLayout"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:text="No items in your cart, add items before placing order"
+            android:textSize="16dp"
+            android:visibility="gone" />
         <Button
             android:id="@+id/button_order"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_below="@+id/priceLayout"
+            android:layout_below="@+id/no_orders"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:background="@color/colorPrimary"

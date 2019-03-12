@@ -1,5 +1,6 @@
 package com.example.karokojnr.nadab_customer;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -42,6 +43,8 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     RecyclerView mRecyclerView;
     Double totalPrice;
     Button placeOrderBt;
+    private TextView noItems;
+    private Context mContext;
 
     private Order order = null;
 
@@ -49,7 +52,9 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+        mContext = this;
 
+        noItems = findViewById(R.id.no_orders);
         mRecyclerView = (RecyclerView) findViewById(R.id.cart_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartAdapter = new CartAdapter(this);
@@ -74,22 +79,31 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
                 getContentResolver().delete(uri, null, null);
                 getLoaderManager().restartLoader(CART_LOADER, null, CartActivity.this);
 
+                // Reset hotel id and order status
+                updateOrderStatus();
             }
         }).attachToRecyclerView(mRecyclerView);
 
         getLoaderManager().initLoader(CART_LOADER, null, this);
 
         placeOrderBt = (Button) findViewById(R.id.button_order);
+        if(cartAdapter.getItemCount() == 0)
+            placeOrderBt.setEnabled(false);
+        else
+            placeOrderBt.setEnabled(true);
 
         String orderStatus = utils.getOrderStatus(CartActivity.this);
-        if (orderStatus.equals("SENT"))
-            placeOrderBt.setText("PAY");
+        if (orderStatus.equals("SENT")) placeOrderBt.setText("PAY");
+
+        if (orderStatus.equals("EMPTY")) {
+            noItems.setVisibility(View.VISIBLE);
+            placeOrderBt.setText("Order");
+        }
 
         placeOrderBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String orderStatus = utils.getOrderStatus(CartActivity.this);
-                Log.wtf("ORDER Status", "onClick: "+ orderStatus );
                 if (orderStatus.equals("NEW")) {
                     HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
                     Call<Order> call = service.placeOrder(order);
@@ -115,6 +129,14 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
             }
         });
+    }
+
+    private void updateOrderStatus() {
+        if(cartAdapter.getItemCount() == 1) {
+            utils.setSharedPrefsString(mContext, Constants.M_ORDER_HOTEL, "none");
+            utils.setSharedPrefsString(mContext, Constants.M_ORDER_STATUS, "EMPTY");
+            noItems.setVisibility(View.VISIBLE);
+        }
     }
 
 

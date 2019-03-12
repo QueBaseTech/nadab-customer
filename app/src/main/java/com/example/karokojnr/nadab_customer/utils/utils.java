@@ -33,7 +33,7 @@ public class utils {
 
     public static final String getOrderStatus(Context context) {
         SharedPreferences sharedPreferences =   context.getSharedPreferences(Constants.M_SHARED_PREFERENCE, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(Constants.M_ORDER_STATUS, "NEW");
+        return sharedPreferences.getString(Constants.M_ORDER_STATUS, "EMPTY");
     }
 
     public static final void setOrderStatus(Context context, String orderStatus) {

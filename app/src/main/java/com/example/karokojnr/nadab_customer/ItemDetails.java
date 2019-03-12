@@ -213,8 +213,11 @@ public class ItemDetails extends AppCompatActivity {
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, "Null");
 
         String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
-        if(currentHotel == null){
+        Log.wtf(TAG, "addValuesToCart: "+currentHotel );
+
+        if(currentHotel.equals("none")){
             utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_HOTEL, itemHotelId);
+            utils.setSharedPrefsString(ItemDetails.this, Constants.M_ORDER_STATUS, "NEW");
             mContentResolver.insert(OrderContract.OrderEntry.CONTENT_URI, cartValues);
             Toast.makeText(this, "Successfully added to Cart", Toast.LENGTH_SHORT).show();
         } else if(!currentHotel.equals(itemHotelId)) {
