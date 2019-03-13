@@ -5,12 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 
 public class Order {
-    @SerializedName("success")
-    private boolean success;
-
-    @SerializedName("message")
-    private String message;
-
     @SerializedName("_id")
     private String orderId;
 
@@ -46,20 +40,15 @@ public class Order {
         this.customerId = customerId;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public Order(String orderId, String orderStatus, Double totalPrice, int totalItems, OrderItem[] orderItems, OrderPayment[] orderPayments, String hotel, String customerId) {
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+        this.totalPrice = totalPrice;
+        this.totalItems = totalItems;
+        this.orderItems = orderItems;
+        this.orderPayments = orderPayments;
+        this.hotel = hotel;
+        this.customerId = customerId;
     }
 
     public String getOrderId() {
@@ -129,6 +118,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
+                "_id='" + orderId + '\'' +
                 "orderStatus='" + orderStatus + '\'' +
                 ", totalPrice=" + totalPrice +
                 ", totalItems=" + totalItems +

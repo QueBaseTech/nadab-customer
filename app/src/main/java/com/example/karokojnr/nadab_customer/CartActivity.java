@@ -1,5 +1,6 @@
 package com.example.karokojnr.nadab_customer;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
@@ -21,6 +22,7 @@ import com.example.karokojnr.nadab_customer.api.HotelService;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.OrderItem;
+import com.example.karokojnr.nadab_customer.model.OrderResponse;
 import com.example.karokojnr.nadab_customer.order.OrderContract;
 import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.utils;
@@ -87,40 +89,49 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         getLoaderManager().initLoader(CART_LOADER, null, this);
 
         placeOrderBt = (Button) findViewById(R.id.button_order);
-        if(cartAdapter.getItemCount() == 0)
-            placeOrderBt.setEnabled(false);
-        else
-            placeOrderBt.setEnabled(true);
 
         String orderStatus = utils.getOrderStatus(CartActivity.this);
         if (orderStatus.equals("SENT")) placeOrderBt.setText("PAY");
 
         if (orderStatus.equals("EMPTY")) {
             noItems.setVisibility(View.VISIBLE);
-            placeOrderBt.setText("Order");
+            placeOrderBt.setVisibility(View.INVISIBLE);
         }
 
         placeOrderBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String orderStatus = utils.getOrderStatus(CartActivity.this);
+                Log.wtf("Cart", "onClick: "+orderStatus );
                 if (orderStatus.equals("NEW")) {
                     HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-                    Call<Order> call = service.placeOrder(order);
-                    call.enqueue ( new Callback<Order>() {
+                    Call<OrderResponse> call = service.placeOrder(order);
+                    call.enqueue ( new Callback<OrderResponse>() {
                         @Override
-                        public void onResponse(Call<Order> call, Response<Order> response) {
+                        public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
                             if (response.body().isSuccess()){
                                 utils.setOrderStatus(CartActivity.this, "SENT");
+                                placeOrderBt.setText("PAY");
                                 Toast.makeText(CartActivity.this, "Order placed successfully", Toast.LENGTH_SHORT).show();
-                                utils.setOrderId(CartActivity.this, response.body().getOrderId());
+                                String orderId = response.body().getOrder().getOrderId();
+                                utils.setOrderId(CartActivity.this, orderId);
+                                for(int i=0; i<order.getOrderItems().length; i++) {
+                                    OrderItem orderItem = order.getOrderItems()[i];
+                                    Uri uri = OrderContract.OrderEntry.CONTENT_URI;
+                                    String itemId = orderItem.getId();
+                                    uri = uri.buildUpon().appendPath(itemId).build();
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, orderId);
+                                    contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS, "SENT");
+                                    mContext.getContentResolver().update(uri, contentValues, "_id = ?", new String[]{ itemId });
+                                }
                             } else {
                                 Toast.makeText(CartActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Order> call, Throwable t) {
+                        public void onFailure(Call<OrderResponse> call, Throwable t) {
                             Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
                         }
                     } );
@@ -136,6 +147,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
             utils.setSharedPrefsString(mContext, Constants.M_ORDER_HOTEL, "none");
             utils.setSharedPrefsString(mContext, Constants.M_ORDER_STATUS, "EMPTY");
             noItems.setVisibility(View.VISIBLE);
+            placeOrderBt.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -185,24 +197,30 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         for (int i = 0; i<cursor.getCount(); i++)
         {
             OrderItem item;
+            int id = cursor.getColumnIndex(OrderContract.OrderEntry._CARTID);
             int price = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE);
             int name = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_NAME);
             int qty = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_QUANTITY);
+            int itemStatus = cursor.getColumnIndex(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS);
 
             cursor.moveToPosition(i);
 
+            String _id = cursor.getString(id);
             String itemName = cursor.getString(name);
             int itemQty = cursor.getInt(qty);
             Double fragrancePrice = cursor.getDouble(price);
+            String status = cursor.getString(itemStatus);
 
-            item = new OrderItem(itemName, itemQty, fragrancePrice);
-            orderItems[i] = item;
-            totalPrice += fragrancePrice;
+            if(status.equals("NEW")){
+                item = new OrderItem(_id, itemName, itemQty, fragrancePrice);
+                orderItems[i] = item;
+                totalPrice += fragrancePrice;
+            }
         }
 
         order.setOrderItems(orderItems);
         order.setTotalPrice(totalPrice);
-        order.setTotalItems(cursor.getCount());
+        order.setTotalItems(orderItems.length);
         order.setOrderStatus("NEW");
         order.setHotel(utils.getSharedPrefsString(this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL));
         order.setCustomerId(utils.getSharedPrefsString(this, Constants.M_USER_SHARED_PREFERENCE, Constants.M_USER_ID));

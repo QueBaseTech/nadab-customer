@@ -74,10 +74,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:background="@color/colorPrimary"
-            android:text="ORDER"
+            android:text="ORDER ALL"
             android:textColor="#FFF"
-            android:textSize="16dp"
-            tools:ignore="OnClick" />
+            android:textSize="16dp" />
 
     </RelativeLayout>
 </ScrollView>

@@ -19,11 +19,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.CartActivity;
+import com.example.karokojnr.nadab_customer.api.HotelService;
+import com.example.karokojnr.nadab_customer.model.OrderItem;
+import com.example.karokojnr.nadab_customer.model.OrderResponse;
 import com.example.karokojnr.nadab_customer.order.OrderContract;
 import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
+import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.text.DecimalFormat;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -66,10 +74,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         // Determine the values of the wanted data
         final int id = mCursor.getInt(idIndex);
-        String name = mCursor.getString(fragranceName);
+        final String name = mCursor.getString(fragranceName);
         String fragranceImage = mCursor.getString(image);
         final int fragranceQuantity = mCursor.getInt(quantity);
-        Double fragrancePrice = mCursor.getDouble(price);
+        final Double fragrancePrice = mCursor.getDouble(price);
         String orderStatus = mCursor.getString(status);
         final double unitPrice = fragrancePrice/fragranceQuantity;
         DecimalFormat precision = new DecimalFormat("0.00");
@@ -85,6 +93,44 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
        if(orderStatus.equals("NEW")){
            holder.order.setText("Order");
+           holder.order.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   // get the current order_id and send a request to add it to it
+                   OrderItem orderItem = new OrderItem(Integer.toString(id), name, fragranceQuantity, fragrancePrice);
+                   String currentOrderId = utils.getOrderId(mContext);
+                   HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
+                   Call<OrderResponse> call = service.addItemToOrder(currentOrderId, orderItem);
+                   call.enqueue ( new Callback<OrderResponse>() {
+                       @Override
+                       public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                           if (response.body().isSuccess()){
+                               utils.setOrderStatus(mContext, "SENT");
+                               Toast.makeText(mContext, "Order placed successfully", Toast.LENGTH_SHORT).show();
+                               String orderId = response.body().getOrder().getOrderId();
+                               utils.setOrderId(mContext, orderId);
+                               Uri uri = OrderContract.OrderEntry.CONTENT_URI;
+                               String itemId = Integer.toString(id);
+                               uri = uri.buildUpon().appendPath(itemId).build();
+                               ContentValues contentValues = new ContentValues();
+                               contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, orderId);
+                               contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS, "SENT");
+                               mContext.getContentResolver().update(uri, contentValues, "_id = ?", new String[]{ itemId });
+                           } else {
+                               Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                           }
+                       }
+
+                       @Override
+                       public void onFailure(Call<OrderResponse> call, Throwable t) {
+                           Toast.makeText ( mContext, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
+                       }
+                   } );
+
+                   // On response update the  local copy
+               }
+           });
+
            holder.edit.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {

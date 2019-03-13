@@ -7,6 +7,8 @@ import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelRegister;
 import com.example.karokojnr.nadab_customer.model.HotelsList;
 import com.example.karokojnr.nadab_customer.model.Order;
+import com.example.karokojnr.nadab_customer.model.OrderItem;
+import com.example.karokojnr.nadab_customer.model.OrderResponse;
 import com.example.karokojnr.nadab_customer.model.Products;
 import com.example.karokojnr.nadab_customer.model.UserLogin;
 
@@ -39,7 +41,10 @@ public interface HotelService {
     Call<HotelRegister> addHotel(@Body Hotel hotel);
 
     @POST("orders/add")
-    Call<Order> placeOrder(@Body Order order);
+    Call<OrderResponse> placeOrder(@Body Order order);
+
+    @POST("orders/{id}/addItem")
+    Call<OrderResponse> addItemToOrder(@Path("id") String currentOrderId, @Body OrderItem orderItem);
 
     @FormUrlEncoded
     @POST("customer/login")
