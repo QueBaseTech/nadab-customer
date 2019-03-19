@@ -7,24 +7,30 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
+import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.Product;
 
 import java.util.ArrayList;
 
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder>  {
+public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder>  implements Filterable {
 
     private ArrayList<Product> productList;
+    private ArrayList<Product> mFilteredList;
+
     Context context;
 
 
     public ItemsAdapter(ArrayList<Product> productList, Context context) {
         this.productList = productList;
+        mFilteredList = productList;
         this.context = context;
     }
 
@@ -49,10 +55,57 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return productList.size ();
+        return mFilteredList.size ();
     }
 
-     class MyViewHolder extends RecyclerView.ViewHolder {
+    //Search bar filter
+
+
+    @Override
+    public Filter getFilter() {
+
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty()) {
+
+                    mFilteredList = productList;
+                } else {
+
+                    ArrayList<Product> filteredList = new ArrayList<>();
+
+                    for (Product product : productList) {
+
+                        if (product.getName ().toLowerCase().contains(charString) || product.getPrice ().toLowerCase().contains(charString) || product.getImage ().toLowerCase().contains(charString)) {
+
+                            filteredList.add(product);
+                        }
+                    }
+
+                    mFilteredList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredList = (ArrayList<Product>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    //End of Search filter
+
+
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
          TextView name, unitMeasure, price, hotel, sellingStatus;
          ImageView imageView;
 

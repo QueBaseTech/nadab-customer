@@ -61,7 +61,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     @Override
     public int getItemCount() {
-        return mDataList.size();
+        return mFilteredList.size();
     }
 
     //Search bar filter
