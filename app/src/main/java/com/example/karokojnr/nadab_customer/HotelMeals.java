@@ -195,6 +195,7 @@ public class HotelMeals extends AppCompatActivity
                 Toast.makeText ( getApplicationContext (), product.getName () + " is selected!", Toast.LENGTH_SHORT ).show ();
 
                 Intent intent = new Intent(HotelMeals.this, ItemDetails.class);
+                Log.wtf ( "itemdetails ", product.getName ());
                 intent.putExtra(Constants.M_NAME, product.getName ());
                 intent.putExtra(Constants.M_IMAGE, product.getImage ());
                 intent.putExtra(Constants.M_UNITMEASURE, product.getUnitMeasure ());
