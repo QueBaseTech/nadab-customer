@@ -90,4 +90,6 @@
     <string name="contact_us">Contact Us</string>
     <string name="conditions">Terms and conditions</string>
 
+    <string name="default_notification_channel_id">ADMIN_CHANNEL_ID</string>
+
 </resources>
