@@ -222,7 +222,8 @@ public class ItemDetails extends AppCompatActivity implements LoaderManager.Load
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS, "NEW");
         cartValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, "Null");
 
-        String currentHotel = utils.getSharedPrefsString(ItemDetails.this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
+        String currentHotelId = utils.getSharedPrefsString(ItemDetails.this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
+        String currentHotel = currentHotelId == null ? "none": currentHotelId;
 
         // Check if item already exists in database and it's not ordered, if so, updated the qty otherwise add a new entry
 
