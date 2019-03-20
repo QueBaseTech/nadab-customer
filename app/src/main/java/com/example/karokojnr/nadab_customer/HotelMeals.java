@@ -2,7 +2,14 @@ package com.example.karokojnr.nadab_customer;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,15 +21,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.adapter.ItemsAdapter;
 import com.example.karokojnr.nadab_customer.api.HotelService;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Product;
 import com.example.karokojnr.nadab_customer.model.Products;
 import com.example.karokojnr.nadab_customer.utils.Constants;
+import com.example.karokojnr.nadab_customer.utils.CustomerSharedPreference;
+import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +42,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HotelMeals extends AppCompatActivity {
+import static com.example.karokojnr.nadab_customer.MainActivity.viewPager;
+
+public class HotelMeals extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private ItemsAdapter adapter;
     private RecyclerView recyclerView;
@@ -40,15 +54,20 @@ public class HotelMeals extends AppCompatActivity {
     private Toolbar toolbar;
     private static final String TAG = "Items";
     private String hotelId;
+    static ViewPager viewPager;
+    static TabLayout tabLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_hotel_meals );
+
+
         toolbar = (Toolbar) findViewById ( R.id.toolbar );
         setSupportActionBar ( toolbar );
 
-        getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
+        /*getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
         getSupportActionBar ().setDisplayShowHomeEnabled ( true );
 
         //toolbar.setNavigationIcon(R.drawable.ic_arrow);
@@ -60,7 +79,24 @@ public class HotelMeals extends AppCompatActivity {
                 // Your code
                 finish ();
             }
-        } );
+        } );*/
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById ( R.id.nav_view );
+        View headerView = navigationView.getHeaderView ( 0 );
+        TextView navUsername = (TextView) headerView.findViewById ( R.id.navTextview );
+        ImageView navImageview = (ImageView) headerView.findViewById ( R.id.imageView );
+        navigationView.setNavigationItemSelectedListener(this);
+
+        CustomerSharedPreference customer = SharedPrefManager.getInstance ( this ).getUser ();
+        navUsername.setText ( customer.getUser_fullname () );
+        Glide.with ( this ).load ( RetrofitInstance.BASE_URL + "images/uploads/customers/" + String.valueOf ( customer.getIvImage () ) ).into ( navImageview );
 
 
         hotelId = getIntent().getStringExtra(Constants.M_HOTEL_ID);
@@ -98,24 +134,13 @@ public class HotelMeals extends AppCompatActivity {
 
         @Override
         public boolean onOptionsItemSelected (MenuItem item){
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId ();
-
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_cart) {
-                startActivity(new Intent(HotelMeals.this, CartActivity.class));
-
-                // notificationCount=0;//clear notification count
-                invalidateOptionsMenu();
-
-                //Toast.makeText ( HotelMeals.this, "Action clicked", Toast.LENGTH_LONG ).show ();
-                return true;
-            }
-
-            return super.onOptionsItemSelected ( item );
+             return super.onOptionsItemSelected ( item );
         }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return true;
+
+    }
 
     private void search(SearchView searchView) {
 
@@ -129,7 +154,7 @@ public class HotelMeals extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-//                adapter.getFilter().filter(newText);
+                adapter.getFilter().filter(newText);
                 return true;
             }
         });
@@ -186,6 +211,36 @@ public class HotelMeals extends AppCompatActivity {
             }
         } ));
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        // Handle navigation view item clicks here.
+        int id = menuItem.getItemId();
+
+        if (id == R.id.nav_home) {
+            viewPager.setCurrentItem(0);
+        } else if (id == R.id.nav_profile) {
+            startActivity(new Intent(HotelMeals.this, ProfileActivity.class));
+        } else if (id == R.id.nav_orders) {
+            viewPager.setCurrentItem(0);
+        } else if (id == R.id.nav_sign_out) {
+            // Log.wtf(TAG, "onOptionsItemSelected: Logout");
+            SharedPrefManager.getInstance ( getApplicationContext () ).logout ();
+            startActivity ( new Intent ( getApplicationContext (), LoginActivity.class ) );
+        }else if (id == R.id.terms_conditions){
+            startActivity(new Intent(HotelMeals.this, Terms.class));
+
+        }
+        this.finish();
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+
 }
 
 
