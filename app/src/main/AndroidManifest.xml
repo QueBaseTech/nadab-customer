@@ -79,7 +79,7 @@
             android:resource="@color/colorAccent" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/a"/>
+            android:resource="@drawable/notifications"/>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />

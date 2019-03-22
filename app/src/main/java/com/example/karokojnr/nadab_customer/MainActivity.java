@@ -1,10 +1,16 @@
 package com.example.karokojnr.nadab_customer;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -58,12 +64,39 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "HotelAdapter";
     static ViewPager viewPager;
     static TabLayout tabLayout;
+    private NotificationManager notificationManager;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setupChannels(){
+        CharSequence adminChannelName = "Orders";
+        String adminChannelDescription = "Collection of orders";
+
+        NotificationChannel adminChannel;
+        adminChannel = new NotificationChannel(Constants.ADMIN_CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_LOW);
+        adminChannel.setDescription(adminChannelDescription);
+        adminChannel.enableLights(true);
+        adminChannel.setLightColor(Color.RED);
+        adminChannel.enableVibration(true);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(adminChannel);
+            Log.wtf(TAG, "setupChannels: not null" );
+        }
+        Log.wtf(TAG, "setupChannels: creating channels");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //Setting up Notification channels for android O and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setupChannels();
+            Log.wtf(TAG, "onCreate: is Oreo and above");
+        }
+
 
         if(!SharedPrefManager.getInstance(this).isLoggedIn()) {
             startActivity(new Intent(this, LoginActivity.class));

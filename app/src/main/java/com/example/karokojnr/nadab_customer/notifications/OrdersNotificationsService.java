@@ -20,6 +20,8 @@ import com.example.karokojnr.nadab_customer.utils.utils;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Random;
+
 public class OrdersNotificationsService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
     private NotificationManager notificationManager;
@@ -55,11 +57,10 @@ public class OrdersNotificationsService extends FirebaseMessagingService {
 
 
         String order = remoteMessage.getData().get("orderID");
-        String message = remoteMessage.getData().get("message");
+        String title = remoteMessage.getData().get("title");
+        String body = remoteMessage.getData().get("body");
 
-        sendNotification(message, order);
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Data: " + order);
+        sendNotification(title, body, order);
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
@@ -71,50 +72,20 @@ public class OrdersNotificationsService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
-    // [END receive_message]
 
-
-    // [START on_new_token]
-
-    /**
-     * Called if InstanceID token is updated. This may occur if the security of
-     * the previous token had been compromised. Note that this is called when the InstanceID token
-     * is initially generated so this is where you would retrieve the token.
-     */
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
-
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
         utils.sendRegistrationToServer(getApplicationContext(), token);
     }
-    // [END on_new_token]
 
-    /**
-     * Schedule a job using FirebaseJobDispatcher.
-     */
-    private void scheduleJob() {
-
-    }
-
-    /**
-     * Handle time allotted to BroadcastReceivers.
-     */
     private void handleNow() {
         Log.d(TAG, "Short lived task is done.");
     }
 
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     */
+
     private void sendNotification() {
         sendNotification();
     }
@@ -122,10 +93,11 @@ public class OrdersNotificationsService extends FirebaseMessagingService {
     /**
      * Create and show a simple notification containing the received FCM message.
      *
-     * @param messageBody FCM message body received.
+     * @param title FCM message body received.
+     * @param body FCM message body received.
      * @param order FCM message orderID received.
      */
-    private void sendNotification(String messageBody, String order) {
+    private void sendNotification(String title, String body, String order) {
         Intent intent = new Intent(this, CartActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("ORDER_ID", order);
@@ -136,8 +108,8 @@ public class OrdersNotificationsService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.notifications)
-                        .setContentTitle("Your order status")
-                        .setContentText(messageBody)
+                        .setContentTitle(title)
+                        .setContentText(body)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
@@ -153,7 +125,9 @@ public class OrdersNotificationsService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0 , notificationBuilder.build());
+        Random dice = new Random();
+        int random = dice.nextInt();
+        notificationManager.notify(random , notificationBuilder.build());
     }
 
 }
