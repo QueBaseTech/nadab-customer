@@ -24,10 +24,16 @@ public class Order {
     private OrderPayment[] orderPayments;
 
     @SerializedName("hotel")
-    private String hotel;
+    private Hotel hotel;
+
+    @SerializedName("hotelId")
+    private String hotelId;
 
     @SerializedName("customerId")
     private String customerId;
+
+    @SerializedName("updatedAt")
+    private String updatedAt;
 
     public Order() {}
 
@@ -36,7 +42,7 @@ public class Order {
         this.totalPrice = totalPrice;
         this.totalItems = totalItems;
         this.orderItems = orderItems;
-        this.hotel = hotel;
+        this.hotelId = hotel;
         this.customerId = customerId;
     }
 
@@ -47,8 +53,12 @@ public class Order {
         this.totalItems = totalItems;
         this.orderItems = orderItems;
         this.orderPayments = orderPayments;
-        this.hotel = hotel;
+        this.hotelId = hotel;
         this.customerId = customerId;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
     public String getOrderId() {
@@ -99,11 +109,19 @@ public class Order {
         this.orderPayments = orderPayments;
     }
 
-    public String getHotel() {
+    public String getHotelId() {
+        return hotelId;
+    }
+
+    public void setHotelId(String hotelId) {
+        this.hotelId = hotelId;
+    }
+
+    public Hotel getHotel() {
         return hotel;
     }
 
-    public void setHotel(String hotel) {
+    public void setHotel(Hotel hotel) {
         this.hotel = hotel;
     }
 
@@ -123,7 +141,7 @@ public class Order {
                 ", totalPrice=" + totalPrice +
                 ", totalItems=" + totalItems +
                 ", orderItems=" + Arrays.toString(orderItems) +
-                ", hotel='" + hotel + '\'' +
+                ", hotel='" + hotel.toString() + '\'' +
                 ", customerId='" + customerId + '\'' +
                 '}';
     }

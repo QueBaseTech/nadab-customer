@@ -43,7 +43,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public static final String TAG = CartAdapter.class.getSimpleName();
 
     /**
-     * Constructor for the CustomCursorAdapter tyhat initializes the Context.
+     * Constructor for the CustomCursorAdapter that initializes the Context.
      *
      * @param mContext the current Context
      */

@@ -9,6 +9,7 @@ import com.example.karokojnr.nadab_customer.model.HotelsList;
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.OrderItem;
 import com.example.karokojnr.nadab_customer.model.OrderResponse;
+import com.example.karokojnr.nadab_customer.model.Orders;
 import com.example.karokojnr.nadab_customer.model.Products;
 import com.example.karokojnr.nadab_customer.model.UserLogin;
 
@@ -61,6 +62,9 @@ public interface HotelService {
     @Multipart
     @POST("customer/register")
     Call<UserLogin> addCustomer(@Part MultipartBody.Part fileToUpload, @Part("filename") RequestBody filename, @Part("fullName") RequestBody userName, @Part("mobileNumber") RequestBody mobileNumber, @Part("email") RequestBody userEmail, @Part("password") RequestBody password);
+
+    @GET("customer/orders")
+    Call<Orders> getOrders(@Header("x-token") String token);
 
     /*
 

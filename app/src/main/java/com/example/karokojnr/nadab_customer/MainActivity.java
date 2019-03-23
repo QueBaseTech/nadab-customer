@@ -64,39 +64,11 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "HotelAdapter";
     static ViewPager viewPager;
     static TabLayout tabLayout;
-    private NotificationManager notificationManager;
-
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setupChannels(){
-        CharSequence adminChannelName = "Orders";
-        String adminChannelDescription = "Collection of orders";
-
-        NotificationChannel adminChannel;
-        adminChannel = new NotificationChannel(Constants.ADMIN_CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_LOW);
-        adminChannel.setDescription(adminChannelDescription);
-        adminChannel.enableLights(true);
-        adminChannel.setLightColor(Color.RED);
-        adminChannel.enableVibration(true);
-        if (notificationManager != null) {
-            notificationManager.createNotificationChannel(adminChannel);
-            Log.wtf(TAG, "setupChannels: not null" );
-        }
-        Log.wtf(TAG, "setupChannels: creating channels");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        //Setting up Notification channels for android O and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            setupChannels();
-            Log.wtf(TAG, "onCreate: is Oreo and above");
-        }
-
 
         if(!SharedPrefManager.getInstance(this).isLoggedIn()) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -258,11 +230,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         } else if (id == R.id.nav_orders) {
-            viewPager.setCurrentItem(0);
+            startActivity(new Intent(MainActivity.this, Orders.class));
+        } else if (id == R.id.nav_cart) {
+            startActivity(new Intent(MainActivity.this, CartActivity.class));
         } else if (id == R.id.nav_sign_out) {
             // Log.wtf(TAG, "onOptionsItemSelected: Logout");
             SharedPrefManager.getInstance ( getApplicationContext () ).logout ();
             startActivity ( new Intent ( getApplicationContext (), LoginActivity.class ) );
+            finish();
         }else if (id == R.id.terms_conditions){
             startActivity(new Intent(MainActivity.this, Terms.class));
 

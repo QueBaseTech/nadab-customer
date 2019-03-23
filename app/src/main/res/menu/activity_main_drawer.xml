@@ -13,6 +13,10 @@
             android:icon="@drawable/ic_profile"
             android:title="@string/profile" />
         <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/meals"
+            android:title="Cart" />
+        <item
             android:id="@+id/nav_orders"
             android:icon="@drawable/meals"
             android:title="@string/orders" />

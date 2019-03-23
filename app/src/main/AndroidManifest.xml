@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-
     <application
         android:allowBackup="true"
         android:exported="true"
@@ -58,14 +57,24 @@
         </activity>
         <activity android:name=".CartActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".LoginActivity" android:label="@string/title_activity_login" />
-        <activity android:name=".RegisterActivity" android:label="Create account" />
-        <service
-            android:name=".notifications.MyFirebaseInstance">
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Create account" />
+
+        <activity
+            android:name=".Orders"
+            android:label="@string/title_activity_orders"
+            android:theme="@style/AppTheme"/>
+
+        <service android:name=".notifications.MyFirebaseInstance">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <service
             android:name=".notifications.OrdersNotificationsService"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -74,18 +83,21 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/notifications"/>
+            android:resource="@drawable/notifications" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+
     </application>
 
 </manifest>

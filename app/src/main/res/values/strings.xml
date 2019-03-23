@@ -91,5 +91,6 @@
     <string name="conditions">Terms and conditions</string>
 
     <string name="default_notification_channel_id">564</string>
+    <string name="title_activity_orders">Orders</string>
 
 </resources>
