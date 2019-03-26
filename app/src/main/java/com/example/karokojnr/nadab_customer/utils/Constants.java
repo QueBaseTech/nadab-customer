@@ -29,6 +29,6 @@ public final class Constants {
     public static final String M_ORDER_HOTEL = "M_ORDER_HOTEL";
 
     public static final String FIREBASE_TOKEN = "FIREBASE_TOKEN";
-    public static final String ADMIN_CHANNEL_ID = "ADMIN_CHANNEL_ID";
+    public static final String ADMIN_CHANNEL_ID = "564";
     public static final String IS_LOGGED_IN = "isLoggedIn";
 }

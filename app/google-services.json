@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "914542902762-3sk8bo1ef9tqrb8ridn1aph4j6ebtun8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.karokojnr.nadab_customer",
+            "certificate_hash": "e315ddc931777a11e412c72b673d016c81dc8113"
+          }
+        },
+        {
           "client_id": "914542902762-9o98b4udagt7ibqt3ct2pt9nmel4b503.apps.googleusercontent.com",
           "client_type": 3
         }

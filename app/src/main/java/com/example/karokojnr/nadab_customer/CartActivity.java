@@ -165,11 +165,13 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
                 OrderContract.OrderEntry.COLUMN_CART_ORDER_ID,
         };
 
+        String selection = OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS + "='NEW'";
+
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
                 OrderContract.OrderEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
+                selection,                   // Only new items
                 null,                   // No selection arguments
                 null);                  // Default sort order
     }
@@ -222,7 +224,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
         order.setTotalPrice(totalPrice);
         order.setTotalItems(orderItems.length);
         order.setOrderStatus("NEW");
-        order.setHotel(utils.getSharedPrefsString(this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL));
+        order.setHotelId(utils.getSharedPrefsString(this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL));
         order.setCustomerId(utils.getSharedPrefsString(this, Constants.M_USER_SHARED_PREFERENCE, Constants.M_USER_ID));
         order.setOrderPayments(null);
 
