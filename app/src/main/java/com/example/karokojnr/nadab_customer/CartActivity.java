@@ -132,6 +132,7 @@ public class CartActivity extends AppCompatActivity implements LoaderManager.Loa
 
                         @Override
                         public void onFailure(Call<OrderResponse> call, Throwable t) {
+                            Log.wtf("Failed", "onFailure: "+t.getMessage());
                             Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
                         }
                     } );
