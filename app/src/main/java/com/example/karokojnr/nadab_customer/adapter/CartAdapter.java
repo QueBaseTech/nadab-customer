@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,97 +92,99 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+fragranceImage)
                 .into(holder.imageView);
 
-       if(orderStatus.equals("NEW")){
-           holder.order.setText("Order");
-           holder.order.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   // get the current order_id and send a request to add it to it
-                   OrderItem orderItem = new OrderItem(Integer.toString(id), name, fragranceQuantity, fragrancePrice);
-                   String currentOrderId = utils.getOrderId(mContext);
-                   HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-                   Call<OrderResponse> call = service.addItemToOrder(currentOrderId, orderItem);
-                   call.enqueue ( new Callback<OrderResponse>() {
-                       @Override
-                       public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
-                           if (response.body().isSuccess()){
-                               utils.setOrderStatus(mContext, "SENT");
-                               Toast.makeText(mContext, "Order placed successfully", Toast.LENGTH_SHORT).show();
-                               String orderId = response.body().getOrder().getOrderId();
-                               utils.setOrderId(mContext, orderId);
-                               Uri uri = OrderContract.OrderEntry.CONTENT_URI;
-                               String itemId = Integer.toString(id);
-                               uri = uri.buildUpon().appendPath(itemId).build();
-                               ContentValues contentValues = new ContentValues();
-                               contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, orderId);
-                               contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS, "SENT");
-                               mContext.getContentResolver().update(uri, contentValues, "_id = ?", new String[]{ itemId });
-                           } else {
-                               Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                           }
-                       }
-
-                       @Override
-                       public void onFailure(Call<OrderResponse> call, Throwable t) {
-                           Toast.makeText ( mContext, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
-                       }
-                   } );
-
-                   // On response update the  local copy
-               }
-           });
-
-           holder.edit.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                   View dialogLayout = inflater.inflate(R.layout.edit_cart_item, null);
-                   final TextView qty = dialogLayout.findViewById(R.id.quantity_text_view);
-                   qty.setText(String.valueOf(fragranceQuantity));
-                   Button decrement = dialogLayout.findViewById(R.id.decrement_button);
-                   Button increment = dialogLayout.findViewById(R.id.increment_button);
-
-                   decrement.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                           int items = Integer.parseInt(qty.getText().toString());
-                           if(items > 1)
-                               qty.setText(""+(items-1));
-                       }
-                   });
-
-                   increment.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                           int items = Integer.parseInt(qty.getText().toString());
-                           qty.setText(""+(items+1));
-                       }
-                   });
-
-                   builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                       @Override
-                       public void onClick(DialogInterface dialog, int which) {
-
-                       }
-                   });
-                   builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                       @Override
-                       public void onClick(DialogInterface dialog, int which) {
-                           int items = Integer.parseInt(qty.getText().toString());
-                           Uri uri = OrderContract.OrderEntry.CONTENT_URI;
-                           uri = uri.buildUpon().appendPath(Integer.toString(id)).build();
-                           ContentValues contentValues = new ContentValues();
-                           contentValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, items);
-                           contentValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, (unitPrice*items));
-                           mContext.getContentResolver().update(uri, contentValues, "_id = ?", new String[id]);
-                       }
-                   });
-                   builder.setView(dialogLayout);
-                   builder.show();
-               }
-           });
+       if(utils.getOrderId(mContext).isEmpty()){
+           holder.order.setVisibility(View.GONE);
        }
+        holder.order.setText("Order");
+        holder.order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // get the current order_id and send a request to add it to it
+                OrderItem orderItem = new OrderItem(Integer.toString(id), name, fragranceQuantity, fragrancePrice);
+                String currentOrderId = utils.getOrderId(mContext);
+                HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
+                Call<OrderResponse> call = service.addItemToOrder(currentOrderId, orderItem);
+                call.enqueue ( new Callback<OrderResponse>() {
+                    @Override
+                    public void onResponse(Call<OrderResponse> call, Response<OrderResponse> response) {
+                        if (response.body().isSuccess()){
+                            utils.setOrderStatus(mContext, "SENT");
+                            Toast.makeText(mContext, "Order placed successfully", Toast.LENGTH_SHORT).show();
+                            String orderId = response.body().getOrder().getOrderId();
+                            utils.setOrderId(mContext, orderId);
+                            Uri uri = OrderContract.OrderEntry.CONTENT_URI;
+                            String itemId = Integer.toString(id);
+                            uri = uri.buildUpon().appendPath(itemId).build();
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_ID, orderId);
+                            contentValues.put(OrderContract.OrderEntry.COLUMN_CART_ORDER_STATUS, "SENT");
+                            mContext.getContentResolver().update(uri, contentValues, "_id = ?", new String[]{ itemId });
+                        } else {
+                            Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<OrderResponse> call, Throwable t) {
+                        Log.wtf(TAG, "onFailure: "+t.getMessage() );
+                        Toast.makeText ( mContext, "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
+                    }
+                } );
+
+                // On response update the  local copy
+            }
+        });
+
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View dialogLayout = inflater.inflate(R.layout.edit_cart_item, null);
+                final TextView qty = dialogLayout.findViewById(R.id.quantity_text_view);
+                qty.setText(String.valueOf(fragranceQuantity));
+                Button decrement = dialogLayout.findViewById(R.id.decrement_button);
+                Button increment = dialogLayout.findViewById(R.id.increment_button);
+
+                decrement.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int items = Integer.parseInt(qty.getText().toString());
+                        if(items > 1)
+                            qty.setText(""+(items-1));
+                    }
+                });
+
+                increment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int items = Integer.parseInt(qty.getText().toString());
+                        qty.setText(""+(items+1));
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int items = Integer.parseInt(qty.getText().toString());
+                        Uri uri = OrderContract.OrderEntry.CONTENT_URI;
+                        uri = uri.buildUpon().appendPath(Integer.toString(id)).build();
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(OrderContract.OrderEntry.COLUMN_CART_QUANTITY, items);
+                        contentValues.put(OrderContract.OrderEntry.COLUMN_CART_TOTAL_PRICE, (unitPrice*items));
+                        mContext.getContentResolver().update(uri, contentValues, "_id = ?", new String[id]);
+                    }
+                });
+                builder.setView(dialogLayout);
+                builder.show();
+            }
+        });
 
         if(orderStatus.equals("SENT")){
             holder.order.setText("Cancel");
