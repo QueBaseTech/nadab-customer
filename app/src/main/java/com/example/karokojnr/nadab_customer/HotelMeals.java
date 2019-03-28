@@ -42,7 +42,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.karokojnr.nadab_customer.MainActivity.viewPager;
 
 public class HotelMeals extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,8 +53,6 @@ public class HotelMeals extends AppCompatActivity
     private Toolbar toolbar;
     private static final String TAG = "Items";
     private String hotelId;
-    static ViewPager viewPager;
-    static TabLayout tabLayout;
 
 
     @Override
@@ -128,6 +125,16 @@ public class HotelMeals extends AppCompatActivity
             MenuItem search = menu.findItem(R.id.action_search);
             SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
             search(searchView);
+
+            MenuItem cart = menu.findItem ( R.id. action_cart);
+            cart.setOnMenuItemClickListener ( new MenuItem.OnMenuItemClickListener () {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Intent i = new Intent ( getApplicationContext (), CartActivity.class );
+                    startActivity ( i );
+                    return true;
+                }
+            } );
             return true;
 
         }
@@ -219,11 +226,11 @@ public class HotelMeals extends AppCompatActivity
         int id = menuItem.getItemId();
 
         if (id == R.id.nav_home) {
-            viewPager.setCurrentItem(0);
+            startActivity(new Intent(HotelMeals.this, MainActivity.class));
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(HotelMeals.this, ProfileActivity.class));
         } else if (id == R.id.nav_orders) {
-            viewPager.setCurrentItem(0);
+            startActivity(new Intent(HotelMeals.this, MainActivity.class));
         } else if (id == R.id.nav_sign_out) {
             // Log.wtf(TAG, "onOptionsItemSelected: Logout");
             SharedPrefManager.getInstance ( getApplicationContext () ).logout ();

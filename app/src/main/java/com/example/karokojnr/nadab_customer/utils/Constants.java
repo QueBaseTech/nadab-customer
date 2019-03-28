@@ -31,4 +31,7 @@ public final class Constants {
     public static final String FIREBASE_TOKEN = "FIREBASE_TOKEN";
     public static final String ADMIN_CHANNEL_ID = "564";
     public static final String IS_LOGGED_IN = "isLoggedIn";
+
+    //Email Validation pattern
+    public static final String regEx = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b";
 }

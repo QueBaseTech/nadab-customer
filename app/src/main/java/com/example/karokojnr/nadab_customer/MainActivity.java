@@ -4,6 +4,7 @@ package com.example.karokojnr.nadab_customer;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,9 +64,6 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView;
     private List<Hotel> hotelList = new ArrayList<> ();
     private static final String TAG = "HotelAdapter";
-    static ViewPager viewPager;
-    static TabLayout tabLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,13 +93,6 @@ public class MainActivity extends AppCompatActivity
             Glide.with ( this ).load ( RetrofitInstance.BASE_URL + "images/uploads/customers/" + String.valueOf ( customer.getIvImage () ) ).into ( navImageview );
 
 
-            viewPager = (ViewPager) findViewById(R.id.viewpager);
-            tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-            if (viewPager != null) {
-                setupViewPager(viewPager);
-                tabLayout.setupWithViewPager(viewPager);
-            }
             //RECYCLER VIEW
             HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
             Call<HotelsList> call = service.getHotels ();
@@ -171,9 +163,20 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        } else
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Really Exit?")
+                    .setMessage("Are you sure you want to exit?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener () {
+
+                        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                            finishAffinity();
+                        }
+                    }).create().show();
     }
 
     @Override
@@ -183,6 +186,16 @@ public class MainActivity extends AppCompatActivity
         MenuItem search = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         search(searchView);
+
+        MenuItem cart = menu.findItem ( R.id. action_cart);
+        cart.setOnMenuItemClickListener ( new MenuItem.OnMenuItemClickListener () {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent i = new Intent ( getApplicationContext (), CartActivity.class );
+                startActivity ( i );
+                return true;
+            }
+        } );
         return true;
     }
 
@@ -214,10 +227,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        return;
 
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -226,7 +236,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            viewPager.setCurrentItem(0);
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         } else if (id == R.id.nav_orders) {

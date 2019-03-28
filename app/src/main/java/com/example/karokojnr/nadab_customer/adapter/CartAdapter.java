@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,9 +93,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .load(RetrofitInstance.BASE_URL+"images/uploads/products/thumb_"+fragranceImage)
                 .into(holder.imageView);
 
-       if(utils.getOrderId(mContext).isEmpty()){
-           holder.order.setVisibility(View.GONE);
-       }
+        if(utils.getOrderId(mContext) == null){
+            holder.order.setVisibility(View.GONE);
+        }
         holder.order.setText("Order");
         holder.order.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,6 +221,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         TextView tvName, tvUnitMeasure, tvPrice, tvId;
         ImageView imageView, edit;
         Button order;
+        public RelativeLayout viewBackground, viewForeground;
+
         public CartViewHolder(View itemView) {
             super(itemView);
 
@@ -230,6 +233,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             order = (Button) itemView.findViewById(R.id.order_item);
             edit = (ImageView) itemView.findViewById(R.id.edit_cart_item);
+            viewBackground = itemView.findViewById(R.id.view_background);
+            viewForeground = itemView.findViewById(R.id.view_foreground);
         }
 
     }

@@ -68,6 +68,10 @@
             android:name=".Orders"
             android:label="@string/title_activity_orders"
             android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".Terms"
+            android:label="Terms"
+            android:theme="@style/AppTheme"/>
 
         <service android:name=".notifications.MyFirebaseInstance">
             <intent-filter>

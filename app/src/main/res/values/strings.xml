@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Nadab Customer</string>
+    <string name="app_name">Nadab</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -22,12 +22,21 @@
     <string name="my_cart">My Cart</string>
     <string name="my_wishlist">My Wishlist</string>
     <string name="my_account">My Account</string>
+    <string name="delete">DELETE</string>
+
 
     <string name="help_support">Help \u0026 Support</string>
     <string name="terms_conditions">Terms \u0026 Conditions</string>
     <string name="help_center">Help Center</string>
 
     <string name="search_hint">Search for Products, Brands and More</string>
+
+    <string name="termsconditions">By clicking REGISTER you agree all the terms \u0026 conditions.</string>
+    <string name="already_user">Already have Account? Login here.</string>
+
+
+    <string name="read"><![CDATA[Read terms & conditions]]></string>
+
 
 
     <!--Intro slider texts -->

@@ -1,23 +1,33 @@
 package com.example.karokojnr.nadab_customer;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.XmlResourceParser;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +37,7 @@ import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelRegister;
 import com.example.karokojnr.nadab_customer.model.UserLogin;
+import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
 import com.example.karokojnr.nadab_customer.utils.utils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +46,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -46,11 +59,12 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText mobileNumber, userName, applicantName, paybillNumber, address, userEmail, city, password, passwordAgain;
-    Button addHotel;
+    EditText mobileNumber, userName, userEmail,  password, passwordAgain;
+    Button addCustomer;
     ProgressBar mLoading;
     ImageView ivImage;
-    TextView ti_first;
+    TextView ti_first, login, readTerms;
+    CheckBox terms_conditions;
 
     private static final String TAG = "Profile";
     private static final int RESULT_LOAD_IMAGE = 1;
@@ -60,6 +74,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private String filePath;
     private File file;
     private Context context;
+    private static Animation shakeAnimation;
+    private LinearLayout linearLayout;
 
     ProgressDialog progressDialog;
 
@@ -69,6 +85,27 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView ( R.layout.activity_register );
 
         context = this;
+
+        // Initialize all views
+        linearLayout = (LinearLayout) findViewById(R.id
+                .linear_layout);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
+        getSupportActionBar ().setDisplayShowHomeEnabled ( true );
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow);
+        toolbar.setNavigationOnClickListener ( new View.OnClickListener () {
+
+            @Override
+            public void onClick(View view) {
+
+                // Your code
+                finish ();
+            }
+        } );
         progressDialog = new ProgressDialog(this);
         ti_first = (TextView)findViewById ( R.id.ti_first );
         mLoading = (ProgressBar) findViewById(R.id.login_loading);
@@ -77,11 +114,41 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         userEmail = (EditText)findViewById ( R.id.your_email );
         password = (EditText)findViewById ( R.id.password );
         passwordAgain = (EditText)findViewById ( R.id.passwordAgain );
-        addHotel = (Button)findViewById ( R.id.addHotel );
+        addCustomer = (Button)findViewById ( R.id.addCustomer );
         ivImage = (ImageView)findViewById ( R.id.ivImage );
+        terms_conditions = (CheckBox) findViewById(R.id.terms_conditions);
+        ti_first = (TextView)findViewById ( R.id.ti_first );
+        login = (TextView) findViewById(R.id.already_user);
+        login.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent ( getApplicationContext (), LoginActivity.class );
+                startActivity ( i );
+            }
+        } );
+        readTerms = (TextView)findViewById ( R.id.read_terms_conditions );
+        readTerms.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View v) {
+                Intent terms = new Intent ( getApplicationContext (), Terms.class );
+                startActivity ( terms );
+            }
+        } );
         ivImage.setOnClickListener (  this );
 
+        // Load ShakeAnimation
+        shakeAnimation = AnimationUtils.loadAnimation(getApplicationContext (),
+                R.anim.shake);
 
+        // Setting text selector over textviews
+        @SuppressLint("ResourceType") XmlResourceParser xrp = getResources().getXml(R.drawable.text_selector);
+        try {
+            ColorStateList csl = ColorStateList.createFromXml(getResources(),
+                    xrp);
+
+            login.setTextColor(csl);
+        } catch (Exception e) {
+        }
 
     }
 
@@ -94,6 +161,104 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String muserEmail = userEmail.getText().toString();
         String mpassword = password.getText().toString();
         String mpasswordAgain = passwordAgain.getText().toString();
+        String mimage = ivImage.getDrawable ().toString ();
+
+
+        // Pattern match for email id
+        Pattern p = Pattern.compile ( Constants.regEx );
+        Matcher m = p.matcher ( muserEmail );
+        // Check if all strings are null or not
+        if (muserName.equals ( "" ) || muserName.length () == 0 || mimage.equals ( "" ) || mimage.length () == 0 || muserEmail.equals ( "" ) || muserEmail.length () == 0 ||  mmobileNumber.equals ( "" ) || mmobileNumber.length () == 0 || mpassword.equals ( "" ) || mpassword.length () == 0 || mpasswordAgain.equals ( "" ) || mpasswordAgain.length () == 0) {
+            linearLayout.startAnimation ( shakeAnimation );
+
+            {
+                Snackbar snackbar = Snackbar.make ( linearLayout, "All fields are required!", Snackbar.LENGTH_LONG ).setAction ( "RETRY", new View.OnClickListener () {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                } );
+                // Changing message text color
+                snackbar.setActionTextColor ( Color.GREEN );
+
+                // Changing action button text color
+                View sbView = snackbar.getView ();
+                TextView textView = (TextView) sbView.findViewById ( android.support.design.R.id.snackbar_text );
+                textView.setTextColor ( Color.RED );
+
+                snackbar.show ();
+
+            }
+        }
+
+        // Check if email id valid or not
+        else if (!m.find())
+           /* new CustomToast().Show_Toast(getApplicationContext (), view,
+                    "Your Email Id is Invalid.");*/ {
+            Snackbar snackbar = Snackbar.make ( linearLayout, "Your Email Id is Invalid!", Snackbar.LENGTH_LONG ).setAction ( "RETRY", new View.OnClickListener () {
+                @Override
+                public void onClick(View view) {
+                }
+            } );
+            // Changing message text color
+            snackbar.setActionTextColor ( Color.GREEN );
+
+            // Changing action button text color
+            View sbView = snackbar.getView ();
+            TextView textView = (TextView) sbView.findViewById ( android.support.design.R.id.snackbar_text );
+            textView.setTextColor ( Color.RED );
+
+            snackbar.show ();
+        }
+
+        // Check if both password should be equal
+        else if (!mpasswordAgain.equals(mpassword))
+           /* new CustomToast().Show_Toast(getApplicationContext (), view,
+                    "Both password doesn't match.");*/
+        {
+            Snackbar snackbar = Snackbar.make ( linearLayout, "Both password doesn't match!", Snackbar.LENGTH_LONG ).setAction ( "RETRY", new View.OnClickListener () {
+                @Override
+                public void onClick(View view) {
+                }
+            } );
+            // Changing message text color
+            snackbar.setActionTextColor ( Color.GREEN );
+
+            // Changing action button text color
+            View sbView = snackbar.getView ();
+            TextView textView = (TextView) sbView.findViewById ( android.support.design.R.id.snackbar_text );
+            textView.setTextColor ( Color.RED );
+
+            snackbar.show ();
+        }
+
+        // Make sure user should check Terms and Conditions checkbox
+        else if (!terms_conditions.isChecked())
+            /*new CustomToast().Show_Toast(getApplicationContext (), view,
+                    "Please select Terms and Conditions.");*/
+        {
+            Snackbar snackbar = Snackbar.make ( linearLayout, "Please select Terms and Conditions!", Snackbar.LENGTH_LONG ).setAction ( "RETRY", new View.OnClickListener () {
+                @Override
+                public void onClick(View view) {
+                }
+            } );
+            // Changing message text color
+            snackbar.setActionTextColor ( Color.GREEN );
+
+            // Changing action button text color
+            View sbView = snackbar.getView ();
+            TextView textView = (TextView) sbView.findViewById ( android.support.design.R.id.snackbar_text );
+            textView.setTextColor ( Color.RED );
+
+            snackbar.show ();
+        }
+
+
+        // Else do signup or do your stuff
+        else
+            Toast.makeText(getApplicationContext (), "Signing up......", Toast.LENGTH_SHORT)
+                    .show();
+
+        //validating inputs
 
         if (TextUtils.isEmpty(muserName)) {
             userName.setError("Please enter your username");
