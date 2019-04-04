@@ -90,8 +90,6 @@ public class CartActivity extends AppCompatActivity implements
         navUsername.setText ( customer.getUser_fullname () );
         Glide.with ( this ).load ( RetrofitInstance.BASE_URL + "images/uploads/customers/" + String.valueOf ( customer.getIvImage () ) ).into ( navImageview );
 
-
-
         noItems = findViewById(R.id.no_orders);
         mRecyclerView = (RecyclerView) findViewById(R.id.cart_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -99,37 +97,8 @@ public class CartActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(cartAdapter);
         mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
 
-
-        // adding item touch helper
-        // only ItemTouchHelper.LEFT added to detect Right to Left swipe
-        // if you want both Right -> Left and Left -> Right
-        // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
-
-/*
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            // Called when a user swipes left or right on a ViewHolder
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                TextView tvId = viewHolder.itemView.findViewById(R.id.tvId);
-                int id = parseInt(tvId.getText().toString());
-                String stringId = Integer.toString(id);
-                Uri uri = OrderContract.OrderEntry.CONTENT_URI;
-                uri = uri.buildUpon().appendPath(stringId).build();
-
-                getContentResolver().delete(uri, null, null);
-                getLoaderManager().restartLoader(CART_LOADER, null, CartActivity.this);
-
-                // Reset hotel id and order status
-                updateOrderStatus();
-            }
-        }).attachToRecyclerView(mRecyclerView);*/
 
         getLoaderManager().initLoader(CART_LOADER, null, this);
 

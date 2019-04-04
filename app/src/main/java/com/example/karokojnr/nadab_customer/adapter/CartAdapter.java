@@ -27,6 +27,8 @@ import com.example.karokojnr.nadab_customer.model.OrderResponse;
 import com.example.karokojnr.nadab_customer.order.OrderContract;
 import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
+import com.example.karokojnr.nadab_customer.utils.Constants;
+import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
 import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.text.DecimalFormat;
@@ -102,6 +104,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             public void onClick(View v) {
                 // get the current order_id and send a request to add it to it
                 OrderItem orderItem = new OrderItem(Integer.toString(id), name, fragranceQuantity, fragrancePrice);
+                orderItem.setHotelId(utils.getSharedPrefsString(mContext, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL));
+                orderItem.setCustomerId(utils.getSharedPrefsString(mContext, Constants.M_USER_SHARED_PREFERENCE, Constants.M_USER_ID));
                 String currentOrderId = utils.getOrderId(mContext);
                 HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
                 Call<OrderResponse> call = service.addItemToOrder(currentOrderId, orderItem);
@@ -113,6 +117,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                             Toast.makeText(mContext, "Order placed successfully", Toast.LENGTH_SHORT).show();
                             String orderId = response.body().getOrder().getOrderId();
                             utils.setOrderId(mContext, orderId);
+                            // TODO:: Update exisiting records in the cart as complete from the older order id.
                             Uri uri = OrderContract.OrderEntry.CONTENT_URI;
                             String itemId = Integer.toString(id);
                             uri = uri.buildUpon().appendPath(itemId).build();

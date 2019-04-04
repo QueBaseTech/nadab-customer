@@ -14,6 +14,12 @@ public class OrderItem {
     @SerializedName("price")
     private double price;
 
+    @SerializedName("customerId")
+    private String customerId;
+
+    @SerializedName("hotelId")
+    private String hotelId;
+
     public OrderItem() {}
 
     public OrderItem(String id, String name, int qty, double price) {
@@ -29,6 +35,22 @@ public class OrderItem {
 
     public String getId() {
         return id;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getHotelId() {
+        return hotelId;
+    }
+
+    public void setHotelId(String hotelId) {
+        this.hotelId = hotelId;
     }
 
     public int getQty() {

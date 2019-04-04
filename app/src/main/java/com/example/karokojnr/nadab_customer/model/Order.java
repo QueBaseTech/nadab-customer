@@ -14,6 +14,9 @@ public class Order {
     @SerializedName("totalPrice")
     private Double totalPrice;
 
+    @SerializedName("totalBill")
+    private Double totalBill;
+
     @SerializedName("totalItems")
     private int totalItems;
 
@@ -125,6 +128,14 @@ public class Order {
         this.hotel = hotel;
     }
 
+    public Double getTotalBill() {
+        return totalBill;
+    }
+
+    public void setTotalBill(Double totalBill) {
+        this.totalBill = totalBill;
+    }
+
     public String getCustomerId() {
         return customerId;
     }
@@ -139,6 +150,7 @@ public class Order {
                 "_id='" + orderId + '\'' +
                 "orderStatus='" + orderStatus + '\'' +
                 ", totalPrice=" + totalPrice +
+                ", totalBill=" + totalBill +
                 ", totalItems=" + totalItems +
                 ", orderItems=" + Arrays.toString(orderItems) +
                 ", hotel='" + hotel.toString() + '\'' +
