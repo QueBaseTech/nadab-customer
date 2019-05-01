@@ -63,22 +63,20 @@
         <activity
             android:name=".RegisterActivity"
             android:label="Create account" />
-
         <activity
             android:name=".Orders"
             android:label="@string/title_activity_orders"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Terms"
             android:label="Terms"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
 
         <service android:name=".notifications.MyFirebaseInstance">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".notifications.OrdersNotificationsService"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -100,8 +98,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-
     </application>
 
 </manifest>

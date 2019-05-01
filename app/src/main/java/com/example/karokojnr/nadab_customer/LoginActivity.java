@@ -211,18 +211,18 @@ public class LoginActivity extends AppCompatActivity {
                                 // Send FCM token to server
                                  sendToken();
                             } else {
-                                mLoading.setVisibility(View.INVISIBLE);
+                                hideProgressDialogWithTitle();
                                 Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            mLoading.setVisibility(View.INVISIBLE);
+                            hideProgressDialogWithTitle();
                             Toast.makeText(context, "Error logging in...", Toast.LENGTH_SHORT).show();
                         }
                         hideProgressDialogWithTitle();
                     }
                     @Override
                     public void onFailure(Call<UserLogin> call, Throwable t) {
-                        mLoading.setVisibility(View.INVISIBLE);
+                        hideProgressDialogWithTitle();
                         Toast.makeText(LoginActivity.this, "Something went wrong...Error message: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 

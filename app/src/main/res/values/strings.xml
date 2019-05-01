@@ -38,7 +38,6 @@
     <string name="read"><![CDATA[Read terms & conditions]]></string>
 
 
-
     <!--Intro slider texts -->
     <string name="title_activity_welcome">Home Screen</string>
     <string name="next">NEXT</string>
@@ -101,5 +100,6 @@
 
     <string name="default_notification_channel_id">564</string>
     <string name="title_activity_orders">Orders</string>
+    <string name="title_activity_fees">Fees</string>
 
 </resources>
