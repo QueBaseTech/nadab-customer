@@ -279,7 +279,7 @@ public class CartActivity extends AppCompatActivity implements
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(CartActivity.this, ProfileActivity.class));
         } else if (id == R.id.nav_orders) {
-            startActivity(new Intent(CartActivity.this, Orders.class));
+            startActivity(new Intent(CartActivity.this, OrdersActivity.class));
         } else if (id == R.id.nav_cart) {
             startActivity(new Intent(CartActivity.this, CartActivity.class));
         } else if (id == R.id.nav_sign_out) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,11 +25,14 @@ import com.example.karokojnr.nadab_customer.api.HotelService;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Order;
 import com.example.karokojnr.nadab_customer.model.OrderItem;
+import com.example.karokojnr.nadab_customer.model.Orders;
 import com.example.karokojnr.nadab_customer.model.Product;
 import com.example.karokojnr.nadab_customer.model.Products;
+import com.example.karokojnr.nadab_customer.order.OrderContract;
 import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.CustomerSharedPreference;
 import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
+import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.util.ArrayList;
 
@@ -36,7 +40,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Orders extends AppCompatActivity {
+import static java.lang.Integer.parseInt;
+
+public class OrdersActivity extends AppCompatActivity {
     private ArrayList<Order> orders = new ArrayList<>();
     private OrdersAdapter adapter;
     private RecyclerView recyclerView;
@@ -52,21 +58,24 @@ public class Orders extends AppCompatActivity {
         context = this;
 
         HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
-        Call<com.example.karokojnr.nadab_customer.model.Orders> call = service.getOrders( SharedPrefManager.getInstance(this).getToken() );
-        call.enqueue ( new Callback<com.example.karokojnr.nadab_customer.model.Orders>() {
+        Call<Orders> call = service.getOrders( SharedPrefManager.getInstance(this).getToken() );
+        call.enqueue ( new Callback<Orders>() {
             @Override
-            public void onResponse(Call<com.example.karokojnr.nadab_customer.model.Orders> call, Response<com.example.karokojnr.nadab_customer.model.Orders> response) {
+            public void onResponse(Call<Orders> call, Response<Orders> response) {
                 if(response.body().isSuccess()){
                     for (int i = 0; i < response.body().getOrders().size(); i++) {
-                        orders.add ( response.body ().getOrders ().get ( i ) );
+                        Order order = response.body().getOrders().get(i);
+                        if (!order.getOrderStatus().equals("COMPLETE")){
+                            orders.add(order);
+                        }
                     }
                 }
                 generateOrders (orders);
             }
 
             @Override
-            public void onFailure(Call<com.example.karokojnr.nadab_customer.model.Orders> call, Throwable t) {
-                Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!", Toast.LENGTH_SHORT ).show ();
+            public void onFailure(Call<Orders> call, Throwable t) {
+                Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!" + t.getMessage(), Toast.LENGTH_SHORT ).show ();
             }
         } );
     }

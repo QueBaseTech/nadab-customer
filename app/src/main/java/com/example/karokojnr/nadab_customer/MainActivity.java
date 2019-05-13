@@ -1,39 +1,26 @@
 package com.example.karokojnr.nadab_customer;
 
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,7 +35,6 @@ import com.example.karokojnr.nadab_customer.model.HotelsList;
 import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.CustomerSharedPreference;
 import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
-import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -240,7 +226,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         } else if (id == R.id.nav_orders) {
-            startActivity(new Intent(MainActivity.this, Orders.class));
+            startActivity(new Intent(MainActivity.this, OrdersActivity.class));
         } else if (id == R.id.nav_cart) {
             startActivity(new Intent(MainActivity.this, CartActivity.class));
         } else if (id == R.id.nav_sign_out) {

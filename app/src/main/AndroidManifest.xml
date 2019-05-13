@@ -64,7 +64,7 @@
             android:name=".RegisterActivity"
             android:label="Create account" />
         <activity
-            android:name=".Orders"
+            android:name=".OrdersActivity"
             android:label="@string/title_activity_orders"
             android:theme="@style/AppTheme" />
         <activity
