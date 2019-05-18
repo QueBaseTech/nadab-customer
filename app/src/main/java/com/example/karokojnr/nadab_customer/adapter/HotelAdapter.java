@@ -20,13 +20,14 @@ import java.util.ArrayList;
 
 public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> implements Filterable{
 
+
     private ArrayList<Hotel> mDataList;
     private ArrayList<Hotel> mFilteredList;
     private Context context;
 
-    public HotelAdapter(ArrayList<Hotel> mDataList, Context context) {
-        this.mDataList = mDataList;
-        mFilteredList = mDataList;
+    public HotelAdapter(ArrayList<Hotel> dataList, Context context) {
+        this.mDataList = dataList;
+        mFilteredList = dataList;
         this.context = context;
     }
 
@@ -50,7 +51,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
     }
 
     @Override
-    public void onBindViewHolder(HotelViewHolder holder, int position) {
+    public void onBindViewHolder(HotelAdapter.HotelViewHolder holder, int position) {
         holder.txtHotelName.setText(mDataList.get(position).getBusinessName ());
         holder.txtAddress.setText(mDataList.get(position).getAddress ());
         holder.txtPayBillNo.setText(mDataList.get(position).getPayBillNo ());
@@ -83,11 +84,13 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
                     ArrayList<Hotel> filteredList = new ArrayList<>();
 
-                    for (Hotel androidVersion : mDataList) {
+                    for (Hotel hotels : mDataList) {
 
-                        if (androidVersion.getBusinessName ().toLowerCase().contains(charString) || androidVersion.getAddress ().toLowerCase().contains(charString) || androidVersion.getPayBillNo ().toLowerCase().contains(charString)) {
+                        if (hotels.getBusinessName ().toLowerCase().contains(charString) )
+                               // || hotels.getAddress ().toLowerCase().contains(charString) || hotels.getPayBillNo ().toLowerCase().contains(charString))
+                        {
 
-                            filteredList.add(androidVersion);
+                            filteredList.add(hotels);
                         }
                     }
 

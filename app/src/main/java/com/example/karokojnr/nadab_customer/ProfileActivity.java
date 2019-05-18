@@ -69,6 +69,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         } );
 
 
+
+
         tv_user_name = (TextView)findViewById(R.id.tv_user_name);
         tv_user_email = (TextView)findViewById(R.id.tv_user_email);
         tv_user_mobile = (TextView)findViewById ( R.id.tv_mobile );
@@ -270,28 +272,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onCreateOptionsMenu(Menu menu) {
 
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.optionsmenu, menu);
 
-        // Get the notifications MenuItem and
-        // its LayerDrawable (layer-list)
-        MenuItem item = menu.findItem(R.id.action_notifications);
-        LayerDrawable icon = (LayerDrawable) item.getIcon();
-
-        // Update LayerDrawable's BadgeDrawable
-        Utils.setBadgeCount(this, icon, mNotificationsCount);
-
-        return true;
+        return super.onCreateOptionsMenu ( menu );
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+//optionsmenu
+//
+//
+//
+
         switch (item.getItemId()) {
 
-            case R.id.action_notifications:
-                Intent intent = new Intent(this, CartActivity.class);
+            case R.id.change_profile:
+            //go to change profile
+                Intent intent = new Intent(this, ChangeProfile.class);
+                //go to change profile
                 startActivity(intent);
                 return true;
+            case R.id.logout:
+                // Log.wtf(TAG, "onOptionsItemSelected: Logout");
+                SharedPrefManager.getInstance ( getApplicationContext () ).logout ();
+                startActivity ( new Intent ( getApplicationContext (), LoginActivity.class ) );
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }

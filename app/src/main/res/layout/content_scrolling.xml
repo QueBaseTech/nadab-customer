@@ -18,11 +18,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:clickable="true"
+            android:clickable="false"
             android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView
-                android:id="@+id/ivContactItem1"
+                android:id="@+id/ivImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -37,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_toEndOf="@id/ivContactItem1"
-                android:layout_toRightOf="@id/ivContactItem1"
+                android:layout_toEndOf="@id/ivImage"
+                android:layout_toRightOf="@id/ivImage"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121" />
 
@@ -49,8 +49,8 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
-                android:layout_toEndOf="@id/ivContactItem1"
-                android:layout_toRightOf="@id/ivContactItem1"
+                android:layout_toEndOf="@id/ivImage"
+                android:layout_toRightOf="@id/ivImage"
                 android:text="User Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:clickable="true"
+            android:clickable="false"
             android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView
@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:clickable="true"
+            android:clickable="false"
             android:padding="@dimen/activity_horizontal_margin">
 
             <ImageView
