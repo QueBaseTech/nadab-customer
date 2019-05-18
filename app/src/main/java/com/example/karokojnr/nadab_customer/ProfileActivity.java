@@ -280,11 +280,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-//optionsmenu
-//
-//
-//
-
         switch (item.getItemId()) {
 
             case R.id.change_profile:
@@ -292,6 +287,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent = new Intent(this, ChangeProfile.class);
                 //go to change profile
                 startActivity(intent);
+                finish();
                 return true;
             case R.id.logout:
                 // Log.wtf(TAG, "onOptionsItemSelected: Logout");

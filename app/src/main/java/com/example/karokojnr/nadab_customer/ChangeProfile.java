@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.karokojnr.nadab_customer.api.HotelService;
 import com.example.karokojnr.nadab_customer.api.RetrofitInstance;
 import com.example.karokojnr.nadab_customer.model.Customer;
+import com.example.karokojnr.nadab_customer.model.CustomerResponse;
 import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.CustomerSharedPreference;
 import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
@@ -55,25 +56,14 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_profile);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
-
         getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
         getSupportActionBar ().setDisplayShowHomeEnabled ( true );
-
         toolbar.setNavigationIcon(R.drawable.ic_arrow);
         toolbar.setNavigationOnClickListener ( new View.OnClickListener () {
-
             @Override
-            public void onClick(View view) {
-
-                // Your code
-                finish ();
-            }
+            public void onClick(View view) { finish (); }
         } );
 
 
@@ -84,28 +74,6 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
         progressDialog = new ProgressDialog (this);
         mLoading = (ProgressBar) findViewById(R.id.edit_loading);
 
-
-        //
-
-        if(getIntent ().getExtras () != null ){
-            Intent i = getIntent ();
-           // pImage = i.getStringExtra ( Constants.M_IMAGE );
-            pUserName = i.getStringExtra ( Constants.M_NAME);
-            pEmail = i.getStringExtra ( Constants.M_PRICE);
-            pMobileNumber = i.getStringExtra ( Constants.M_HOTEL_ID);
-            pUserId = i.getStringExtra ( Constants.M_HOTEL_ID);
-
-        } else {
-            pUserName = "";
-            pEmail = "";
-            pMobileNumber = "";
-            pUserId = "";
-
-        }
-
-
-
-
         //getting the current user
         CustomerSharedPreference customer = SharedPrefManager.getInstance(this).getUser ();
         tv_user_name.setText(String.valueOf(customer.getUser_fullname ()));
@@ -114,18 +82,6 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
         Glide.with(this)
                 .load(RetrofitInstance.BASE_URL+"images/uploads/customers/"+ String.valueOf ( customer.getIvImage ()))
                 .into(imageView);
-        Log.wtf (  "image: ",customer.getIvImage ()  );
-
-
-
-
-
-
-
-
-
-
-
     }
 
     @Override
@@ -137,46 +93,41 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case R.id.action_change:
-
-                        updateProfile ();
-                        Intent intent = new Intent ( this, ProfileActivity.class );
-                        startActivity ( intent );
-
+                updateProfile ();
+                Intent intent = new Intent ( this, ProfileActivity.class );
+                startActivity ( intent );
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void updateProfile() {
-       // String image = ivImage.getDrawable ().toString ().trim ();
         String userName = tv_user_name.getText ().toString ().trim ();
         String userEmail = tv_user_email.getText ().toString ().trim ();
         String userMobileNumber = tv_user_mobile.getText ().toString ().trim ();
-
        // MultipartBody.Part fileToUpload;
-        Call<Customer> call = null;
-
-
         HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
         //RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), image);
         RequestBody username = RequestBody.create(MediaType.parse("text/plain"), userName.getBytes ().toString());
         RequestBody mobilenumber = RequestBody.create(MediaType.parse("text/plain"), userMobileNumber.getBytes ().toString());
         RequestBody emailaddress = RequestBody.create(MediaType.parse("text/plain"), userEmail);
         RequestBody userId = RequestBody.create(MediaType.parse("text/plain"), pUserId);
+        final String authToken = SharedPrefManager.getInstance(ChangeProfile.this).getToken();
+        pUserId = SharedPrefManager.getInstance(ChangeProfile.this).getUser().getId();
+        Call<CustomerResponse> call = service.profileEdit(authToken, pUserId, userName, userEmail, userMobileNumber);
 
 
-        call.enqueue ( new Callback<Customer> () {
+        call.enqueue ( new Callback<CustomerResponse> () {
             @Override
-            public void onResponse(Call<Customer> call, Response<Customer> response) {
+            public void onResponse(Call<CustomerResponse> call, Response<CustomerResponse> response) {
                 if (response.isSuccessful ()) {
                     assert response.body () != null;
-                    hideProgressDialogWithTitle ();
+                    SharedPrefManager.getInstance(ChangeProfile.this).userLogin(response.body().getCustomer(), authToken);
                     Toast.makeText ( ChangeProfile.this, "Profile edited successfully...", Toast.LENGTH_SHORT ).show ();
-                    Intent intent = new Intent ( getApplicationContext (), MainActivity.class );
+                    finish();
+                    Intent intent = new Intent ( getApplicationContext (), ProfileActivity.class );
                     startActivity ( intent );
                 } else {
                     hideProgressDialogWithTitle ();
@@ -185,14 +136,11 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
             }
 
             @Override
-            public void onFailure(Call<Customer> call, Throwable t) {
+            public void onFailure(Call<CustomerResponse> call, Throwable t) {
                 hideProgressDialogWithTitle ();
                 Toast.makeText ( ChangeProfile.this, "Something went wrong...Error message: " + t.getMessage (), Toast.LENGTH_SHORT ).show ();
             }
         } );
-
-
-
     }
 
     private void showProgressDialogWithTitle() {

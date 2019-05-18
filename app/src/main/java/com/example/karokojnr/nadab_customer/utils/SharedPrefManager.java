@@ -2,6 +2,8 @@ package com.example.karokojnr.nadab_customer.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.example.karokojnr.nadab_customer.model.Customer;
 
 //here for this class we are using a singleton pattern
@@ -36,6 +38,7 @@ public class SharedPrefManager {
         editor.putString (Constants.M_SHARED_PREFERENCE_LOGIN_TOKEN, token);
         editor.apply();
         editor.commit();
+        Log.wtf("User", "userLogin: "+ user.getUsername());
     }
 
     //this method will checker whether hotel is already logged in or not

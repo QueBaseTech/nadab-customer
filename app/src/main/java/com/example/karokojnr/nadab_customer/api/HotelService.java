@@ -3,6 +3,7 @@ package com.example.karokojnr.nadab_customer.api;
 
 
 import com.example.karokojnr.nadab_customer.model.Customer;
+import com.example.karokojnr.nadab_customer.model.CustomerResponse;
 import com.example.karokojnr.nadab_customer.model.FCMToken;
 import com.example.karokojnr.nadab_customer.model.Hotel;
 import com.example.karokojnr.nadab_customer.model.HotelRegister;
@@ -61,8 +62,8 @@ public interface HotelService {
     Call<FCMToken> sendTokenToServer(@Header("x-token") String authToken, @Field("token") String token);
 
     @FormUrlEncoded
-    @PUT("products/edit/{id}")
-    Call<Customer> profileEdit(@Header("x-token") String token, @Path ( "id" )String productId, @Field("username") String username, @Field("email") String email, @Field("fullName") String fullName, @Field("id") String id , @Field("fullName") String fullNmae, @Field("mobileNumber") String mobileNumber);
+    @PUT("customers/edit/{id}")
+    Call<CustomerResponse> profileEdit(@Header("x-token") String token, @Path ( "id" )String customerId, @Field("fullName") String fullName, @Field("email") String email, @Field("mobileNumber") String mobileNumber);
 
 
     @Multipart
