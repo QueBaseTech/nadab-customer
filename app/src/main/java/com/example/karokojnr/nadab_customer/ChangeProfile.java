@@ -80,8 +80,9 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
         tv_user_email.setText(String.valueOf ( customer.getEmail ()));
         tv_user_mobile.setText(String.valueOf ( customer.getTv_mobile ()));
         Glide.with(this)
-                .load(RetrofitInstance.BASE_URL+"images/uploads/customers/"+ String.valueOf ( customer.getIvImage ()))
+                .load(RetrofitInstance.BASE_URL+"images/uploads/customers/"+ String.valueOf(customer.getIvImage()))
                 .into(imageView);
+        pUserId = SharedPrefManager.getInstance(ChangeProfile.this).getUser().getId();
     }
 
     @Override
@@ -115,7 +116,7 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
         RequestBody emailaddress = RequestBody.create(MediaType.parse("text/plain"), userEmail);
         RequestBody userId = RequestBody.create(MediaType.parse("text/plain"), pUserId);
         final String authToken = SharedPrefManager.getInstance(ChangeProfile.this).getToken();
-        pUserId = SharedPrefManager.getInstance(ChangeProfile.this).getUser().getId();
+
         Call<CustomerResponse> call = service.profileEdit(authToken, pUserId, userName, userEmail, userMobileNumber);
 
 
