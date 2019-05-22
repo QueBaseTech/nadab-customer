@@ -93,11 +93,12 @@ public class MainActivity extends AppCompatActivity
                     } else {
                         assert response.body () != null;
                         for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
-                            hotelList.add ( response.body ().getHotelsArrayList ().get ( i ) );
+                            Hotel hotel = response.body ().getHotelsArrayList ().get ( i);
+                            if(hotel.getPaymentStatus().equals("PAID"))
+                                hotelList.add(hotel);
                         }
-                        Log.i ( "RESPONSE: ", "" + response.toString () );
                     }
-                    generateHotelsList ( response.body ().getHotelsArrayList () );
+                    generateHotelsList();
                 }
                 @Override
                 public void onFailure(Call<HotelsList> call, Throwable t) {
@@ -109,9 +110,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     /*Method to generate List of hotel using RecyclerView with custom adapter*/
-    private void generateHotelsList(ArrayList<Hotel> empDataList) {
+    private void generateHotelsList() {
         recyclerView = (RecyclerView) findViewById ( R.id.recycler_view );
-        adapter = new HotelAdapter ( empDataList, this );
+        adapter = new HotelAdapter ((ArrayList<Hotel>) hotelList, this );
         recyclerView.setHasFixedSize(true);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

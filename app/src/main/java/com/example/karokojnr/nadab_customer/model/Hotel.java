@@ -52,6 +52,9 @@ public class Hotel {
     @SerializedName("image")
     private String profile;
 
+    @SerializedName("paymentStatus")
+    private String paymentStatus;
+
     public String getProfile() {
         return profile;
     }
@@ -88,5 +91,9 @@ public class Hotel {
 
     public void setPayBillNo(String payBillNo) {
         this.payBillNo = payBillNo;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
     }
 }
