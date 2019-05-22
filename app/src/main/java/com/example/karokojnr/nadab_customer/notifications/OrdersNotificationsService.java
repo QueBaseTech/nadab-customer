@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.karokojnr.nadab_customer.CartActivity;
+import com.example.karokojnr.nadab_customer.OrdersActivity;
 import com.example.karokojnr.nadab_customer.R;
 import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.utils;
@@ -98,7 +99,7 @@ public class OrdersNotificationsService extends FirebaseMessagingService {
      * @param order FCM message orderID received.
      */
     private void sendNotification(String title, String body, String order) {
-        Intent intent = new Intent(this, CartActivity.class);
+        Intent intent = new Intent(this, OrdersActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("ORDER_ID", order);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);

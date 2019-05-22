@@ -57,6 +57,7 @@ public class OrdersActivity extends AppCompatActivity {
 
         context = this;
 
+        final String currentOrder = utils.getOrderId(context);
         HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
         Call<Orders> call = service.getOrders( SharedPrefManager.getInstance(this).getToken() );
         call.enqueue ( new Callback<Orders>() {
@@ -65,6 +66,10 @@ public class OrdersActivity extends AppCompatActivity {
                 if(response.body().isSuccess()){
                     for (int i = 0; i < response.body().getOrders().size(); i++) {
                         Order order = response.body().getOrders().get(i);
+                        if(currentOrder.equals(order.getOrderId()) && order.getOrderStatus().equals("COMPLETE")){
+                            utils.setOrderId(context, null);
+                            utils.setSharedPrefsString(context, Constants.M_ORDER_HOTEL, null);
+                        }
                         if (!order.getOrderStatus().equals("COMPLETE")){
                             orders.add(order);
                         }

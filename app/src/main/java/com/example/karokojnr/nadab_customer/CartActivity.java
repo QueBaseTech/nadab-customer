@@ -116,7 +116,6 @@ public class CartActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 String orderStatus = utils.getOrderStatus(CartActivity.this);
-                Log.wtf("Cart", "onClick: "+orderStatus );
                 if (orderStatus.equals("NEW")) {
                     HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
                     Call<OrderResponse> call = service.placeOrder(order);
