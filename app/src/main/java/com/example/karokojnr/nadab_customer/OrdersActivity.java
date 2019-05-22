@@ -74,8 +74,10 @@ public class OrdersActivity extends AppCompatActivity {
                             orders.add(order);
                         }
                     }
+                    generateOrders (orders);
+                } else {
+                    Toast.makeText ( getApplicationContext (), "Something went wrong...Please try later!" + response.body().getMessage(), Toast.LENGTH_SHORT ).show ();
                 }
-                generateOrders (orders);
             }
 
             @Override
