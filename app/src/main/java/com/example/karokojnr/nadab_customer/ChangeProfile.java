@@ -108,7 +108,7 @@ public class ChangeProfile  extends AppCompatActivity implements View.OnClickLis
         String userName = tv_user_name.getText ().toString ().trim ();
         String userEmail = tv_user_email.getText ().toString ().trim ();
         String userMobileNumber = tv_user_mobile.getText ().toString ().trim ();
-       // MultipartBody.Part fileToUpload;
+        // MultipartBody.Part fileToUpload;
         HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
         //RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), image);
         RequestBody username = RequestBody.create(MediaType.parse("text/plain"), userName.getBytes ().toString());

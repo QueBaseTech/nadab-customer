@@ -22,15 +22,17 @@ import java.util.ArrayList;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder>  implements Filterable {
 
-    private ArrayList<Product> productList;
+    private ArrayList<Product> mproductList;
+    //private ArrayList<Product> productList;
     private ArrayList<Product> mFilteredList;
-
-    Context context;
+    private ArrayList<Product> tempList;
+    private Context context;
 
 
     public ItemsAdapter(ArrayList<Product> productList, Context context) {
-        this.productList = productList;
+        this.mproductList = productList;
         mFilteredList = productList;
+        this.tempList = productList;
         this.context = context;
     }
 
@@ -44,7 +46,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Product product = productList.get ( position );
+        Product product = mproductList.get ( position );
         holder.name.setText(product.getName());
         holder.unitMeasure.setText(product.getUnitMeasure());
         holder.price.setText("Ksh " + product.getPrice());
@@ -72,12 +74,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
                 if (charString.isEmpty()) {
 
-                    mFilteredList = productList;
+                    mFilteredList = tempList;
                 } else {
 
                     ArrayList<Product> filteredList = new ArrayList<>();
 
-                    for (Product product : productList) {
+                    for (Product product : tempList) {
 
                         if (product.getName ().toLowerCase().contains(charString) || product.getPrice ().toLowerCase().contains(charString) || product.getImage ().toLowerCase().contains(charString)) {
 
@@ -95,7 +97,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                mFilteredList = (ArrayList<Product>) filterResults.values;
+                mproductList = (ArrayList<Product>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

@@ -280,12 +280,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+
+
         switch (item.getItemId()) {
 
             case R.id.change_profile:
-            //go to change profile
                 Intent intent = new Intent(this, ChangeProfile.class);
-                //go to change profile
                 startActivity(intent);
                 finish();
                 return true;
