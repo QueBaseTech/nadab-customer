@@ -2,6 +2,7 @@ package com.example.karokojnr.nadab_customer.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,13 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     private ArrayList<Hotel> mDataList;
     private ArrayList<Hotel> mFilteredList;
+    private ArrayList<Hotel> tempList;
     private Context context;
 
     public HotelAdapter(ArrayList<Hotel> dataList, Context context) {
         this.mDataList = dataList;
         mFilteredList = dataList;
+        this.tempList = dataList;
         this.context = context;
     }
 
@@ -78,19 +81,17 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
                 String charString = charSequence.toString();
 
                 if (charString.isEmpty()) {
-
-                    mFilteredList = mDataList;
+                    mFilteredList = tempList;
                 } else {
 
                     ArrayList<Hotel> filteredList = new ArrayList<>();
 
-                    for (Hotel hotels : mDataList) {
+                    for (Hotel hotel : tempList) {
 
-                        if (hotels.getBusinessName ().toLowerCase().contains(charString) )
+                        if (hotel.getBusinessName ().toLowerCase().contains(charString) )
                                // || hotels.getAddress ().toLowerCase().contains(charString) || hotels.getPayBillNo ().toLowerCase().contains(charString))
                         {
-
-                            filteredList.add(hotels);
+                            filteredList.add(hotel);
                         }
                     }
 
@@ -104,7 +105,7 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                mFilteredList = (ArrayList<Hotel>) filterResults.values;
+                mDataList = (ArrayList<Hotel>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
