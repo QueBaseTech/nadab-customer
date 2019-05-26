@@ -37,6 +37,7 @@ import com.example.karokojnr.nadab_customer.model.HotelsList;
 import com.example.karokojnr.nadab_customer.utils.Constants;
 import com.example.karokojnr.nadab_customer.utils.CustomerSharedPreference;
 import com.example.karokojnr.nadab_customer.utils.SharedPrefManager;
+import com.example.karokojnr.nadab_customer.utils.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity
             Glide.with ( this ).load ( RetrofitInstance.BASE_URL + "images/uploads/customers/" + String.valueOf ( customer.getIvImage () ) ).into ( navImageview );
 
 
+            final String selectedHotel = utils.getSharedPrefsString(this, Constants.M_SHARED_PREFERENCE, Constants.M_ORDER_HOTEL);
             //RECYCLER VIEW
             HotelService service = RetrofitInstance.getRetrofitInstance ().create ( HotelService.class );
             Call<HotelsList> call = service.getHotels ();
@@ -94,8 +96,15 @@ public class MainActivity extends AppCompatActivity
                         assert response.body () != null;
                         for (int i = 0; i < response.body ().getHotelsArrayList ().size (); i++) {
                             Hotel hotel = response.body ().getHotelsArrayList ().get ( i);
-                            if(hotel.getPaymentStatus().equals("PAID"))
-                                hotelList.add(hotel);
+                            if(hotel.getPaymentStatus().equals("PAID")) {
+                                Log.wtf(TAG, "onResponse: Selected hotel"+ selectedHotel);
+                                if(selectedHotel != null){
+                                    if(hotel.getId().equals(selectedHotel))
+                                        hotelList.add(hotel);
+                                } else {
+                                    hotelList.add(hotel);
+                                }
+                            }
                         }
                     }
                     generateHotelsList();
