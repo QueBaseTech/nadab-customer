@@ -66,7 +66,7 @@ public class OrdersActivity extends AppCompatActivity {
                 if(response.body().isSuccess()){
                     for (int i = 0; i < response.body().getOrders().size(); i++) {
                         Order order = response.body().getOrders().get(i);
-                        if(currentOrder.equals(order.getOrderId()) && order.getOrderStatus().equals("COMPLETE")){
+                        if((currentOrder != null && currentOrder.equals(order.getOrderId())) && order.getOrderStatus().equals("COMPLETE")){
                             utils.setOrderId(context, null);
                             utils.setSharedPrefsString(context, Constants.M_ORDER_HOTEL, null);
                         }
@@ -99,7 +99,10 @@ public class OrdersActivity extends AppCompatActivity {
                 OrderItem[] orderItems = order.getOrderItems();
                 String[] items = new String[orderItems.length];
                 for(int i=0;i<orderItems.length;i++) {
-                    items[i] = orderItems[i].getQty() + " "+ orderItems[i].getName() + " @ Kshs." + orderItems[i].getPrice();
+                    OrderItem item = orderItems[i];
+                    String itemStatus = item.getItemStatus();
+                    itemStatus = itemStatus.equals("REJECTED")? "Rejected":"";
+                    items[i] = item.getQty() + " "+ item.getName() + " @ Kshs." + item.getPrice() + " " + itemStatus;
                 }
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Items");

@@ -20,6 +20,9 @@ public class OrderItem {
     @SerializedName("hotelId")
     private String hotelId;
 
+    @SerializedName("status")
+    private String itemStatus;
+
     public OrderItem() {}
 
     public OrderItem(String id, String name, int qty, double price) {
@@ -59,5 +62,9 @@ public class OrderItem {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getItemStatus() {
+        return itemStatus;
     }
 }

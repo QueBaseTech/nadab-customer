@@ -57,7 +57,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
         }
         holder.hotelName.setText(order.getHotel().getBusinessName());
         holder.qty.setText(Integer.toString(order.getTotalItems()));
-        holder.bill.setText("Ksh " + order.getTotalPrice());
+        holder.bill.setText("Ksh " + order.getTotalBill());
         holder.time.setText("Date: "+sdf);
         holder.orderStatus.setText(order.getOrderStatus());
     }
