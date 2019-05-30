@@ -1,15 +1,12 @@
 package com.example.karokojnr.nadab_customer;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.view.MenuItemCompat;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -181,55 +178,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
 
-/*
         MenuItem search = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        //SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        SearchView searchView = (SearchView) search.getActionView ();
+
+        //SearchView sv = (SearchView) search.getActionView ();
         search(searchView);
-
-*/
-
-// Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
-        searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        // listening to search query text change
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                adapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
-                adapter.getFilter().filter(query);
-                return false;
-            }
-        });
-
-
-
-        MenuItem cart = menu.findItem ( R.id. action_cart);
-        cart.setOnMenuItemClickListener ( new MenuItem.OnMenuItemClickListener () {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent i = new Intent ( getApplicationContext (), CartActivity.class );
-                startActivity ( i );
-                return true;
-            }
-        } );
         return true;
-    }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return true;
 
     }
 
@@ -237,6 +193,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
     private void search(SearchView searchView) {
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
